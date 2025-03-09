@@ -7,14 +7,61 @@ const account = ref()
 const passward = ref()
 const passwardTest = /^[a-zA-Z0-_]{2,11}$/
 
+
+
+let fetchUser = async () => {
+
+
+  try {
+
+
+    const url = "http://localhost:8081/userInfo"
+    const response = await axios.post(url, {
+      username: account.value,
+      password: passward.value
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应登录", response.data);
+
+    if (response.data.code === 1) {
+
+
+      router.push({ name: 'index' })
+
+
+    } else {
+      alert(response.data.msg)
+    }
+
+
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+
+
+}
+
 const LoginTest = () => {
   if (account.value) {
     if (passward.value) {
-      if(passwardTest.test(passward.value)){
-          router.push('/index/indexView')
-        }else{
-          alert("密码必须在12个字符内，且仅限英文字母，数字和下划线")
-        }
+      if (passwardTest.test(passward.value)) {
+
+        // fetchUser()
+
+        router.push({ name: 'index' })
+      } else {
+        alert("密码必须在12个字符内，且仅限英文字母，数字和下划线")
+      }
     } else {
       alert("请输入密码")
     }
@@ -35,7 +82,7 @@ const LoginTest = () => {
       <input type="submit" id="login" class="login" value="登录" @click="LoginTest">
       <div class="linkBox">
         <router-link to="/admLogin" class="link">管理员登录</router-link>
-      <router-link to="/register" class="link">用户注册</router-link>
+        <router-link to="/register" class="link">用户注册</router-link>
       </div>
     </from>
   </div>
@@ -103,21 +150,21 @@ const LoginTest = () => {
   cursor: pointer;
 }
 
-.link{
+.link {
   font-size: 0.8rem;
   text-decoration: none;
 }
 
-.linkBox{
+.linkBox {
   width: 30%;
   margin-top: 2%;
 }
 
-.linkBox a:nth-of-type(1){
+.linkBox a:nth-of-type(1) {
   margin-right: 5%;
 }
 
-.linkBox a:nth-of-type(2){
+.linkBox a:nth-of-type(2) {
   margin-left: 5%;
 }
 </style>
