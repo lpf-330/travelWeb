@@ -2,12 +2,15 @@
 import { ref } from 'vue';
 import router from '../router'
 import { RouterLink } from 'vue-router';
+import useUserInfoStore from '../stores/user';
+import { storeToRefs } from 'pinia';
+import axios from 'axios';
 
 const account = ref()
 const passward = ref()
 const passwardTest = /^[a-zA-Z0-_]{2,11}$/
 
-
+const userInfoStore = storeToRefs(useUserInfoStore())
 
 let fetchUser = async () => {
 
@@ -38,7 +41,6 @@ let fetchUser = async () => {
     } else {
       alert(response.data.msg)
     }
-
 
 
   } catch (error) {

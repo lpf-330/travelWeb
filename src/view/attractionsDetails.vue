@@ -41,20 +41,10 @@ import { onMounted, ref } from 'vue';
 import CommentsArea from '../components/CommentsArea.vue';
 import LikeButton from '../components/LikeButton.vue';
 import router from '../router';
+import axios from 'axios';
 
 
 console.log(JSON.parse(history.state.data))
-
-onMounted(()=>{
-  // console.log(router);
-  
-  // console.log(JSON.parse(history.state.data));
-  
-})
-
-const toFamousPeople = () => {
-  router.push("/index/famousPeople")
-}
 
 let attraction = ref({
   name: "黄山",
@@ -80,7 +70,45 @@ let attraction = ref({
     },
   ],
   likes: 0,
-});  
+});
+
+const fetchFamousPeople = async () => {
+
+  try {
+
+    const url = "http://localhost:8081/FamousPeople/" + "" //这里路径可能错
+    const response = await axios.post(url, {
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应登录", response.data);
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+}
+
+
+onMounted(() => {
+  // console.log(router);
+
+  // console.log(JSON.parse(history.state.data));
+
+})
+
+const toFamousPeople = () => {
+  router.push("/index/famousPeople")
+}
+
+
 </script>
 
 <style scoped>

@@ -2,25 +2,20 @@ import { defineStore } from "pinia";
 
 const useProductionsStore = defineStore("productions", {
     state: () => ({
-        productions: [],
-        shopCart: []
+        productions: []
     }),
     actions: {
-        addProduction(id, name, description, price, image, stock, keyword, state) {
+        addProduction(id, name, message, price, image, stock, keyword) {
             this.productions.push({
-                id: id,
+                product_id: id,
                 name: name,
-                description: description,
+                message: message,
                 price: price,
                 image: image,
                 stock: stock,
                 keyword: keyword,
-                state: state
             })
         },
-        addShopCart(id) {
-            this.shopCart.push(id)
-        }
     }
 })
 

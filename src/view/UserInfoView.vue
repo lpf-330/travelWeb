@@ -2,11 +2,11 @@
 import { RouterView } from 'vue-router';
 import router from '../router';
 
-const toUserSpace=()=>{
+const toUserSpace = () => {
     router.push('userSpace')
 }
 
-const toAddress=()=>{
+const toAddress = () => {
     router.push('address')
 }
 
@@ -25,21 +25,21 @@ const toAddress=()=>{
 </template>
 
 <style scoped>
-.box{
+.box {
     max-width: 92%;
-  min-width: 1300px;
-  margin: auto;
-  text-align: center;
-  padding: 40px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 80%;
-  display: flex;
-  justify-content: space-between;
+    min-width: 1300px;
+    margin: auto;
+    text-align: center;
+    padding: 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: 80%;
+    display: flex;
+    justify-content: space-between;
 }
 
-.router{
+.router {
     height: 100%;
     width: 15%;
     background-color: #b9b9b947;
@@ -50,7 +50,7 @@ const toAddress=()=>{
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.sbox{
+.sbox {
     width: 90%;
     height: 8%;
     margin: 5% auto 5% auto;
@@ -59,16 +59,16 @@ const toAddress=()=>{
     cursor: pointer;
 }
 
-.sbox:hover{
-    background-color:#ccc ;
+.sbox:hover {
+    background-color: #ccc;
 }
 
-.sbox span{
+.sbox span {
     margin: auto;
     font-size: 1.4rem;
 }
 
-.container{
+.container {
     height: 100%;
     width: 80%;
     border-radius: 25px;
@@ -76,5 +76,4 @@ const toAddress=()=>{
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
     display: flex;
 }
-
 </style>

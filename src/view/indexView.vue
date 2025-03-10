@@ -1,6 +1,37 @@
 <script setup>
 import Carousel from '../components/Carousel.vue';
 import { ref } from 'vue';
+import axios from 'axios';
+
+
+let fetchViews = async () => {
+  try {
+
+    const url = "http://localhost:8081/"  //这里后端还没写
+    const response = await axios.post(url, {
+
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应登录", response.data);
+
+
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+}
+
+
+
 
 let attractionLists = ref([
   {

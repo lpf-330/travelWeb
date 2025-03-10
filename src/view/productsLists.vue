@@ -5,9 +5,6 @@
 
     </div>
 
-
-    <!-- Checkout Modal -->
-
   </div>
 </template>
 
@@ -16,19 +13,40 @@ import { ref } from 'vue';
 import Production from '../components/Production.vue'
 import useProductionsStore from '../stores/productions';
 import { storeToRefs } from 'pinia';
+import axios from 'axios';
 
-let {shopCart,productions} =storeToRefs(useProductionsStore)
 
-useProductionsStore().addProduction(1,1,1,2,1,1,1,1)
+const toLink = "productDetails"
 
-const toLink="productDetails"
+let fetchProductsList = async () => {
 
-//let productsID=ref("") 以免你忘了特产也有ID
+  try {
+
+    const url = "http://localhost:8081/product/getProducts" //这里路径可能错
+    const response = await axios.post(url, {
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应登录", response.data);
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+}
+
 
 // 示例的土特产数据  
 let products = ref([
   {
-    id:"1",
+    id: "1",
     name: "特产A",
     price: 100,
     pic: "https://via.placeholder.com/200",
@@ -36,7 +54,7 @@ let products = ref([
     available: true,  // 售卖情况  
   },
   {
-    id:"2",
+    id: "2",
     name: "特产B",
     price: 200,
     pic: "https://via.placeholder.com/200",
@@ -44,7 +62,7 @@ let products = ref([
     available: false,  // 售罄  
   },
   {
-    id:"3",
+    id: "3",
     name: "特产C",
     price: 150,
     pic: "https://via.placeholder.com/200",

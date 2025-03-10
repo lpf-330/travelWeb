@@ -2,20 +2,49 @@
 import { ref } from 'vue';
 import router from '../router'
 import { RouterLink } from 'vue-router';
+import axios from 'axios';
 
 const account = ref()
 const passward = ref()
 const passwardTest = /^[a-zA-Z0-_]{2,11}$/
 
+
+let postRegister = async () => {
+  try {
+
+    const url = "http://localhost:8081/"  //这里后端还没写
+    const response = await axios.post(url, {
+      username: account.value,
+      password: passward.value
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应登录", response.data);
+
+
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+}
+
 const LoginTest = () => {
   if (account.value) {
     if (passward.value) {
-      if(passwardTest.test(passward.value)){
-          router.push('/')
-          console.log(1);
-        }else{
-          alert("密码必须在12个字符内，且仅限英文字母，数字和下划线") 
-        }
+      if (passwardTest.test(passward.value)) {
+        router.push('/')
+        console.log(1);
+      } else {
+        alert("密码必须在12个字符内，且仅限英文字母，数字和下划线")
+      }
     } else {
       alert("请输入密码")
     }
@@ -24,7 +53,7 @@ const LoginTest = () => {
   }
 }
 
-const returnLogin=()=>{
+const returnLogin = () => {
   router.push('/')
 }
 
@@ -45,7 +74,6 @@ const returnLogin=()=>{
 </template>
 
 <style scoped>
-
 .backgrand {
   width: 100%;
   height: 100%;
@@ -107,7 +135,7 @@ const returnLogin=()=>{
   cursor: pointer;
 }
 
-.iconReturn{
+.iconReturn {
   display: inline-block;
   width: 1.8rem;
   position: absolute;
@@ -118,7 +146,7 @@ const returnLogin=()=>{
   cursor: pointer;
 }
 
-.iconReturn:hover{
+.iconReturn:hover {
   color: rgba(0, 174, 227, 0.797);
 }
 </style>

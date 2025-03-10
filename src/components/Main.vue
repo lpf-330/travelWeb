@@ -4,11 +4,11 @@ import { storeToRefs } from 'pinia';
 import { RouterLink } from 'vue-router';
 import router from '../router';
 
-const userInfoStore=useUserInfoStore()
+const userInfoStore = useUserInfoStore()
 
-const {userName}=storeToRefs(userInfoStore)
+const { userName } = storeToRefs(userInfoStore)
 
-const userInfoPage=()=>{
+const userInfoPage = () => {
     router.push('/index/userInfo/userSpace')
 }
 
@@ -16,27 +16,29 @@ const userInfoPage=()=>{
 
 
 <template>
-<div class="title">
-            <div class="logo"><img src="../assets//picture/logo.jpg"></div>
-            <div class="system_name"><p>江西省旅游平台</p></div>
-            <div class="list">
-                <!--这些也要实现页面跳转-->
-                <span><router-link to="/index/indexView" class="a1">首页</router-link></span>
-                <span><router-link to="/index/attractions" class="a2">风景名胜</router-link></span>
-                <span><router-link to="/index/products" class="a4">土特产</router-link></span>
-                <span><router-link to="/index/community" class="a5">社区</router-link></span>
-                
-            </div>
-            <div class="user" @click="userInfoPage()">
-                <div class="userImg"></div>
-                <span>{{ userName }}</span>
-            </div>
-            
-</div>
+    <div class="title">
+        <div class="logo"><img src="../assets//picture/logo.jpg"></div>
+        <div class="system_name">
+            <p>江西省旅游平台</p>
+        </div>
+        <div class="list">
+            <!--这些也要实现页面跳转-->
+            <span><router-link to="/index/indexView" class="a1">首页</router-link></span>
+            <span><router-link to="/index/attractions" class="a2">风景名胜</router-link></span>
+            <span><router-link to="/index/products" class="a4">土特产</router-link></span>
+            <span><router-link to="/index/community" class="a5">社区</router-link></span>
+            <span><router-link to="/index/shopCart" class="a6">购物车</router-link></span>
+        </div>
+        <div class="user" @click="userInfoPage()">
+            <div class="userImg"></div>
+            <span>{{ userName }}</span>
+        </div>
+
+    </div>
 </template>
 
 <style scoped>
-.title{
+.title {
     background-color: white;
     height: 70px;
     margin-top: 0.2%;
@@ -44,18 +46,18 @@ const userInfoPage=()=>{
     margin-bottom: 2%;
 }
 
-.logo{
+.logo {
     margin-left: 50px;
     height: 100%;
     display: inline-block;
 }
 
-.logo img{
+.logo img {
     width: 100%;
     height: 90%;
 }
 
-.system_name{
+.system_name {
     position: absolute;
     height: 70px;
     display: inline-block;
@@ -64,31 +66,31 @@ const userInfoPage=()=>{
     font-size: 20px;
 }
 
-.list{
+.list {
     position: absolute;
     display: inline-block;
     margin-left: 250px;
     margin-top: 22px;
 }
 
-.list span{
+.list span {
     padding-right: 30px;
     color: black;
     font-size: 17px;
 }
 
-.list span:hover{
+.list span:hover {
     opacity: 0.7;
     text-decoration: underline;
     color: #ff9d00;
 }
 
-a{
+a {
     color: inherit;
     text-decoration: none;
 }
 
-.user{
+.user {
     position: absolute;
     top: 1.5%;
     right: 6%;
@@ -101,15 +103,14 @@ a{
     cursor: pointer;
 }
 
-.userImg{
+.userImg {
     height: 50px;
     width: 50px;
     border-radius: 50%;
     background-color: #ff9d00;
 }
 
-.user span{
+.user span {
     font-size: 1.2rem;
 }
-
 </style>
