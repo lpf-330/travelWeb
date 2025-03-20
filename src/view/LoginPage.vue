@@ -30,12 +30,19 @@ let fetchUser = async () => {
       }
     );
 
-    console.log("响应登录", response.data);
+
 
     if (response.data.code === 1) {
 
 
       router.push({ name: 'index' })
+      userInfoStore.avatar.value = response.data.data.avtar
+      userInfoStore.email.value = response.data.data.email
+      userInfoStore.phone.value = response.data.data.phone
+      userInfoStore.user_id.value = response.data.data.user_id
+      userInfoStore.username.value = response.data.data.username
+      console.log("响应登录", response.data);
+      console.log('01', userInfoStore);
 
 
     } else {
@@ -58,9 +65,9 @@ const LoginTest = () => {
     if (passward.value) {
       if (passwardTest.test(passward.value)) {
 
-        // fetchUser()
+        fetchUser()
 
-        router.push({ name: 'index' })
+        // router.push({ name: 'index' })
       } else {
         alert("密码必须在12个字符内，且仅限英文字母，数字和下划线")
       }

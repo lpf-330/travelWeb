@@ -1,8 +1,7 @@
 <template>
   <div class="products-list">
     <div class="showlist-container">
-      <Production v-for="(value) in products" :id="value.id" :toLink="toLink"></Production>
-
+      <Production v-for="(value) in products" :data="value" :toLink="toLink"></Production>
     </div>
 
   </div>
@@ -11,10 +10,10 @@
 <script setup>
 import { ref } from 'vue';
 import Production from '../components/Production.vue'
-import useProductionsStore from '../stores/productions';
-import { storeToRefs } from 'pinia';
 import axios from 'axios';
 
+
+const products = ref([])
 
 const toLink = "productDetails"
 
@@ -22,7 +21,7 @@ let fetchProductsList = async () => {
 
   try {
 
-    const url = "http://localhost:8081/product/getProducts" //这里路径可能错
+    const url = "http://localhost:8081/product/getProducts"
     const response = await axios.post(url, {
     },
       {
@@ -33,6 +32,17 @@ let fetchProductsList = async () => {
     );
 
     console.log("响应登录", response.data);
+    for (let i = 0; i < response.data.length; i++) {
+      products.value.push({
+        id: response.data[i].product_id,
+        name: response.data[i].name,
+        price: response.data[i].price,
+        pic: response.data[i].image,
+        message: response.data[i].message,
+        stock: response.data[i].stock
+      })
+    }
+
 
   } catch (error) {
     console.error("出错", error);
@@ -42,43 +52,10 @@ let fetchProductsList = async () => {
 
 }
 
-
-// 示例的土特产数据  
-let products = ref([
-  {
-    id: "1",
-    name: "特产A",
-    price: 100,
-    pic: "https://via.placeholder.com/200",
-    message: "特产A的介绍",
-    available: true,  // 售卖情况  
-  },
-  {
-    id: "2",
-    name: "特产B",
-    price: 200,
-    pic: "https://via.placeholder.com/200",
-    message: "特产B的介绍",
-    available: false,  // 售罄  
-  },
-  {
-    id: "3",
-    name: "特产C",
-    price: 150,
-    pic: "https://via.placeholder.com/200",
-    message: "特产C的介绍",
-    available: true,
-  },
-]);
-
-// let selectedProducts = ref([]); // 存储已选择的土特产  
-// let totalPrice = ref(0);
+fetchProductsList()
 
 
-// 跳转到特产详情页  
-// let goToDetail = (product) => {
-//   console.log('跳转到详情页面，产品：', product.name);
-// };  
+
 </script>
 
 <style scoped>

@@ -3,10 +3,11 @@ import useUserInfoStore from '../stores/user';
 import { storeToRefs } from 'pinia';
 import { RouterLink } from 'vue-router';
 import router from '../router';
+import { ref } from 'vue';
 
-const userInfoStore = useUserInfoStore()
-
-const { userName } = storeToRefs(userInfoStore)
+const userInfoStore = storeToRefs(useUserInfoStore())
+const username = ref(userInfoStore.username.value)
+console.log('username', username.value);
 
 const userInfoPage = () => {
     router.push('/index/userInfo/userSpace')
@@ -31,7 +32,7 @@ const userInfoPage = () => {
         </div>
         <div class="user" @click="userInfoPage()">
             <div class="userImg"></div>
-            <span>{{ userName }}</span>
+            <span>{{ username }}</span>
         </div>
 
     </div>
