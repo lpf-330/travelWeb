@@ -1,5 +1,60 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import useUserInfoStore from '../stores/user';
+import { storeToRefs } from 'pinia';
+import axios from 'axios';
+
+const userInfoStore = storeToRefs(useUserInfoStore())
+
+
+
+/**
+ * 获取历史订单
+ * 
+ * 请求参数：
+ * user_id:String
+ * 
+ * 响应参数：
+ * pre_orders:[{
+ *  order_id:String,
+ *  status:String,
+ *  total_price:String,
+ *  created_at:String,
+ *  order_details:{
+ *      productions:[{
+ *          name:String,
+ *          price:Number,
+ *          quantity:Number
+ *      },...],
+ *      address:String
+ *  }
+ * },...]
+ */
+const fetchPreOrder = async () => {
+
+    try {
+
+        const url = "http://localhost:8081/"
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value,
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log("响应获取历史订单", response.data);
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
 
 </script>
 
