@@ -31,8 +31,7 @@ const toPreOrder = () => {
 
 <style scoped>
 .box {
-    max-width: 92%;
-    min-width: 1300px;
+    width: 92%;
     margin: auto;
     text-align: center;
     padding: 40px;
