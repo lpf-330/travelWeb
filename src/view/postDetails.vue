@@ -25,7 +25,7 @@
   <script setup>  
   import { ref } from 'vue';  
   import LikeButton from '../components/LikeButton.vue';
-  import PostCommentsArea from '../components/PostCommentsArea.vue';
+  import PostCommentsArea from '../components/CommentsArea.vue';
   import axios from 'axios'; 
 
   console.log('postDetails',history.state);
