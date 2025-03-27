@@ -25,7 +25,7 @@ const updataUserName = async () => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/updateUsername"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             username: username.value
@@ -62,7 +62,7 @@ const updataEmail = async () => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/updateEmail"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             email: email.value
@@ -100,7 +100,7 @@ const updataPhone = async () => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/updatePhone"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             phone: phone.value
@@ -160,6 +160,8 @@ const updataAvatar = async () => {
     }
 
 }
+
+
 </script>
 
 <template>
@@ -184,15 +186,15 @@ const updataAvatar = async () => {
             <div class="box img"></div>
             <div class="box name">
                 <input type="text" class="update" v-model="username">
-                <button class="updateButton">修改</button>
+                <button class="updateButton" @click="updataUserName">修改</button>
             </div>
             <div class="box email">
                 <input type="email" class="update" v-model="email">
-                <button class="updateButton">修改</button>
+                <button class="updateButton"@click="updataEmail">修改</button>
             </div>
             <div class="box phone">
                 <input type="text" class="update" v-model="phone">
-                <button class="updateButton">修改</button>
+                <button class="updateButton" @click="updataPhone">修改</button>
             </div>
         </div>
     </div>

@@ -29,14 +29,14 @@ const userInfoStore = storeToRefs(useUserInfoStore())
  * 响应参数：
  * 是否更新成功
  */
-const updataNowAddress = async (addr_id) => {
+const updateNowAddress = async (addr_id) => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/updateNowAddress"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
-            addr_id: addr_id
+            addr_id: addr_id,
         },
             {
                 headers: {
@@ -67,11 +67,11 @@ const updataNowAddress = async (addr_id) => {
  * 响应参数：
  * 是否更新成功
  */
-const updataAddress = async (value) => {
+const updateAddress = async (value) => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/updateAddress"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             addr_id: addr_id,
@@ -109,7 +109,7 @@ const deleteAddress = async (addr_id) => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/deleteAddress"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             addr_id: addr_id
@@ -146,7 +146,7 @@ const addAddress = async (value) => {
 
     try {
 
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/addAddress"
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             address: value
