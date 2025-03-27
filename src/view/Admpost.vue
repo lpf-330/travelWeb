@@ -1,9 +1,6 @@
 <template>
-<div class="container">
-        <div class="total">
-            <AdmMain></AdmMain>
-        </div>
-        <h1>帖子列表</h1>
+    <div class="container">
+        <h1>评论列表</h1>
         <div class="review-section">
             <div class="review-item">
                 <div class="user-id">用户ID: <span>用户A</span></div>
@@ -49,47 +46,7 @@
 import { onMounted } from 'vue';
 import AdmMain from '../components/AdmMain.vue';
 
-onMounted(()=>{
-    // 打开封禁模态窗口  
-function openBanModal(userId) {
-    document.getElementById('banUserId').value = userId;
-    document.getElementById('banModal').style.display = 'block';
-}
 
-// 关闭封禁模态窗口  
-function closeBanModal() {
-    document.getElementById('banModal').style.display = 'none';
-}
-
-// 点击模态窗口之外区域关闭模态窗口  
-window.onclick = function (event) {
-    if (event.target == document.getElementById('banModal')) {
-        closeBanModal();
-    }
-}
-
-// 处理封禁提交  
-document.getElementById('banForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const banUserId = document.getElementById('banUserId').value;
-    const banReason = document.getElementById('banReason').value;
-
-    alert(`用户 ${banUserId} 被封禁，理由：${banReason}`);
-
-    // 关闭模态窗口  
-    closeBanModal();
-});
-
-// 处理通过操作  
-function handlePass(userId) {
-    alert(`用户 ${userId} 的评价已通过。`);
-}
-
-// 处理拒绝操作  
-function handleReject(userId) {
-    alert(`用户 ${userId} 的评价已被拒绝。`);
-}
-});
 </script>
 
 
@@ -211,10 +168,6 @@ button {
     /* 鼠标悬停效果 */
     text-decoration: none;
     cursor: pointer;
-}
-
-.total {
-    width: 100%;
 }
 
 .title {

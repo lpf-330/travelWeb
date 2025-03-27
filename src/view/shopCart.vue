@@ -2,11 +2,215 @@
 import { ElContainer } from 'element-plus';
 import ShopCartItem from '../components/ShopCartItem.vue';
 import { ref } from 'vue';
+import useUserInfoStore from '../stores/user';
+import { storeToRefs } from 'pinia';
+import axios from 'axios';
 
-const selected = ref([1, 2, 3, 4, 5, 6])
+const userInfoStore = storeToRefs(useUserInfoStore())
 
-const sumNum = ref(0)
+const selected = ref([1, 2, 3, 4, 5, 6])    //在购物车的下标
+const shopCart = ref([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
 const sumPrice = ref(0)
+
+
+/**
+ * 获取用户购物车的所有商品
+ * 
+ * 请求参数：
+ * user_id:String，
+ * 
+ * 响应参数：
+ * product_id，
+ * quantity，
+ * name，
+ * image
+ */
+const fetchShopCart = async () => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        for (let i = 0; i < response.data.length; i++) {
+            shopCart.value.push({
+                product_id: response.data[i].product_id,
+                quantity: response.data[i].quantity,
+                name: response.data[i].name,
+                price: response.data[i].price,
+                image: response.data[i].image
+            })
+        }
+
+        countSumPrice()
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
+
+/**
+ * 购物车某商品的数量加1
+ * 
+ * 请求参数：
+ * user_id:String，
+ * product_id:String
+ * 
+ * 响应参数：
+ * 是否添加成功
+ */
+const addQuantity = async (product_id) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value,
+            product_id: product_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+/**
+ * 购物车某商品的数量减1
+ * 
+ * 请求参数：
+ * user_id:String，
+ * product_id:String
+ * 
+ * 响应参数：
+ * 是否减少成功
+ */
+const reduceQuantity = async (product_id) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value,
+            product_id: product_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+/**
+ * 删除购物车某商品
+ * 
+ * 响应参数：
+ * user_id:String，
+ * product_id:String
+ * 
+ * 响应参数：
+ * 是否删除成功
+ */
+const deleteProduction = async (product_id) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value,
+            product_id: product_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+/**
+ * 用户结算账单
+ * 
+ * 请求参数：
+ * user_id:String,
+ * total_price:Number,
+ * address:String,
+ * order_details:[{
+ *  product_id:String,
+ *  quantity:Number,
+ *  price:Number
+ * },...]
+ * 
+ * 响应参数：
+ * 是否提交结算成功
+ */
+const postCheckOut = async () => {
+    const order_details = []
+    for (let i = 0; i < selected.value.length; i++) {
+        order_details.push({
+            product_id: shopCart.value[selected.value[i]].product_id,
+            quantity: shopCart.value[selected.value[i]].quantity,
+            price: shopCart.value[selected.value[i]].price
+        })
+    }
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            user_id: userInfoStore.user_id.value,
+            total_price: sumPrice.value,
+            address: userInfoStore.nowAddr.value,
+            order_details: order_details
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+const select = (index) => {
+    selected.value.push(index)
+    countSumPrice()
+}
+
+const countSumPrice = () => {
+    for (let i = 0; i < selected.value.length; i++) {
+        sumPrice += shopCart.value[selected.value[i]].quantity * shopCart.value[selected.value[i]].price
+    }
+}
+
+
 
 
 </script>
@@ -22,13 +226,7 @@ const sumPrice = ref(0)
                 </el-header>
                 <el-main class="main">
                     <el-scrollbar max-height="100%" class="scrollbar">
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
-                        <shop-cart-item></shop-cart-item>
+                        <shop-cart-item v-for="(value, index) in shopCart"></shop-cart-item>
                     </el-scrollbar>
                 </el-main>
             </el-container>

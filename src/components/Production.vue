@@ -1,54 +1,24 @@
 <script setup>
 import { defineProps } from 'vue';
-import router from '../router';
-import axios from 'axios';
-import { storeToRefs } from 'pinia';
-import useProductionsStore from '../stores/productions';
+import { useRouter } from 'vue-router';
+// import router from '../router';
 
-
-// onMounted(()=>{
-//     document.querySelector('.name').style.
-// })
+const router = useRouter()
 
 let props = defineProps({
-    id: {
-        type: String,
-        // required: true
+    data: {
+        type: Object,
     },
     toLink: {
         type: String,
-        // required: true, // 这是一个必需的属性  
     },
 });
 
-let fetchProduct = async () => {
-
-    try {
-
-        const url = "http://localhost:8081/"    //这里后端还没写
-        const response = await axios.post(url, {
-
-        },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }
-        );
-
-        console.log("响应登录", response.data);
-
-    } catch (error) {
-        console.error("出错", error);
-        alert("加载失败，请稍后再试。"); // 友好的错误提示  
-
-    }
-
-}
-
-
 const toProductDetails = () => {
-    router.push("/index/" + props.toLink)
+    router.push({
+        name: props.toLink,
+        state: props.data
+    })
 }
 
 
@@ -59,8 +29,8 @@ const toProductDetails = () => {
 <template>
     <div class="box" @click="toProductDetails">
         <div class="img"></div>
-        <div class="name">{{ }}</div>
-        <div class="price">{{ }}</div>
+        <div class="name">{{ props.data.name }}</div>
+        <div class="price">{{ props.data.price }}</div>
     </div>
 
 </template>
@@ -69,9 +39,10 @@ const toProductDetails = () => {
 .box {
     width: 100%;
     height: 100%;
-    background-color: aqua;
     border-radius: 15px;
     box-sizing: border-box;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.224);
 }
 
 .box:hover {

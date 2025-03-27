@@ -2,11 +2,13 @@ import { defineStore } from "pinia";
 
 const useUserInfoStore = defineStore("userInfor", {
     state: () => ({
-        user_id: null,
+        user_id: "",
         username: "",
         email: "",
         phone: "",
         avatar: "",
+        address: [],    //[{addr_id:address}]
+        nowAddr: ""
     }),
     actions: {
         setUser(uname, password, email, phone, avatar) {

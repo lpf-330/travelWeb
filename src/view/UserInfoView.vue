@@ -10,6 +10,10 @@ const toAddress = () => {
     router.push('address')
 }
 
+const toPreOrder = () => {
+    router.push({ name: 'preOrder' })
+}
+
 </script>
 
 <template>
@@ -17,6 +21,7 @@ const toAddress = () => {
         <div class="router">
             <div class="sbox" @click="toUserSpace"><span>个人信息</span></div>
             <div class="sbox" @click="toAddress"><span>收货地址</span></div>
+            <div class="sbox" @click="toPreOrder"><span>历史订单</span></div>
         </div>
         <div class="container">
             <RouterView></RouterView>
@@ -26,8 +31,7 @@ const toAddress = () => {
 
 <style scoped>
 .box {
-    max-width: 92%;
-    min-width: 1300px;
+    width: 92%;
     margin: auto;
     text-align: center;
     padding: 40px;

@@ -1,127 +1,111 @@
-
 <template>
-  <div class="container">
-        <div class="total">
-            <AdmMain></AdmMain>
-        </div>
+    <div class="container">
         <h1>景点列表</h1>
-        <div id="scenery-list">
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">1</span>
+        <div class="scrollbarBox" id="scenery-list">
+            <el-scrollbar>
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">1</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>景点 1</h2>
+                        <p>这是第一个景点的描述，介绍该景点的特点和历史。</p>
+                        <p></p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-                <div class="scenery-description">
-                    <h2>景点 1</h2>
-                    <p>这是第一个景点的描述，介绍该景点的特点和历史。</p>
-                    <p></p>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">2</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>景点 2</h2>
+                        <p>这是第二个景点的描述，介绍它的魅力和吸引点。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">3</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>景点 3</h2>
+                        <p>第三个景点的介绍，包括它的特色之处和游玩的建议。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-            </div>
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">2</span>
-                </div>
-                <div class="scenery-description">
-                    <h2>景点 2</h2>
-                    <p>这是第二个景点的描述，介绍它的魅力和吸引点。</p>
-                </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
-                </div>
-            </div>
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">3</span>
-                </div>
-                <div class="scenery-description">
-                    <h2>景点 3</h2>
-                    <p>第三个景点的介绍，包括它的特色之处和游玩的建议。</p>
-                </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
-                </div>
-            </div>
+
+                <button class="addButton" @click="centerDialogVisible = true">增加</button>
+            </el-scrollbar>
+
         </div>
-        <button id="add-button">增加</button>
     </div>
+
+    <el-dialog v-model="centerDialogVisible" title="景点内容" width="50rem" align-center>
+        <form action="" class="fromBox">
+            <div class="nameBox">
+
+            </div>
+            <div class="descriptionBox">
+
+            </div>
+            <div class="famousPeopleBox">
+
+            </div>
+            <div class="openingBox">
+
+            </div>
+            <div class="transportationBox">
+
+            </div>
+            <div class="locationBox">
+
+            </div>
+        </form>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">
+                    Confirm
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 
 <script setup>
 import { onMounted } from 'vue';
 import AdmMain from '../components/AdmMain.vue';
+import { ref } from 'vue'
 
-onMounted(()=>{
-    document.getElementById('add-button').addEventListener('click', function () {
-    const sceneryList = document.getElementById('scenery-list');
+const centerDialogVisible = ref(false)
 
-    const newScenery = document.createElement('div');
-    newScenery.className = 'scenery-item';
 
-    newScenery.innerHTML = `  
-        <div class="image-placeholder">200 x 200</div>  
-        <div class="scenery-description">  
-            <h2>新景点</h2>  
-            <p>这是新景点的描述，可以添加更多信息。</p>  
-        </div>  
-        <div class="button-group">  
-            <button class="modify-button">修改</button>  
-            <button class="delete-button">删除</button>  
-        </div>  
-    `;
-
-    sceneryList.appendChild(newScenery);
-
-    // 为删除按钮添加事件  
-    newScenery.querySelector('.delete-button').addEventListener('click', function () {
-        sceneryList.removeChild(newScenery);
-    });
-
-    // 为修改按钮添加事件  
-    newScenery.querySelector('.modify-button').addEventListener('click', function () {
-        alert('修改功能待实现！');
-    });
-});
-
-// 为现有的删除按钮添加事件  
-document.querySelectorAll('.delete-button').forEach(button => {
-    button.addEventListener('click', function () {
-        const item = button.closest('.scenery-item');
-        sceneryList.removeChild(item);
-    });
-});
-
-// 为现有的修改按钮添加事件  
-document.querySelectorAll('.modify-button').forEach(button => {
-    button.addEventListener('click', function () {
-        alert('修改功能待实现！');
-    });
-});
-})
 </script>
 
 
 <style scoped>
-
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
-
 .container {
-    max-width: 100%;
+    height: 93.6%;
     margin: auto;
-    background: white;
-    padding: 20px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
     border-radius: 8px;
+    box-sizing: border-box;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -131,23 +115,31 @@ h1 {
 
 .scenery-item {
     display: flex;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    border: 0.1rem solid #ddd;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    border-radius: 1rem;
     background-color: #fafafa;
     position: relative;
     /* 让子元素相对于此盒子定位 */
 }
 
+.scrollbarBox {
+    height: 90%;
+    background-color: #0056b3;
+}
+
 .image-placeholder {
-    width: 200px;
-    height: 200px;
+    width: 10rem;
+    height: 10rem;
     background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
+    margin-right: 5rem;
     position: relative;
     /* 让数字标记相对于此盒子定位 */
 }
@@ -210,7 +202,7 @@ button {
     background-color: #c82333;
 }
 
-#add-button {
+.addButton {
     width: 100%;
     padding: 10px;
     background-color: #28a745;
@@ -218,17 +210,14 @@ button {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
-#add-button:hover {
+.addButton:hover {
     background-color: #218838;
 }
 
-
-.total {
-    width: 100%;
-}
 
 .title {
     background-color: white;
@@ -318,4 +307,47 @@ a {
     float: left;
 }
 
+.fromBox {
+    background-color: #28a745;
+    width: 100%;
+    height: 40rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.nameBox {
+    width: 100%;
+    height: 10%;
+    background-color: #c82333;
+}
+
+.descriptionBox {
+    width: 100%;
+    height: 40%;
+    background-color: #3adcae;
+}
+
+.famousPeopleBox {
+    width: 100%;
+    height: 10%;
+    background-color: yellow;
+}
+
+.openingBox {
+    width: 100%;
+    height: 10%;
+    background-color: #ff9d00;
+}
+
+.transportationBox {
+    width: 100%;
+    height: 10%;
+    background-color: aqua;
+}
+
+.locationBox {
+    width: 100%;
+    height: 10%;
+    background-color: bisque;
+}
 </style>
