@@ -57,7 +57,7 @@ const routes = [
             {
                 path: 'community',
                 name: 'community',
-                component: () => import("../view/community.vue")
+                component: () => import("../view/community.vue"),
             },
             {
                 path: 'post',

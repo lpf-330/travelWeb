@@ -45,7 +45,7 @@ let fetchUser = async () => {
 
   } catch (error) {
     console.error("出错", error);
-    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    alert("加载失败，请稍后再试。"); 
 
   }
 
@@ -58,9 +58,9 @@ const LoginTest = () => {
     if (passward.value) {
       if (passwardTest.test(passward.value)) {
 
-        // fetchUser()
+        fetchUser()
 
-        router.push({ name: 'index' })
+        // router.push({ name: 'index' })
       } else {
         alert("密码必须在12个字符内，且仅限英文字母，数字和下划线")
       }

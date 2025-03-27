@@ -44,7 +44,7 @@ let fetchAttractions = async () => {
 
 }
 
-
+fetchAttractions();
 
 // 地名和对应的景点信息  
 let locations = [

@@ -18,26 +18,54 @@
       <div class="likes">  
         <LikeButton></LikeButton>  
       </div>
-      <PostCommentsArea></PostCommentsArea>  
+        <PostCommentsArea></PostCommentsArea>  
     </div>  
   </template>  
   
   <script setup>  
   import { ref } from 'vue';  
-  import Main from '../components/Main.vue';  
   import LikeButton from '../components/LikeButton.vue';
-  import PostCommentsArea from '../components/PostCommentsArea.vue'; 
+  import PostCommentsArea from '../components/PostCommentsArea.vue';
+  import axios from 'axios'; 
+
+  console.log('postDetails',history.state);
   
-  // 假设我们有一个帖子数据对象  
-  let post = ref({  
-    title: "探索Vue 3的世界",  
-    content: "Vue 3是一个渐进式的JavaScript框架，用于构建用户界面。它具有更好的性能和更小的体积，并引入了组合式API，使得代码组织和复用变得更加简单。",  
-    category: "前端开发"  
-  });  
   
-  // 创建时间和更新时间  
-  let createdAt = ref("2024-01-01");  
-  let updatedAt = ref("2024-12-01");  
+  const fetchPostsDetails = async () => {
+  try {
+    const url = "http://localhost:8081/post/post_id"
+    const response = await axios.post(url, {post_id: history.state.post_id
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log("响应帖子详情", response.data);
+
+    post.value={
+      title: response.data.title,
+      content: response.data.message,
+      category: response.data.post_partition,
+    }
+
+    createdAt.value = response.data.created_at;
+    updatedAt.value = response.data.updated_at;
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。");
+
+  }
+}
+
+  // fetchPostsDetails();
+  
+  let post = ref({});  
+  let createdAt = ref();  
+  let updatedAt = ref();  
   </script>  
   
   <style scoped>  

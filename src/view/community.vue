@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="post-list">
-      <ShowLists :showLists="posts" @editPost="openEditModal" @deletePost="deletePost" :currentUser="currentUser"
-        @click.stop="toPost" />
+      <ShowLists :showLists="posts" @editPost="openEditModal" @deletePost="deletePost" :currentUser="currentUser" />
       <br>
       <div class="add-post" @click="showAddModal = true">+</div>
     </div>
@@ -32,9 +31,7 @@ import { storeToRefs } from 'pinia';
 
 const userInfoStore = storeToRefs(useUserInfoStore())
 
-const toPost = () => {
-  router.push("/index/post")
-}
+
 
 // 模拟当前用户  
 let currentUser = ref({
@@ -42,18 +39,12 @@ let currentUser = ref({
   name: userInfoStore.username.value // 当前用户名称  
 });
 
-// 定义一个响应式数组来存储帖子数据  
-let posts = ref([
-  { id: 1, name: '帖子标题1', message: '这是帖子内容1.', authorId: 1 }, // 帖子创建者ID   
-  { id: 2, name: '帖子标题2', message: '这是帖子内容2.', authorId: 2 },
-  { id: 3, name: '帖子标题3', message: '这是帖子内容3.', authorId: 1 },
-]);
-
+let posts = ref([]); //社区帖子数据
 const fetchPosts = async () => {
 
   try {
 
-    const url = "http://localhost:8081/post/getPosts" //这里路径可能错
+    const url = "http://localhost:8081/post/getPosts"
     const response = await axios.post(url, {
     },
       {
@@ -63,15 +54,23 @@ const fetchPosts = async () => {
       }
     );
 
-    console.log("响应登录", response.data);
+    console.log("响应帖子", response.data);
+    for (let i = 0; i < response.data.length; i++) {
+      posts.value.push({
+        id:response.data[i].post_id,
+        name:response.data[i].title,
+        message:response.data[i].message,
+        authorId:response.data[i].user_id,
+      }) 
+    }
 
   } catch (error) {
     console.error("出错", error);
-    alert("加载失败，请稍后再试。"); // 友好的错误提示  
-
+    alert("加载失败，请稍后再试。");
   }
-
 }
+
+fetchPosts();
 
 let showAddModal = ref(false);
 let showEditModal = ref(false);
@@ -141,24 +140,19 @@ let deletePost = (postId) => {
 
 <style scoped>
 .post-list {
-  max-width: 95%;
-  /* 设置最大宽度 */
+  padding: 2%;
+  max-width: 90%;
   margin: auto;
   text-align: center;
-  /* 文本居中 */
   background-color: #f9f9f9;
-  /* 背景颜色，可选 */
   border-radius: 8px;
-  /* 圆角边框 */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  /* 阴影效果 */
 }
 
 .add-post {
   font-size: 2em;
   color: white;
   background-color: #28a745;
-  /* 绿色 */
   padding: 10px;
   border-radius: 50%;
   width: 50px;
@@ -176,7 +170,6 @@ let deletePost = (postId) => {
 
 .add-post:hover {
   background-color: #218838;
-  /* 深绿色 */
 }
 
 textarea {

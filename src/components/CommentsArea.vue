@@ -7,7 +7,6 @@
         <strong>{{ comment.username }}</strong>  
         <p>{{ comment.text }}</p>  
         <button @click="likeComment(comment.id)">点赞 ({{ comment.likes }})</button>  
-        <!-- 仅当评论是当前用户的时显示编辑和删除按钮 -->  
         <template v-if="comment.isOwner">  
           <button @click="editComment(comment.id)">编辑</button>  
           <button @click="deleteComment(comment.id)">删除</button>  
@@ -22,66 +21,205 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'; 
+import { ref } from 'vue';
+import { Axios } from 'axios'; 
 
-// 评论数据结构，添加 isOwner 属性  
-let comments = ref([  
-  {  
-    id: 1,  
-    username: "用户1",  
-    avatar: "https://via.placeholder.com/200",  
-    text: "非常美的地方！",  
-    likes: 0,  
-    isOwner: false, // 不是当前用户的评论  
-  },  
-  {  
-    id: 2,  
-    username: "我", // 当前用户的评论  
-    avatar: "https://via.placeholder.com/200",  
-    text: "值得一去！",  
-    likes: 0,  
-    isOwner: true, // 当前用户的评论  
-  },  
-]);  
+let comments = ref([]);
+
+/**
+ * 获取评论列表
+ * 
+ * 请求参数：
+ * user_id:String,
+ * post_id:String,
+ * 
+ * 响应参数：
+ * comments:[{
+ *    post_comment_id,
+ *    username,
+ *    content,
+ *    likes,
+ *    avatar,
+ * },...],
+ * userComments:[]  (用户在这个帖子评论区里发表的所有评论的id)
+ * 
+ */
+const fetchComments = async () => {  
+  try{
+    const url = 'http://localhost:8081/comments';
+    const response = await Axios.get(url,{},
+    {
+      headers:{
+        'Content-Type': 'application/json',
+      }
+    }
+  );
+
+  console.log("响应评论",response.data);
+  let userComments = response.data.userComments;
+  let comments = response.data.comments;
+  for(let i=0;i<response.data.length;i++){
+    const item={
+      id: response.data[i].post_comment_id,
+      username: response.data[i].username,
+      text: response.data[i].content,
+      likes: response.data[i].likes,
+      isOwner: false, 
+    }
+
+    if(userComments.includes(item.id)){
+      item.isOwner = true;
+    }
+
+    comments.value.push(item);
+  }
+  } catch (error) {
+    console.log("出错",error);
+    alert("加载失败，请稍后再试。");
+  }
+}
+
+//fetchComments();
 
 let newComment = ref("");  
 
-// 点赞某个评论  
-let likeComment = (id) => {  
-  const comment = comments.value.find(c => c.id === id);  
-  if (comment) {  
-    comment.likes += 1;  
+/**  
+ * 编辑评论  
+ *   
+ * 请求参数:  
+ * commentId: String
+ */  
+let likeComment = async (id) => {  
+  try {  
+    const url = "http://localhost:8081/comments/likes";  
+    const response = await Axios.post(url, {}, {  
+      headers: {  
+        'Content-Type': 'application/json',  
+      }  
+    });  
+    console.log("点赞成功");  
+    const comment = comments.value.find(c => c.id === id);  
+    if (comment) {  
+      comment.likes += 1;  
+    }  
+  } catch (error) {  
+    console.error("点赞失败:", error);  
+    alert("点赞失败，请稍后再试。");  
   }  
 };  
 
-// 编辑某个评论  
-let editComment = (id) => {  
-  const comment = comments.value.find(c => c.id === id);  
-  if (comment) {  
-    newComment.value = comment.text; // 填充评论框  
-    deleteComment(id); // 删除原评论以修改  
+//likeComment();
+
+/**  
+ * 编辑评论  
+ *   
+ * 请求参数:  
+ * commentId: String  
+ * content: String  
+ *   
+ * 响应参数:  
+ * 无需返回具体数据，评论内容在前端直接更新  
+ */  
+
+let editComment = async (commentId) => {  
+  try {  
+    const comment = comments.value.find(c => c.id === commentId);  
+    if (!comment) {  
+      console.error("评论未找到");  
+      return;  
+    }  
+
+    const url = `http://localhost:8081/comments/${commentId}`;  
+    const response = await Axios.put(url, {  
+      content: comment.text  
+    }, {  
+      headers: {  
+        'Content-Type': 'application/json',  
+      }  
+    });  
+
+    console.log("编辑成功");  
+  } catch (error) {  
+    console.error("编辑失败:", error);  
+    alert("编辑失败，请稍后再试。");  
   }  
 };  
 
-// 删除评论  
-let deleteComment = (id) => {  
-  comments.value = comments.value.filter(c => c.id !== id);  
-};  
+//eidtComment();
 
-// 提交新评论  
-let submitComment = () => {  
-  if (newComment.value.trim() !== "") {  
+/**  
+ * 删除评论  
+ *   
+ * 请求参数:  
+ * commentId: String  
+ *   
+ * 响应参数:  
+ * 无需返回具体数据，评论将从评论列表中移除  
+ */  
+ let deleteComment = async (commentId) => {  
+  try {  
+    const url = `http://localhost:8081/comments/${commentId}`;  
+    const response = await Axios.delete(url, {  
+      headers: {  
+        'Content-Type': 'application/json',  
+      }  
+    });  
+    console.log("删除成功");  
+    comments.value = comments.value.filter(c => c.id !== commentId);  
+  } catch (error) {  
+    console.error("删除失败:", error);  
+    alert("删除失败，请稍后再试。");  
+  }  
+};   
+
+//deleteComment();
+
+/**  
+ * 提交新评论  
+ *   
+ * 请求参数:  
+ * content: String  
+ *   
+ * 响应参数:  
+ * id: 新评论的ID  
+ * username: 评论作者的用户名  
+ * avatar: 评论作者的头像  
+ * likes: 评论的点赞数  
+ * contect: 评论的内容  
+ */  
+ let submitComment = async () => {  
+  try {  
+    if (newComment.value.trim() === "") {  
+      alert("请先输入评论内容");  
+      return;  
+    }  
+
+    const url = 'http://localhost:8081/comments';  
+    const response = await Axios.post(url, {  
+      content: newComment.value  
+    }, {  
+      headers: {  
+        'Content-Type': 'application/json',  
+      }  
+    });  
+
+    console.log("提交成功");  
     comments.value.push({  
-      id: comments.value.length + 1,  
-      username: "我",  
-      avatar: "https://example.com/myavatar.jpg",  
+      id: response.data.id,  
+      username: currentUser.username,  
+      avatar: currentUser.avatar,  
       text: newComment.value,  
       likes: 0,  
-      isOwner: true, // 新评论的作者是当前用户  
+      isOwner: true,  
     });  
-    newComment.value = ""; // 清空输入框  
+    newComment.value = "";  
+  } catch (error) {  
+    console.error("提交失败:", error);  
+    alert("提交失败，请稍后再试。");  
   }  
 };  
+
+//submitComment();
 </script>
 
 <style scoped>
