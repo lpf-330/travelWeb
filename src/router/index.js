@@ -97,6 +97,34 @@ const routes = [
     {
         path: "/admInDex",
         component: () => import("../view/AdmInDex.vue"),
+        redirect: '/admInDex/admScenic',
+        children: [
+            {
+                path: 'admCelebrity',
+                name: 'admCelebrity',
+                component: () => import("../view/AdmCelebrity.vue")
+            },
+            {
+                path: "admPost",
+                name: "admPost",
+                component: () => import("../view/AdmPost.vue")
+            },
+            {
+                path: "admLocal",
+                name: "admLocal",
+                component: () => import("../view/AdmLocal.vue")
+            },
+            {
+                path: "admScenic",
+                name: "admScenic",
+                component: () => import("../view/AdmScenic.vue")
+            },
+            {
+                path: "admCheck",
+                name: "admCheck",
+                component: () => import("../view/AdmCheck.vue")
+            }
+        ]
     },
 ]
 

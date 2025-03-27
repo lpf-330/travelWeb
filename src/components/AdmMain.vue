@@ -1,44 +1,52 @@
 <script setup>
-
+import { RouterLink } from 'vue-router';
 </script>
 
 <template>
-<div class="title">
-            <div class="logo"><img src="../assets/logo.jpg"></div>
-            <div class="system_name"><p>旅游平台管理端</p></div>
-            <div class="list">
-                <!--这些也要实现页面跳转-->
-                <span><a href="#" class="a1" target="_blank">景点列表</a></span>
-                <span><a href="#" class="a2" target="_blank">名人列表</a></span>
-                <span><a href="#" class="a3" target="_blank">土特产列表</a></span>
-                <span><a href="#" class="a4" target="_blank">帖子列表</a></span>
-                <span><a href="#" class="a5" target="_blank">评论列表</a></span>
-            </div>
-            <div class="adm">
-                <!--插入管理员登录页面-->
-                <span class="login"><a href="#">管理员登录</a></span>
-            </div>
-</div>
+    <div class="title">
+        <div class="logo"><img src="../assets/picture/logo.jpg"></div>
+        <div class="system_name">
+            <p>江西旅游平台管理端</p>
+        </div>
+        <div class="list">
+            <!--这些也要实现页面跳转-->
+            <span>
+                <RouterLink class="a1" :to="{ name: 'admScenic' }">景点列表</RouterLink>
+            </span>
+            <span>
+                <RouterLink class="a2" :to="{ name: 'admCelebrity' }">名人列表</RouterLink>
+            </span>
+            <span>
+                <RouterLink class="a3" :to="{ name: 'admLocal' }">土特产列表</RouterLink>
+            </span>
+            <span>
+                <RouterLink class="a4" :to="{ name: 'admPost' }">帖子列表</RouterLink>
+            </span>
+            <span>
+                <RouterLink class="a5" :to="{ name: 'admCheck' }">订单处理</RouterLink>
+            </span>
+        </div>
+    </div>
 </template>
 
 <style scoped>
-    .title{
+.title {
     background-color: white;
     height: 70px;
 }
 
-.logo{
+.logo {
     margin-left: 50px;
     height: 100%;
     display: inline-block;
 }
 
-.logo img{
+.logo img {
     width: 100%;
     height: 90%;
 }
 
-.system_name{
+.system_name {
     position: absolute;
     height: 70px;
     display: inline-block;
@@ -47,39 +55,31 @@
     font-size: 20px;
 }
 
-.list{
+.list {
     position: absolute;
     display: inline-block;
     margin-left: 250px;
     margin-top: 22px;
 }
 
-.list span{
+.list span {
     padding-right: 30px;
     color: black;
     font-size: 17px;
 }
 
-.list span:hover{
+.list span:hover {
     opacity: 0.7;
     text-decoration: underline;
     color: #ff9d00;
 }
 
-a{
+a {
     color: inherit;
     text-decoration: none;
 }
 
-.adm{
-    position: absolute;
-    display: inline-block;
-    right: 200px;
-    margin-top: 22px;
-    color: #ff9d00;
-}
-
-.login:hover{
+.login:hover {
     opacity: 0.7;
     text-decoration: underline;
     font-weight: bolder;

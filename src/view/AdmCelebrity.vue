@@ -1,9 +1,5 @@
-
 <template>
-  <div class="container">
-        <div class="total">
-        <AdmMain></AdmMain>  
-        </div>
+    <div class="container">
         <h1>名人名事列表</h1>
         <div id="scenery-list">
             <div class="scenery-item">
@@ -56,59 +52,11 @@
 import AdmMain from '../components/AdmMain.vue';
 import { onMounted } from 'vue';
 
-onMounted(()=>{
-    document.getElementById('add-button').addEventListener('click', function () {
-    const sceneryList = document.getElementById('scenery-list');
 
-    const newScenery = document.createElement('div');
-    newScenery.className = 'scenery-item';
-
-    newScenery.innerHTML = `  
-        <div class="image-placeholder">200 x 200</div>  
-        <div class="scenery-description">  
-            <h2>新名人</h2>  
-            <p>这是新景点的描述，可以添加更多信息。</p>  
-        </div>  
-        <div class="button-group">  
-            <button class="modify-button">修改</button>  
-            <button class="delete-button">删除</button>  
-        </div>  
-    `;
-
-    sceneryList.appendChild(newScenery);
-
-    // 为删除按钮添加事件  
-    newScenery.querySelector('.delete-button').addEventListener('click', function () {
-        sceneryList.removeChild(newScenery);
-    });
-
-    // 为修改按钮添加事件  
-    newScenery.querySelector('.modify-button').addEventListener('click', function () {
-        alert('修改功能待实现！');
-    });
-});
-
-// 为现有的删除按钮添加事件  
-document.querySelectorAll('.delete-button').forEach(button => {
-    button.addEventListener('click', function () {
-        const item = button.closest('.scenery-item');
-        sceneryList.removeChild(item);
-    });
-});
-
-// 为现有的修改按钮添加事件  
-document.querySelectorAll('.modify-button').forEach(button => {
-    button.addEventListener('click', function () {
-        alert('修改功能待实现！');
-    });
-});
-})
 </script>
 
 
 <style scoped>
-
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -226,10 +174,6 @@ button {
 }
 
 
-.total {
-    width: 100%;
-}
-
 .title {
     background-color: white;
     height: 70px;
@@ -317,5 +261,4 @@ a {
     height: 200px;
     float: left;
 }
-
 </style>
