@@ -47,7 +47,7 @@ let comments = ref([]);
 const fetchComments = async () => {  
   try{
     const url = 'http://localhost:8081/comments';
-    const response = await Axios.get(url,{},
+    const response = await Axios.post(url,{},
     {
       headers:{
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const fetchComments = async () => {
 let newComment = ref("");  
 
 /**  
- * 编辑评论  
+ * 点赞评论  
  *   
  * 请求参数:  
  * commentId: String
