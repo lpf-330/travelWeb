@@ -79,16 +79,16 @@ const fetchPreOrder = async () => {
                             </div>
                         </div>
                     </template>
-                    <div class="orderDetails">
+                    <div>
                         <div class="prodection">
                             <div class="productionBlock">
-                                <span class="prodectionName">商品名称：</span>
+                                <span>商品名称：</span>
                             </div>
                             <div class="productionBlock">
-                                <span class="prodectionPrice">单价：</span>
+                                <span>单价：</span>
                             </div>
                             <div class="productionBlock">
-                                <span class="prodectionNum">数量：</span>
+                                <span>数量：</span>
                             </div>
                         </div>
                         <div class="addBox">

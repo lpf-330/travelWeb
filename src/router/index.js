@@ -107,7 +107,7 @@ const routes = [
             {
                 path: "admPost",
                 name: "admPost",
-                component: () => import("../view/AdmPost.vue")
+                component: () => import("../view/Admpost.vue")
             },
             {
                 path: "admLocal",

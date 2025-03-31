@@ -1,174 +1,253 @@
 <template>
     <div class="container">
-        <h1>评论列表</h1>
-        <div class="review-section">
-            <div class="review-item">
-                <div class="user-id">用户ID: <span>用户A</span></div>
-                <div class="review-content">景色真美可可！</div>
-                <div class="review-actions">
-                    <button class="ban" onclick="openBanModal('用户A')">封禁</button>
-                    <button class="pass" onclick="handlePass('用户A')">通过</button>
-                    <button class="reject" onclick="handleReject('用户A')">拒绝</button>
+        <h1>帖子列表</h1>
+        <div class="scrollbarBox" id="scenery-list">
+            <el-scrollbar>
+                <div class="scenery-item" @click="centerDialogVisible = true">
+                    <div class="image-placeholder">
+                        <span class="number-label">1</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>帖子 1</h2>
+                        <p>这是第一个帖子的描述，介绍该帖子的特点和历史。</p>
+                        <p></p>
+                    </div>
+                    <div class="button-group">
+                        <button class="delete-button" @click.stop>删除</button>
+                    </div>
                 </div>
-            </div>
-            <div class="review-item">
-                <div class="user-id">用户ID: <span>用户B</span></div>
-                <div class="review-content">非常不好！</div>
-                <div class="review-actions">
-                    <button class="ban" onclick="openBanModal('用户B')">封禁</button>
-                    <button class="pass" onclick="handlePass('用户B')">通过</button>
-                    <button class="reject" onclick="handleReject('用户B')">拒绝</button>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">2</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>帖子 2</h2>
+                        <p>这是第二个帖子的描述，介绍它的魅力和吸引点。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-            </div>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">3</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>帖子 3</h2>
+                        <p>第三个帖子的介绍，包括它的特色之处和游玩的建议。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="delete-button">删除</button>
+                    </div>
+                </div>
+
+            </el-scrollbar>
+
         </div>
     </div>
 
-    <!-- 封禁弹出窗口 -->
-    <div id="banModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeBanModal()">&times;</span>
-            <h2>封禁用户</h2>
-            <form id="banForm">
-                <div>
-                    <label for="banUserId">用户ID:</label>
-                    <input type="text" id="banUserId" readonly>
-                </div>
-                <div>
-                    <label for="banReason">封禁理由:</label>
-                    <textarea id="banReason" required></textarea>
-                </div>
-                <button type="submit">提交封禁</button>
-            </form>
-        </div>
-    </div>
+    <el-dialog v-model="centerDialogVisible" title="帖子修改" width="50rem" align-center>
+        <el-form label-position="left" v-model="form" class="fromBox">
+            <div class="nameBox formItem">
+                <el-form-item label="帖子标题" class="formItemBox head">
+                    <span>q3w324</span>
+                </el-form-item>
+            </div>
+
+            <div class="posterBox formItem">
+                <el-form-item label="发布人" class="formItemBox head">
+                    <span>23443</span>
+                </el-form-item>
+            </div>
+
+            <div class="descriptionBox formItem">
+                <el-form-item label="帖子内容" class="formItemBox">
+                    <el-scrollbar height="95%">
+                        <span>123111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+                        </span>
+                    </el-scrollbar>
+                </el-form-item>
+            </div>
+
+            <div class="imgBox formItem">
+                <el-form-item label="帖子图像" class="formItemBox">
+                    <div class="img"></div>
+                </el-form-item>
+            </div>
+
+            <div class="commentBox formItem">
+                <el-form-item label="帖子评论" class="formItemBox">
+                    <el-scrollbar height="100%" style="width: 100%;">
+                        <div class="commentItem">
+                            <div class="commenter">
+                                <span>123</span>
+                            </div>
+                            <div class="commentBody">
+                                <span></span>
+                            </div>
+                            <div class="commentDelete">
+                                <button class="delete-button">删除</button>
+                            </div>
+                        </div>
+
+                    </el-scrollbar>
+                </el-form-item>
+            </div>
+
+
+        </el-form>
+
+        <!-- <template #footer>
+            <div class="dialog-footer footer">
+                <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">
+                    确定
+                </el-button>
+            </div>
+        </template> -->
+    </el-dialog>
 </template>
+
+
 <script setup>
 import { onMounted } from 'vue';
-import AdmMain from '../components/AdmMain.vue';
+import { ref } from 'vue'
+
+
+
+const form = ref({
+
+})
+const centerDialogVisible = ref(false)
 
 
 </script>
 
 
 <style scoped>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #e9ecef;
-    /* 页面背景颜色 */
-    margin: 0;
-    padding: 20px;
-}
-
 .container {
-    max-width: 100%;
+    height: 93.6%;
     margin: auto;
-    background: white;
-    /* 容器背景色 */
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #333;
+    text-align: center;
 }
 
-.review-section {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
-.review-item {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: #f8f9fa;
-    /* 评价项目的背景色 */
-}
-
-.review-content {
-    margin: 5px 0;
-}
-
-.review-actions {
+.scenery-item {
     display: flex;
-    justify-content: flex-end;
-    /* 将按钮靠右对齐 */
-    margin-top: 10px;
+    margin-bottom: 1.5rem;
+    border: 0.1rem solid #ddd;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    border-radius: 1rem;
+    background-color: #fafafa;
+    position: relative;
+    /* 让子元素相对于此盒子定位 */
+    cursor: pointer;
 }
 
-.review-actions button {
-    margin-left: 10px;
-    /* 为按钮之间添加间距 */
+.scrollbarBox {
+    height: 90%;
+}
+
+.image-placeholder {
+    width: 10rem;
+    height: 10rem;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5rem;
+    position: relative;
+    /* 让数字标记相对于此盒子定位 */
+}
+
+.number-label {
+    font-size: 3em;
+    /* 数字标的字体大小 */
+    color: white;
+    /* 数字标的颜色 */
+    position: absolute;
+    /* 绝对定位 */
+    top: 15%;
+    /* 调整数字的位置 */
+    left: 15%;
+    /* 调整数字的位置 */
+    transition: transform 0.3s;
+    /* 平滑过渡效果 */
+    opacity: 0.8;
+    /* 数字的透明度 */
+}
+
+.scenery-item:hover .number-label {
+    transform: scale(1.2);
+    /* 悬浮时放大效果 */
+}
+
+.scenery-description {
+    flex: 1;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 button {
-    padding: 5px 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.pass {
-    background-color: #28a745;
-    /* 通过按钮的背景色 */
     color: white;
 }
 
-.reject {
+.modify-button {
+    background-color: #007bff;
+}
+
+.modify-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-button {
     background-color: #dc3545;
-    /* 拒绝按钮的背景色 */
-    color: white;
 }
 
-.ban {
-    background-color: #ffc107;
-    /* 封禁按钮的背景色（自定义） */
-    color: white;
+.delete-button:hover {
+    background-color: #c82333;
 }
 
-.modal {
-    display: none;
-    /* 默认隐藏 */
-    position: fixed;
-    z-index: 1000;
-    /* 显示在最上层 */
-    left: 0;
-    top: 0;
+.addButton {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    /* 背景蒙罩 */
-}
-
-.modal-content {
-    background-color: white;
-    /* 模态窗口背景 */
-    margin: 15% auto;
-    /* 居中 */
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    /* 宽度 */
-}
-
-.close {
-    color: #aaa;
-    /* 关闭按钮颜色 */
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    /* 鼠标悬停效果 */
-    text-decoration: none;
+    padding: 10px;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    border-radius: 5px;
     cursor: pointer;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
+
+.addButton:hover {
+    background-color: #218838;
+}
+
 
 .title {
     background-color: white;
@@ -256,5 +335,124 @@ a {
     width: auto;
     height: 200px;
     float: left;
+}
+
+.fromBox {
+    width: 100%;
+    height: 40rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.formItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.formItemBox {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelbutton {
+    background-color: #ccc;
+}
+
+.nameBox {
+    width: 100%;
+    height: 10%;
+}
+
+.posterBox {
+    width: 100%;
+    height: 10%;
+}
+
+.descriptionBox {
+    width: 100%;
+    height: 30%;
+}
+
+.imgBox {
+    width: 100%;
+    height: 20%;
+}
+
+.commentBox {
+    min-height: 30%;
+    width: 100%;
+}
+
+::v-deep .el-form-item__label {
+    font-size: 1.1rem;
+}
+
+.commentItem {
+    width: 99%;
+    height: 5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    border-style: solid;
+    border-color: #919191;
+    border-width: 0.12rem;
+}
+
+.commenter {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: #e0e0e0;
+    border-right-width: 0.2rem;
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.commentBody {
+    height: 100%;
+    width: 65%;
+    display: flex;
+    align-items: center;
+}
+
+.commentDelete {
+    height: 100%;
+    width: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img {
+    height: 7rem;
+    width: 7rem;
+    margin-left: 5%;
+    background-color: #919191;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.head span {
+    margin-left: 2%;
+}
+
+::v-deep .el-form-item__content {
+    align-items: flex-start;
 }
 </style>

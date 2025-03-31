@@ -13,7 +13,7 @@
                         <p></p>
                     </div>
                     <div class="button-group">
-                        <button class="modify-button">修改</button>
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
                         <button class="delete-button">删除</button>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                         <p>这是第二个景点的描述，介绍它的魅力和吸引点。</p>
                     </div>
                     <div class="button-group">
-                        <button class="modify-button">修改</button>
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
                         <button class="delete-button">删除</button>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         <p>第三个景点的介绍，包括它的特色之处和游玩的建议。</p>
                     </div>
                     <div class="button-group">
-                        <button class="modify-button">修改</button>
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
                         <button class="delete-button">删除</button>
                     </div>
                 </div>
@@ -53,31 +53,59 @@
     </div>
 
     <el-dialog v-model="centerDialogVisible" title="景点内容" width="50rem" align-center>
-        <form action="" class="fromBox">
-            <div class="nameBox">
-
+        <el-form label-position="left" v-model="form" class="fromBox">
+            <div class="nameBox formItem">
+                <el-form-item label="景点名称" class="formItemBox">
+                    <el-input v-model="form.name" style="height: 60%;width: 100%;" />
+                </el-form-item>
             </div>
-            <div class="descriptionBox">
+            <div class="imgBox formItem">
+                <el-form-item label="景点图像" class="formItemBox">
+                    <el-upload ref="uploadRef" class="upload" :auto-upload="false">
+                        <template #trigger>
+                            <el-button type="primary">选择文件</el-button>
+                        </template>
 
-            </div>
-            <div class="famousPeopleBox">
+                        <el-button class="ml-3" type="success" @click="submitUpload">
+                            提交到服务器
+                        </el-button>
 
+                    </el-upload>
+                </el-form-item>
             </div>
-            <div class="openingBox">
-
+            <div class="descriptionBox formItem">
+                <el-form-item label="景点介绍" class="formItemBox">
+                    <el-input type="textarea" :rows="7" v-model="form.description" style="height: 85%;width: 100%;" />
+                </el-form-item>
             </div>
-            <div class="transportationBox">
-
+            <div class="famousPeopleBox formItem">
+                <el-form-item label="相关名人" class="formItemBox">
+                    <el-select-v2 v-model="selectedFamousPeople" :options="famousPeople" placeholder="Please select"
+                        style="height: 60%;width: 100%;" multiple collapse-tags collapse-tags-tooltip />
+                    <!-- <el-input v-model="form.famousPeople" style="height: 60%;width: 90%;" /> -->
+                </el-form-item>
             </div>
-            <div class="locationBox">
-
+            <div class="openingBox formItem">
+                <el-form-item label="开放时间" class="formItemBox">
+                    <el-input v-model="form.opening" style="height: 60%;width: 100%;" />
+                </el-form-item>
             </div>
-        </form>
+            <div class="transportationBox formItem">
+                <el-form-item label="交通方式" class="formItemBox">
+                    <el-input v-model="form.transportation" style="height: 60%;width: 100%;" />
+                </el-form-item>
+            </div>
+            <div class="locationBox formItem">
+                <el-form-item label="详细地址" class="formItemBox">
+                    <el-input type="textarea" :rows="2" v-model="form.location" style="height: 80%;width: 100%;" />
+                </el-form-item>
+            </div>
+        </el-form>
         <template #footer>
-            <div class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">Cancel</el-button>
+            <div class="dialog-footer footer">
+                <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="centerDialogVisible = false">
-                    Confirm
+                    确定
                 </el-button>
             </div>
         </template>
@@ -87,9 +115,27 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import AdmMain from '../components/AdmMain.vue';
 import { ref } from 'vue'
+import axios from 'axios';
 
+
+
+// const famousPeople = Array.from({ length: 1000 }).map((_, idx) => ({
+//     value: `Option ${idx + 1}`,
+//     label: `${initials[idx % 10]}${idx}`,
+// }))
+
+const selectedFamousPeople = ref([])
+const famousPeople = ref([{ value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }, { value: '4', label: '4' }])
+
+const form = ref({
+    name: '',
+    description: '',
+    famousPeople: [],
+    opening: '',
+    transportation: '',
+    location: ''
+})
 const centerDialogVisible = ref(false)
 
 
@@ -129,7 +175,6 @@ h1 {
 
 .scrollbarBox {
     height: 90%;
-    background-color: #0056b3;
 }
 
 .image-placeholder {
@@ -308,7 +353,6 @@ a {
 }
 
 .fromBox {
-    background-color: #28a745;
     width: 100%;
     height: 40rem;
     display: flex;
@@ -318,36 +362,74 @@ a {
 .nameBox {
     width: 100%;
     height: 10%;
-    background-color: #c82333;
+}
+
+.imgBox {
+    width: 100%;
+    height: 15%;
 }
 
 .descriptionBox {
     width: 100%;
-    height: 40%;
-    background-color: #3adcae;
+    height: 30%;
 }
 
 .famousPeopleBox {
     width: 100%;
     height: 10%;
-    background-color: yellow;
 }
 
 .openingBox {
     width: 100%;
     height: 10%;
-    background-color: #ff9d00;
 }
 
 .transportationBox {
     width: 100%;
     height: 10%;
-    background-color: aqua;
 }
 
 .locationBox {
     width: 100%;
-    height: 10%;
-    background-color: bisque;
+    height: 15%;
+}
+
+.formItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.formItemBox {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+::v-deep .el-form-item__label {
+    font-size: 1.1rem;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelbutton {
+    background-color: #ccc;
+}
+
+::v-deep .el-select__wrapper {
+    height: 100%;
+}
+
+.upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 </style>

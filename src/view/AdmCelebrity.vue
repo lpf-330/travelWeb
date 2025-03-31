@@ -1,75 +1,133 @@
 <template>
     <div class="container">
-        <h1>名人名事列表</h1>
-        <div id="scenery-list">
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">1</span>
+        <h1>名人列表</h1>
+        <div class="scrollbarBox" id="scenery-list">
+            <el-scrollbar>
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">1</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>名人 1</h2>
+                        <p>这是第一个名人的描述，介绍该名人。</p>
+                        <p></p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-                <div class="scenery-description">
-                    <h2>名人名事 1</h2>
-                    <p>这是第一个景点的描述，介绍该景点的特点和历史。</p>
-                    <p></p>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">2</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>名人 2</h2>
+                        <p>这是第二个名人的描述，介绍名人。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
+
+                <div class="scenery-item">
+                    <div class="image-placeholder">
+                        <span class="number-label">3</span>
+                    </div>
+                    <div class="scenery-description">
+                        <h2>名人 3</h2>
+                        <p>第三个名人的介绍。</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
+                        <button class="delete-button">删除</button>
+                    </div>
                 </div>
-            </div>
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">2</span>
-                </div>
-                <div class="scenery-description">
-                    <h2>名人名事 2</h2>
-                    <p>这是第二个景点的描述，介绍它的魅力和吸引点。</p>
-                </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
-                </div>
-            </div>
-            <div class="scenery-item">
-                <div class="image-placeholder">
-                    <span class="number-label">3</span>
-                </div>
-                <div class="scenery-description">
-                    <h2>名人名事 3</h2>
-                    <p>第三个景点的介绍，包括它的特色之处和游玩的建议。</p>
-                </div>
-                <div class="button-group">
-                    <button class="modify-button">修改</button>
-                    <button class="delete-button">删除</button>
-                </div>
-            </div>
+
+                <button class="addButton" @click="centerDialogVisible = true">增加</button>
+            </el-scrollbar>
+
         </div>
-        <button id="add-button">增加</button>
     </div>
+
+    <el-dialog v-model="centerDialogVisible" title="名人内容" width="50rem" align-center>
+        <el-form label-position="left" v-model="form" class="fromBox">
+            <div class="nameBox formItem">
+                <el-form-item label="名人名称" class="formItemBox">
+                    <el-input v-model="form.name" style="height: 60%;width: 100%;" />
+                </el-form-item>
+            </div>
+
+            <div class="imgBox formItem">
+                <el-form-item label="名人图像" class="formItemBox">
+                    <el-upload ref="uploadRef" class="upload"
+                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :auto-upload="false">
+                        <template #trigger>
+                            <el-button type="primary">select file</el-button>
+                        </template>
+
+                        <el-button class="ml-3" type="success" @click="submitUpload">
+                            upload to server
+                        </el-button>
+
+                    </el-upload>
+                </el-form-item>
+            </div>
+
+            <div class="descriptionBox formItem">
+                <el-form-item label="名人事迹" class="formItemBox">
+                    <el-input type="textarea" :rows="12" v-model="form.description" style="height: 85%;width: 100%;" />
+                </el-form-item>
+            </div>
+
+        </el-form>
+
+        <template #footer>
+            <div class="dialog-footer footer">
+                <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">
+                    确定
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 
-<script setup>
-import AdmMain from '../components/AdmMain.vue';
+<script setup lang="ts">
 import { onMounted } from 'vue';
+import { ref } from 'vue'
+import type { UploadInstance } from 'element-plus'
+
+const uploadRef = ref<UploadInstance>()
+
+const submitUpload = () => {
+    uploadRef.value!.submit()
+}
+
+
+const form = ref({
+    name: '',
+    description: '',
+})
+const centerDialogVisible = ref(false)
 
 
 </script>
 
 
 <style scoped>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
-
 .container {
-    max-width: 100%;
+    height: 93.6%;
     margin: auto;
-    background: white;
-    padding: 20px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
     border-radius: 8px;
+    box-sizing: border-box;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -79,23 +137,30 @@ h1 {
 
 .scenery-item {
     display: flex;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    border: 0.1rem solid #ddd;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    border-radius: 1rem;
     background-color: #fafafa;
     position: relative;
     /* 让子元素相对于此盒子定位 */
 }
 
+.scrollbarBox {
+    height: 90%;
+}
+
 .image-placeholder {
-    width: 200px;
-    height: 200px;
+    width: 10rem;
+    height: 10rem;
     background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
+    margin-right: 5rem;
     position: relative;
     /* 让数字标记相对于此盒子定位 */
 }
@@ -158,7 +223,7 @@ button {
     background-color: #c82333;
 }
 
-#add-button {
+.addButton {
     width: 100%;
     padding: 10px;
     background-color: #28a745;
@@ -166,10 +231,11 @@ button {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
-#add-button:hover {
+.addButton:hover {
     background-color: #218838;
 }
 
@@ -260,5 +326,63 @@ a {
     width: auto;
     height: 200px;
     float: left;
+}
+
+.fromBox {
+    width: 100%;
+    height: 40rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.formItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.formItemBox {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelbutton {
+    background-color: #ccc;
+}
+
+.nameBox {
+    width: 100%;
+    height: 10%;
+}
+
+.imgBox {
+    width: 100%;
+    height: 13%;
+}
+
+.descriptionBox {
+    width: 100%;
+    height: 40%;
+}
+
+.upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+::v-deep .el-form-item__label {
+    font-size: 1.1rem;
 }
 </style>
