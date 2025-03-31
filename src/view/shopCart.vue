@@ -28,7 +28,7 @@ const sumPrice = ref(0)
 const fetchShopCart = async () => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/fetchShopCart"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value
         },
@@ -72,7 +72,7 @@ const fetchShopCart = async () => {
 const addQuantity = async (product_id) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/addQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -92,7 +92,7 @@ const addQuantity = async (product_id) => {
 
 /**
  * 购物车某商品的数量减1
- * 
+ * reduceQuantity
  * 请求参数：
  * user_id:String，
  * product_id:String
@@ -103,7 +103,7 @@ const addQuantity = async (product_id) => {
 const reduceQuantity = async (product_id) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/reduceQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -123,7 +123,7 @@ const reduceQuantity = async (product_id) => {
 
 /**
  * 删除购物车某商品
- * 
+ * deleteProduction
  * 响应参数：
  * user_id:String，
  * product_id:String
@@ -134,7 +134,7 @@ const reduceQuantity = async (product_id) => {
 const deleteProduction = async (product_id) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/deleteProduction"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id

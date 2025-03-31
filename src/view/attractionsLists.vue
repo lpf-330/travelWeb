@@ -18,94 +18,69 @@ import axios from 'axios';
 const showType = "attractionsDetails"
 
 
-let fetchAttractions = async () => {
+const locations = ref([]);  
 
-  try {
+  /**
+   * 获取景点数据
+   * 
+   * 请求参数：
+   * attraction_id:String,
+   * 
+   * 响应参数：
+   * locations:[{
+   *    loaction,
+   *    attractions:[{
+   *      attraction_id,
+   *      name,
+   *      description,
+   *      image,
+   *      },...]
+   * },...],
+   * 
+   */
+const fetchAttractions = async () => {  
+  try {  
+    const response = await axios.post("http://localhost:8081/getAttractions");  
+    if (response.data) {  
+      locations.value = response.data.map(item => ({  
+        name: item.location,  
+        attractions: [{  
+          id: item.attraction_id,  
+          name: item.name,  
+          message: item.description,  
+          pic: item.image  
+        }]  
+      }));  
+    }  
+    console.log("获取数据成功:", response.data);  
+  } catch (error) {  
+    console.error("获取数据失败:", error);  
+  }  
+};  
 
-    const url = "http://localhost:8081/getAttractions"
-    const response = await axios.post(url, {
-    },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    );
+//fetchAttractions();   
 
-    console.log("响应登录", response.data);
+// // 用来做测试的假数据
+// let locations=[
+//   {
+//     name: "北京",
+//     attractions: [
+//       {
+//         id: 1,
+//         name: "故宫",
+//         message: "hhh",
+//         pic: "https://cdn.pixabay.com/photo/2014/06/19/16/55/the-imperial-garden-483076_1280.jpg"
+//       },
+//     ]
+//   }];
 
-
-
-  } catch (error) {
-    console.error("出错", error);
-    alert("加载失败，请稍后再试。"); // 友好的错误提示  
-
-  }
-
-}
-
-fetchAttractions();
-
-// 地名和对应的景点信息  
-let locations = [
-  {
-    name: "南昌",
-    attractions: [
-      {
-        id: 9,
-        name: "滕王阁",
-        pic: "https://via.placeholder.com/200",
-        message: "滕王阁是唐代诗人王勃所作《滕王阁序》的阁楼。",
-      },
-      {
-        id: 4,
-        name: "南昌八一纪念馆",
-        pic: "https://via.placeholder.com/200",
-        message: "南昌八一纪念馆是为纪念八一南昌起义而设立的。",
-      },
-    ],
-  },
-  {
-    name: "九江",
-    attractions: [
-      {
-        id: 1,
-        name: "庐山",
-        pic: "https://via.placeholder.com/200",
-        message: "庐山是中国著名的风景名胜区。",
-      },
-    ],
-  },
-  {
-    name: "赣州",
-    attractions: [
-      {
-        id: 7,
-        name: "赣州古城",
-        pic: "https://via.placeholder.com/200",
-        message: "赣州古城是客家文化的重要发源地。",
-      },
-    ],
-  },
-  {
-    name: "上饶",
-    attractions: [
-      {
-        id: 11,
-        name: "三清山",
-        pic: "https://via.placeholder.com/200",
-        message: "三清山以其奇特的岩石和美丽的风景而闻名。",
-      },
-    ],
-  },
-];
+                                  
 
 let selectedLocation = ref(null);
 let showLists = ref([]);
 
 let selectLocation = (location) => {
   selectedLocation.value = location;
-  // 更新 showLists 根据选中地点的 attractions  
   showLists.value = location ? location.attractions : [];
 };  
 </script>
