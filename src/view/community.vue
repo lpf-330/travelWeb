@@ -39,9 +39,10 @@ let currentUser = ref({
   name: userInfoStore.username.value // 当前用户名称  
 });
 
-let posts = ref([]); //社区帖子数据
-const fetchPosts = async () => {
+const posts = ref([]); //社区帖子数据
 
+
+const fetchPosts = async () => {
   try {
 
     const url = "http://localhost:8081/post/getPosts"
@@ -84,21 +85,56 @@ let editPost = ref({
   content: '',
 });
 
-// 提交帖子逻辑  
-let submitPost = () => {
-  if (newPost.value.title && newPost.value.content) {
-    let post = {
-      id: posts.value.length + 1,
-      name: newPost.value.title,
+/**
+ * 创建新帖子
+ * 
+ * 请求方法：POST
+ * 请求路径：/post/createPost
+ * 
+ * 请求体参数：
+ * {
+ *   title: String,     // 帖子标题（必需）
+ *   message: String,   // 帖子内容（必需）
+ *   user_id: Number    // 用户ID（必需）
+ * }
+ * 
+ * 响应参数：
+ * {
+ *   post_id: Number,     // 新创建的帖子ID
+ *   title: String,       // 帖子标题
+ *   message: String,     // 帖子内容
+ *   user_id: Number,     // 作者ID
+ *   created_at: String,  // 创建时间（ISO格式）
+ *   updated_at: String   // 更新时间（ISO格式）
+ * }
+ */
+const submitPost = async () => {
+  if (!newPost.value.title || !newPost.value.content) {
+    alert('标题和内容不能为空');
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${API_BASE}/createPost`, {
+      title: newPost.value.title,
       message: newPost.value.content,
-      authorId: currentUser.value.id, // 记录帖子创建者ID  
-    };
-    posts.value.push(post); // 将新帖子添加到帖子数组中  
-    newPost.value.title = ''; // 清空输入框  
-    newPost.value.content = ''; // 清空输入框  
-    showAddModal.value = false; // 关闭模态框  
-  } else {
-    console.log('标题或内容不能为空');
+      user_id: currentUser.value.id
+    });
+
+    posts.value.unshift({ // 将新帖子添加到列表顶部
+      id: response.data.post_id,
+      name: response.data.title,
+      message: response.data.message,
+      authorId: currentUser.value.id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+
+    newPost.value = { title: '', content: '' };
+    showAddModal.value = false;
+  } catch (error) {
+    console.error("创建帖子失败:", error);
+    alert("提交失败，请稍后再试。");
   }
 };
 
@@ -112,27 +148,72 @@ let openEditModal = (post) => {
   showEditModal.value = true; // 显示编辑模态框  
 };
 
-// 更新帖子逻辑  
-let updatePost = () => {
-  if (editPost.value.title && editPost.value.content) {
-    const postIndex = posts.value.findIndex(p => p.id === editPost.value.id); // 查找要更新的帖子  
-    if (postIndex !== -1) {
-      posts.value[postIndex].name = editPost.value.title; // 更新标题  
-      posts.value[postIndex].message = editPost.value.content; // 更新内容  
+/**
+ * 更新帖子
+ * 
+ * 请求方法：PUT
+ * 请求路径：/post/updatePost/{postId}
+ * 
+ * 路径参数：
+ * postId: Number  // 要更新的帖子ID
+ * 
+ * 请求体参数：
+ * {
+ *   title: String,    // 新标题（必需）
+ *   message: String   // 新内容（必需）
+ * }
+ * 
+ * 响应参数：
+ * {
+ *   post_id: Number,     // 帖子ID
+ *   title: String,       // 更新后的标题
+ *   message: String,     // 更新后的内容
+ *   updated_at: String   // 新的更新时间（ISO格式）
+ * }
+ */
+const updatePost = async () => {
+  try {
+    await axios.put(`${API_BASE}/updatePost/${editPost.value.id}`, {
+      title: editPost.value.title,
+      message: editPost.value.content
+    });
+
+    const index = posts.value.findIndex(p => p.id === editPost.value.id);
+    if (index !== -1) {
+      posts.value[index] = {
+        ...posts.value[index],
+        name: editPost.value.title,
+        message: editPost.value.content,
+        updatedAt: new Date().toISOString()
+      };
     }
-    showEditModal.value = false; // 关闭模态框  
-  } else {
-    console.log('标题或内容不能为空');
+    showEditModal.value = false;
+  } catch (error) {
+    console.error("更新帖子失败:", error);
+    alert("更新失败，请稍后再试。");
   }
 };
 
-// 删除帖子逻辑  
-let deletePost = (postId) => {
-  const post = posts.value.find(p => p.id === postId);
-  if (post && post.authorId === currentUser.value.id) {
-    posts.value = posts.value.filter(post => post.id !== postId); // 从列表中删除帖子  
-  } else {
-    console.log('您没有权限删除此帖子。');
+/**
+ * 删除帖子
+ * 
+ * 请求方法：DELETE
+ * 请求路径：/post/deletePost/{postId}
+ * 
+ * 路径参数：
+ * postId: Number  // 要删除的帖子ID
+ * 
+ *
+ */
+const deletePost = async (postId) => {
+  if (!confirm('确定要删除这个帖子吗？')) return;
+
+  try {
+    await axios.delete(`${API_BASE}/deletePost/${postId}`);
+    posts.value = posts.value.filter(post => post.id !== postId);
+  } catch (error) {
+    console.error("删除帖子失败:", error);
+    alert("删除失败，请稍后再试。");
   }
 };
 
