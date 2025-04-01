@@ -16,7 +16,7 @@
       </div>  
   
       <div class="likes">  
-        <LikeButton></LikeButton>  
+        <LikeButton @click="handlelikes"></LikeButton>  
       </div>
         <PostCommentsArea></PostCommentsArea>  
     </div>  
@@ -65,7 +65,32 @@
   
   let post = ref({});  
   let createdAt = ref();  
-  let updatedAt = ref();  
+  let updatedAt = ref();
+  
+// 要实现数据库的帖子点赞数加1，更新点赞数，需要后端接口支持。
+// 请求参数：
+// post_id: String  // 帖子ID,从postList组件中获取
+// 响应参数：
+// likes: Number  // 点赞数量
+  const handlelikes = async() => {
+    try {
+      const url = ""
+      const response = await axios.post(url, {post_id: history.state.post_id
+      },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      if(response.data.success){
+        console.log("点赞成功", response.data.likes);
+      }
+    } catch (error) {
+      console.error("出错", error);
+      alert("点赞失败，请稍后再试。");
+    }
+  }
   </script>  
   
   <style scoped>  
