@@ -30,7 +30,19 @@
 
   console.log('postDetails',history.state);
   
-  
+  /**
+   * 获取帖子详情数据
+   * 
+   * 请求参数：
+   * post_id:String,
+   * 
+   * 响应参数：
+   * title:String,
+   * message:String,
+   * port_partition:String,
+   * created_at:String,
+   * updated_at:String
+   */
   const fetchPostsDetails = async () => {
   try {
     const url = "http://localhost:8081/post/post_id"
