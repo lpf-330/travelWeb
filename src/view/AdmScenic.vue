@@ -8,7 +8,7 @@
                         <span class="number-label">1</span>
                     </div>
                     <div class="scenery-description">
-                        <h2>景点 1</h2>
+                        <h2></h2>
                         <p>这是第一个景点的描述，介绍该景点的特点和历史。</p>
                         <p></p>
                     </div>

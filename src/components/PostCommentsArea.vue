@@ -130,7 +130,7 @@ let editComment = async (commentId) => {
     }  
 
     const url = `http://localhost:8081/comments/${commentId}`;  
-    const response = await Axios.put(url, {  
+    const response = await Axios.post(url, {  
       content: comment.text  
     }, {  
       headers: {  

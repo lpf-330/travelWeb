@@ -82,6 +82,8 @@ let showLists = ref([]);
 let selectLocation = (location) => {
   selectedLocation.value = location;
   showLists.value = location ? location.attractions : [];
+  const attractionId = location.attractions[0].id;  
+  router.push({ name: 'attractionDetail', params: { id: attractionId } });//还没作测试
 };  
 </script>
 

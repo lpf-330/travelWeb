@@ -42,67 +42,94 @@ import CommentsArea from '../components/CommentsArea.vue';
 import LikeButton from '../components/LikeButton.vue';
 import router from '../router';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
 
-
+const route = useRoute();
 console.log(JSON.parse(history.state.data))
 
-let attraction = ref({
-  name: "黄山",
-  createdAt: "2024-01-01",
-  updatedAt: "2024-01-15",
-  region: "安徽省",
-  image: "https://via.placeholder.com/200",
-  openingHours: "08:00 - 18:00",
-  transportation: "可乘坐公交车或自驾前往",
-  description: "请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!",
-  relatedFigures: [
-    {
-      id: 1,
-      name: "李白",
-      image: "https://via.placeholder.com/200",
-      biography: "唐代著名诗人，以其豪放的诗风著称。请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！",
-    },
-    {
-      id: 2,
-      name: "徐霞客",
-      image: "https://via.placeholder.com/200.jpg",
-      biography: "明代地理学家，以其游记著称。",
-    },
-  ],
-  likes: 0,
-});
+// let attraction = ref({
+//   name: "黄山",
+//   createdAt: "2024-01-01",
+//   updatedAt: "2024-01-15",
+//   region: "安徽省",
+//   image: "https://via.placeholder.com/200",
+//   openingHours: "08:00 - 18:00",
+//   transportation: "可乘坐公交车或自驾前往",
+//   description: "请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!请输入景点的介绍!",
+//   relatedFigures: [
+//     {
+//       id: 1,
+//       name: "李白",
+//       image: "https://via.placeholder.com/200",
+//       biography: "唐代著名诗人，以其豪放的诗风著称。请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！请输入名人生平！",
+//     },
+//     {
+//       id: 2,
+//       name: "徐霞客",
+//       image: "https://via.placeholder.com/200.jpg",
+//       biography: "明代地理学家，以其游记著称。",
+//     },
+//   ],
+//   likes: 0,
+// });
+const attraction = ref({});
 
-const fetchFamousPeople = async () => {
+ /**   
+   * 获取单个景点的详细信息   
+   *   
+   * 请求参数：   
+   * attraction_id: String  // 景点ID   
+   *   
+   * 响应参数：   
+   * {   
+   *   name: String,            // 景点名称   
+   *   created_at: String,     // 创建时间   
+   *   updated_at: String,      // 更新时间   
+   *   location: String,        // 所在地区   
+   *   image: String,            // 景点图片地址   
+   *   opening_hours: String,   // 开放时间   
+   *   transportation: String,  // 交通信息   
+   *   description: String,     // 景点描述   
+   *   relatedFigures: [{     // 相关名人信息数组   
+   *     person_id: String,     // 名人ID   
+   *     name: String,         // 名人姓名   
+   *     image: String,        // 名人图片地址   
+   *     message: String       // 名人介绍   
+   *   }],   
+   *   likes: Number           // 点赞数量   
+   * }   
+   */  
+const fetchAttractionDetail = async () => {  
+  try {  
+    const response = await axios.post("http://localhost:8081/getAttractionDetail",{attractionId:route.params.id});//路由未测试  
+    if (response.data) {  
+      attraction.value = {  
+        name: response.data.name,  
+        createdAt: response.data.created_at,  
+        updatedAt: response.data.updated_at,  
+        region: response.data.location,  
+        image: response.data.image,  
+        openingHours: response.data.opening_hours,  
+        transportation: response.data.transportation,  
+        description: response.data.description,  
+        // 下面的relatedFigures是获取名人表的信息
+        relatedFigures: response.data.relatedFigures.map(figure => ({  
+          id: figure.person_id,  
+          name: figure.name,  
+          image: figure.image,  
+          biography: figure.message  
+        })),
+        likes: response.data.like
+      };  
+    }  
+    console.log("获取数据成功:", response.data);  
+  } catch (error) {  
+    console.error("获取数据失败:", error);  
+  }  
+};  
+console.log(route.params.id)
 
-  try {
-
-    const url = "http://localhost:8081/FamousPeople/" + "" //这里路径可能错
-    const response = await axios.post(url, {
-    },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    );
-
-    console.log("响应登录", response.data);
-
-  } catch (error) {
-    console.error("出错", error);
-    alert("加载失败，请稍后再试。"); // 友好的错误提示  
-
-  }
-
-}
-
-
-onMounted(() => {
-  // console.log(router);
-
-  // console.log(JSON.parse(history.state.data));
-
-})
+//fetchAttractionDetail();
 
 const toFamousPeople = () => {
   router.push("/index/famousPeople")
