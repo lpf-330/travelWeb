@@ -112,14 +112,117 @@
 
 
 <script setup>
-import { onMounted } from 'vue';
 import { ref } from 'vue'
 
+const posts = ref([])
 
 
-const form = ref({
+/**
+ * 获取所有帖子
+ * 
+ * 请求参数：
+ * 无
+ * 
+ * 响应参数：
+ * posts:[{
+ *  post_id,
+ *  title,
+ *  message,
+ *  username,
+ *  comments:[{
+ *      username,
+ *      content
+ *  },...]
+ * },...]
+ */
+const fatchPosts = async () => {
 
-})
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        for (let item in response.data) {
+            posts.value.push(item)
+        }
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+/**
+ * 删除帖子
+ * 
+ * 请求参数：
+ * post_id：Int
+ * 
+ * 响应参数：
+ * 是否删除成功
+ */
+const deletePosts = async () => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            // post_id:
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+
+/**
+ * 删除帖子中的某个评论
+ * 
+ * 请求参数：
+ * post_comment_id:String
+ * 
+ * 响应参数：
+ * 是否删除成功
+ * 
+ */
+const deleteComment = async () => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            // post_id:
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+
 const centerDialogVisible = ref(false)
 
 

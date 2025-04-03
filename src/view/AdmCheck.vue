@@ -4,7 +4,7 @@
         <div class="scrollbarBox" id="scenery-list">
             <el-scrollbar>
                 <el-collapse>
-                    <el-collapse-item name="1">
+                    <el-collapse-item name="1" v-for="item in orders">
                         <template #title>
                             <div class="titleBox">
                                 <div class="titleBlock">
@@ -100,6 +100,10 @@ const fetchOrder = async () => {
 
         console.log('所有待审核订单', response.data);
 
+        for (let item in response.data) {
+            orders.value.push(item)
+        }
+
     } catch (error) {
         console.error("出错", error);
         alert("加载失败，请稍后再试。"); // 友好的错误提示  
@@ -132,6 +136,8 @@ const passOrder = async (index) => {
         );
 
         console.log('通过订单', response.data);
+
+
 
     } catch (error) {
         console.error("出错", error);
