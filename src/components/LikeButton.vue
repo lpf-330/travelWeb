@@ -1,26 +1,11 @@
 <template>
-<div class="like-button" @click="incrementLikes">  
-    <span v-if="isLiked">&#x1F44D;  已赞 {{ likes }} 次</span>  
-    <span v-else>&#x1F44D; 点赞 {{ likes }}</span>  
+<div class="like-button" @click="incrementLikes"> 
+    <span>&#x1F44D; 点赞 {{ likes }}</span>  
 </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-// 定义响应式状态  
-let likes = ref(0); // 点赞次数  
-let isLiked = ref(false); // 是否已点赞  
 
-// 点赞函数  
-let incrementLikes = () => {  
-  // 如果未点赞，则增加点赞数  
-  if (!isLiked.value) {  
-    likes.value += 1;  
-    isLiked.value = true; // 设置为已点赞状态  
-  } else {  
-    alert("你已经点赞过了！"); // 用户反馈  
-  }  
-};  
 </script>
 
 <style scoped>

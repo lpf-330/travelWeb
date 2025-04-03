@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="likes-line">
-      <LikeButton></LikeButton>
+      <LikeButton @click="handleLikes"></LikeButton>
     </div>
     <CommentsArea></CommentsArea>
   </div>
@@ -47,6 +47,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 console.log(JSON.parse(history.state.data))
 
+// 测试数据
 // let attraction = ref({
 //   name: "黄山",
 //   createdAt: "2024-01-01",
@@ -78,7 +79,7 @@ const attraction = ref({});
    * 获取单个景点的详细信息   
    *   
    * 请求参数：   
-   * attraction_id: String  // 景点ID   
+   * attraction_id: String  // 景点ID,从attractionsLists组件中获取   
    *   
    * 响应参数：   
    * {   
@@ -101,7 +102,16 @@ const attraction = ref({});
    */  
 const fetchAttractionDetail = async () => {  
   try {  
-    const response = await axios.post("http://localhost:8081/getAttractionDetail",{attractionId:route.params.id});//路由未测试  
+    const url = ""
+    const response = await axios.post(url, {
+      attractionId:route.params.id
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
     if (response.data) {  
       attraction.value = {  
         name: response.data.name,  
@@ -119,15 +129,15 @@ const fetchAttractionDetail = async () => {
           image: figure.image,  
           biography: figure.message  
         })),
-        likes: response.data.like
-      };  
+        likes: response.data.likes
+      };
     }  
     console.log("获取数据成功:", response.data);  
   } catch (error) {  
     console.error("获取数据失败:", error);  
   }  
 };  
-console.log(route.params.id)
+// console.log(route.params.id)
 
 //fetchAttractionDetail();
 
@@ -135,7 +145,30 @@ const toFamousPeople = () => {
   router.push("/index/famousPeople")
 }
 
-
+// 要实现数据库的景点点赞数加1，更新点赞数，需要后端接口支持。
+// 请求参数：
+// attraction_id: String  // 景点ID,从attractionsLists组件中获取
+// 响应参数：
+// likes: Number  // 点赞数量
+const handleLikes = async () => {  
+  try {  
+    const url = ""
+    const response = await axios.post(url, {
+      attractionId:route.params.id
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    if (response.data.success) {  
+      attraction.value.likes = response.data.data.likes;  
+    }  
+  } catch (error) {  
+    console.error('更新点赞数失败:', error);  
+  }  
+};  
 </script>
 
 <style scoped>
