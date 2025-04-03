@@ -53,7 +53,7 @@
                         </template>
 
                         <el-button class="ml-3" type="success" @click="submitUpload">
-                            上传图片
+                            上传到服务器
                         </el-button>
 
                     </el-upload>

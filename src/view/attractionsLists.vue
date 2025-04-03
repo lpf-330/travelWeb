@@ -24,7 +24,7 @@ const locations = ref([]);
    * 获取景点数据
    * 
    * 请求参数：
-   * attraction_id:String,
+   * 无
    * 
    * 响应参数：
    * locations:[{

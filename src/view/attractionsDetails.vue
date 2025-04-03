@@ -92,10 +92,10 @@ const attraction = ref({});
    *   transportation: String,  // 交通信息   
    *   description: String,     // 景点描述   
    *   relatedFigures: [{     // 相关名人信息数组   
-   *     person_id: String,     // 名人ID   
-   *     name: String,         // 名人姓名   
-   *     image: String,        // 名人图片地址   
-   *     message: String       // 名人介绍   
+   *   person_id: String,     // 名人ID   
+   *   name: String,         // 名人姓名   
+   *   image: String,        // 名人图片地址   
+   *   message: String       // 名人介绍   
    *   }],   
    *   likes: Number           // 点赞数量   
    * }   
