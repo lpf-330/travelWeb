@@ -8,7 +8,7 @@ const useUserInfoStore = defineStore("userInfor", {
         phone: "",
         avatar: "",
         address: [],
-        nowAddr: ""
+        nowAddr: 0
     }),
     actions: {
         setUser(uname, password, email, phone, avatar) {

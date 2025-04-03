@@ -42,7 +42,6 @@ let fetchUser = async () => {
       userInfoStore.user_id.value = response.data.data.user_id
       userInfoStore.username.value = response.data.data.username
       console.log("响应登录", response.data);
-      console.log('01', userInfoStore);
 
 
     } else {
@@ -52,7 +51,7 @@ let fetchUser = async () => {
 
   } catch (error) {
     console.error("出错", error);
-    alert("加载失败，请稍后再试。"); 
+    alert("加载失败，请稍后再试。");
 
   }
 

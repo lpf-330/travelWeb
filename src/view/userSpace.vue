@@ -37,7 +37,13 @@ const updataUserName = async () => {
             }
         );
 
-        console.log("响应修改名称", response.data);
+        if (response.data === 1) {
+            userInfoStore.username = username.value
+            username.value = ''
+            alert('修改名称成功')
+        } else {
+            alert('修改名称失败')
+        }
 
 
     } catch (error) {
@@ -74,7 +80,13 @@ const updataEmail = async () => {
             }
         );
 
-        console.log("响应修改邮箱", response.data);
+        if (response.data === 1) {
+            userInfoStore.username = email.value
+            email.value = ''
+            alert('修改邮箱成功')
+        } else {
+            alert('修改邮箱失败')
+        }
 
 
     } catch (error) {
@@ -112,7 +124,13 @@ const updataPhone = async () => {
             }
         );
 
-        console.log("响应修改电话", response.data);
+        if (response.data === 1) {
+            userInfoStore.username = phone.value
+            phone.value = ''
+            alert('修改电话成功')
+        } else {
+            alert('修改电话失败')
+        }
 
 
     } catch (error) {
@@ -190,7 +208,7 @@ const updataAvatar = async () => {
             </div>
             <div class="box email">
                 <input type="email" class="update" v-model="email">
-                <button class="updateButton"@click="updataEmail">修改</button>
+                <button class="updateButton" @click="updataEmail">修改</button>
             </div>
             <div class="box phone">
                 <input type="text" class="update" v-model="phone">

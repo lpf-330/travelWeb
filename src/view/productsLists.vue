@@ -31,7 +31,6 @@ let fetchProductsList = async () => {
       }
     );
 
-    console.log("响应登录", response.data);
     for (let i = 0; i < response.data.length; i++) {
       products.value.push({
         id: response.data[i].product_id,

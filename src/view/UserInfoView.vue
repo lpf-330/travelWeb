@@ -3,11 +3,11 @@ import { RouterView } from 'vue-router';
 import router from '../router';
 
 const toUserSpace = () => {
-    router.push('userSpace')
+    router.push({ name: 'userSpace' })
 }
 
 const toAddress = () => {
-    router.push('address')
+    router.push({ name: 'address' })
 }
 
 const toPreOrder = () => {
