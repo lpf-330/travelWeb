@@ -8,8 +8,8 @@ import axios from 'axios';
 
 const userInfoStore = storeToRefs(useUserInfoStore())
 
-const selected = ref([1, 2, 3, 4, 5, 6])    //在购物车的下标
-const shopCart = ref([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
+const selected = ref([])    //在shopCart的下标
+const shopCart = ref([])
 const sumPrice = ref(0)
 
 
@@ -23,12 +23,13 @@ const sumPrice = ref(0)
  * product_id，
  * quantity，
  * name，
+ * price,
  * image
  */
 const fetchShopCart = async () => {
 
     try {
-        const url = "http://localhost:8081/fetchShopCart"    //后端还没写
+        const url = "http://localhost:8081/product/fetchShopCart"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value
         },
@@ -39,17 +40,23 @@ const fetchShopCart = async () => {
             }
         );
 
+
+
         for (let i = 0; i < response.data.length; i++) {
             shopCart.value.push({
                 product_id: response.data[i].product_id,
                 quantity: response.data[i].quantity,
                 name: response.data[i].name,
                 price: response.data[i].price,
-                image: response.data[i].image
+                // image: response.data[i].image
             })
+
         }
 
-        countSumPrice()
+        console.log('购物车所有商品', shopCart.value);
+
+
+        // countSumPrice()
 
     } catch (error) {
         console.error("出错", error);
@@ -58,6 +65,9 @@ const fetchShopCart = async () => {
     }
 
 }
+
+fetchShopCart()
+
 
 /**
  * 购物车某商品的数量加1
@@ -69,10 +79,10 @@ const fetchShopCart = async () => {
  * 响应参数：
  * 是否添加成功
  */
-const addQuantity = async (product_id) => {
+const addQuantity = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/addQuantity"    //后端还没写
+        const url = "http://localhost:8081/product/addQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -84,11 +94,23 @@ const addQuantity = async (product_id) => {
             }
         );
 
+        if (response.data === 1) {
+            for (let i = 0; i < shopCart.value.length; i++) {
+                if (shopCart.value[i].product_id === product_id) {
+                    shopCart.value[i].quantity++
+                    break
+                }
+            }
+        }
+
+        countSumPrice()
+
     } catch (error) {
         console.error("出错", error);
         alert("加载失败，请稍后再试。"); // 友好的错误提示  
     }
 }
+
 
 /**
  * 购物车某商品的数量减1
@@ -100,10 +122,10 @@ const addQuantity = async (product_id) => {
  * 响应参数：
  * 是否减少成功
  */
-const reduceQuantity = async (product_id) => {
+const reduceQuantity = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/reduceQuantity"    //后端还没写
+        const url = "http://localhost:8081/product/reduceQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -114,6 +136,17 @@ const reduceQuantity = async (product_id) => {
                 }
             }
         );
+
+        if (response.data === 1) {
+            for (let i = 0; i < shopCart.value.length; i++) {
+                if (shopCart.value[i].product_id === product_id) {
+                    shopCart.value[i].quantity--
+                    break
+                }
+            }
+        }
+
+        countSumPrice()
 
     } catch (error) {
         console.error("出错", error);
@@ -131,10 +164,10 @@ const reduceQuantity = async (product_id) => {
  * 响应参数：
  * 是否删除成功
  */
-const deleteProduction = async (product_id) => {
+const deleteProduction = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/deleteProduction"    //后端还没写
+        const url = "http://localhost:8081/product/deleteProduction"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -145,6 +178,26 @@ const deleteProduction = async (product_id) => {
                 }
             }
         );
+
+        if (response.data === 1) {
+            console.log('删除前', shopCart.value);
+
+            for (let i = 0; i < shopCart.value.length; i++) {
+                if (shopCart.value[i].product_id === product_id) {
+                    selected.value.splice(selected.value.indexOf(i), 1)
+                    shopCart.value.splice(i, 1)
+                    break
+                }
+            }
+
+            countSumPrice()
+            console.log('删除后', shopCart.value);
+
+            alert('删除成功')
+        } else {
+            alert('删除失败')
+        }
+
 
     } catch (error) {
         console.error("出错", error);
@@ -199,14 +252,35 @@ const postCheckOut = async () => {
     }
 }
 
-const select = (index) => {
-    selected.value.push(index)
+const select = ({ index }) => {
+    console.log('选择前', selected.value);
+
+    try {
+        let isExist = false
+        for (let i = 0; i < selected.value.length; i++) {
+            if (selected.value[i] === index) {
+                isExist = true
+                break
+            }
+        }
+
+        if (isExist === false) {
+            selected.value.push(index)
+        } else {
+            selected.value.splice(selected.value.indexOf(index), 1)
+        }
+    } catch (e) {
+        console.log('e', e);
+    }
+
+    console.log('选择后', selected.value);
     countSumPrice()
 }
 
 const countSumPrice = () => {
+    sumPrice.value = 0
     for (let i = 0; i < selected.value.length; i++) {
-        sumPrice += shopCart.value[selected.value[i]].quantity * shopCart.value[selected.value[i]].price
+        sumPrice.value += shopCart.value[selected.value[i]].quantity * shopCart.value[selected.value[i]].price
     }
 }
 
@@ -222,11 +296,14 @@ const countSumPrice = () => {
             <el-container class="body">
                 <el-header class="header">
                     <div class="title">购物车</div>
-                    <div class="sum">全部商品 ()</div>
+                    <div class="sum">全部商品 ({{ shopCart.length }})</div>
                 </el-header>
                 <el-main class="main">
                     <el-scrollbar max-height="100%" class="scrollbar">
-                        <shop-cart-item v-for="(value, index) in shopCart"></shop-cart-item>
+                        <shop-cart-item v-for="(value, index) in shopCart" :key="value.product_id" :data="value"
+                            :index="index" @addQuantity="addQuantity" @reduceQuantity="reduceQuantity"
+                            @deleteProduction="deleteProduction" @select="select">
+                        </shop-cart-item>
                     </el-scrollbar>
                 </el-main>
             </el-container>
@@ -246,13 +323,13 @@ const countSumPrice = () => {
                         </div>
                         <div class="scrollbarBox">
                             <el-scrollbar max-height="100%" style="width: 100%;">
-                                <div class="selectItem" v-for="item in selected">
+                                <div class="selectItem" v-for="i in selected" :key="shopCart[i].product_id">
                                     <div class="selectImg"></div>
                                     <div class="selectNum">
-                                        <span></span>
+                                        <span>{{ shopCart[i].quantity }}</span>
                                     </div>
                                     <div class="selectPrice">
-                                        <span>{{ }} 元</span>
+                                        <span>{{ shopCart[i].quantity * shopCart[i].price }} 元</span>
                                     </div>
                                 </div>
                             </el-scrollbar>

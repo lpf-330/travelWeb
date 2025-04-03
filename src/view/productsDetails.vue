@@ -27,7 +27,7 @@
     </div>
 
     <div class="tail">
-      <div class="buy">购买</div>
+      <div class="buy">添加到购物车</div>
       <!--设置事件跳转CheckoutModal.vue-->
     </div>
   </div>
@@ -35,14 +35,16 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import Main from '../components/Main.vue';
-import LikeButton from '../components/LikeButton.vue';
+import useUserInfoStore from '../stores/user';
+import { storeToRefs } from 'pinia';
+
+const userInfoStore = storeToRefs(useUserInfoStore())
 
 const data = ref()
 
 data.value = history.state
 
-console.log('history', data.value);
+
 
 
 // 假设我们有一个土特产数据对象  
@@ -56,9 +58,51 @@ const product = ref({
   available: true // 售卖情况  
 });
 
+console.log('history', product.value.description);
+
 if (data.value.stock <= 0) {
   product.value.available = false
 }
+
+/**
+ * 将商品提交到购物车（初始默认添加的商品数量为1）
+ * 
+ * 请求参数：
+ * user_id:Int
+ * product_id:Int
+ * 
+ * 响应参数：
+ * 是否提交成功
+ */
+let postAddShopCart = async () => {
+
+  try {
+
+    const url = "http://localhost:8081/"
+    const response = await axios.post(url, {
+      user_id: userInfoStore.user_id.value,
+      product_id: data.value.product_id
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+  }
+
+}
+
+
+
+
+
 
 // 创建时间和更新时间  
 let createdAt = ref("2024-01-01");
@@ -140,7 +184,7 @@ h2 {
 }
 
 .buy {
-  width: 80px;
+  width: 140px;
   height: 40px;
   padding-top: 9px;
   text-align: center;

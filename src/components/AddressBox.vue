@@ -5,7 +5,12 @@ import useUserInfoStore from '../stores/user';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 
-const radio = ref(1)
+const userInfoStore = storeToRefs(useUserInfoStore())
+
+console.log('userInfoStore', userInfoStore.address.value);
+
+
+const radio = ref(userInfoStore.nowAddr.value)
 const address = ref([
     { addr_id: 1, address: '1234567' },
     { addr_id: 2, address: '1234567' },
@@ -15,8 +20,6 @@ const address = ref([
     { addr_id: 6, address: '1234567' },
     { addr_id: 7, address: '1234567' },
 ])
-
-const userInfoStore = storeToRefs(useUserInfoStore())
 
 
 /**
@@ -178,7 +181,7 @@ const addAddress = async (value) => {
                 <div class="contain" v-for="(value, index) in address">
                     <div class="selectBox">
                         <div class="selectButton">
-                            <el-radio size="large" :value="1"></el-radio>
+                            <el-radio size="large" :value="value.addr_id"></el-radio>
                         </div>
                         <div class="selectShow">
                             <span v-if="radio === value.addr_id">当前使用的地址</span>

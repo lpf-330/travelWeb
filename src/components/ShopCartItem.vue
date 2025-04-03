@@ -1,31 +1,72 @@
 <script setup>
 import { Delete } from '@element-plus/icons-vue'
+import { defineProps } from 'vue';
+import { ref } from 'vue';
+import { defineEmits } from 'vue';
+
+let props = defineProps({
+    data: {
+        type: Object,
+    },
+    index: {
+        type: Number
+    }
+});
+
+
+
+const data = ref(props.data)
+
+const emit = defineEmits(['addQuantity', 'reduceQuantity', 'deleteProduction', 'select'])
+
+const addQuantity = () => {
+    emit('addQuantity', { product_id: props.data.product_id })
+}
+
+const reduceQuantity = () => {
+    if (data.value.quantity > 1) {
+        emit('reduceQuantity', { product_id: props.data.product_id })
+    }
+}
+
+const deleteProduction = () => {
+    emit('deleteProduction', { product_id: props.data.product_id })
+}
+
+const select = () => {
+    // console.log('index', props.index);
+
+    console.log('emit', typeof (emit));
+
+    emit('select', { index: props.index })
+}
+
 </script>
 
 <template>
     <div class="item">
         <div class="contain">
             <div class="selectBox">
-                <input type="checkbox" name="" id="">
+                <input type="checkbox" name="" id="" @click="select">
             </div>
             <div class="imgBox"></div>
             <div class="nameBox">
                 <div class="name">
-                    <span>{{}}</span>
+                    <span>{{ data.name }}</span>
                 </div>
                 <div class="unitPrice">
-                    <span>单价：{{}} 元</span>
+                    <span>单价：{{ data.price }} 元</span>
                 </div>
             </div>
             <div class="numBox">
                 <div class="num">
-                    <button class="button"> - </button>
+                    <button class="button" @click="reduceQuantity"> - </button>
                     <div class="showNum">
-                        <span>{{ }}</span>
+                        <span>{{ data.quantity }}</span>
                     </div>
-                    <button class="button"> + </button>
+                    <button class="button" @click="addQuantity"> + </button>
                 </div>
-                <el-button type="danger" :icon="Delete" circle />
+                <el-button type="danger" :icon="Delete" circle @click="deleteProduction" />
             </div>
         </div>
     </div>
@@ -131,6 +172,9 @@ input[type="checkbox"]:checked {
 .name {
     height: 100%;
     width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
 }
 
 .name {

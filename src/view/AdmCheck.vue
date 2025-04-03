@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="addBox">
-                                <span>用户：</span>
+                                <span>用户id：</span>
                                 <span>地址：</span>
                                 <div class="handle">
                                     <el-button type="danger">撤回</el-button>
@@ -56,8 +56,124 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import AdmMain from '../components/AdmMain.vue';
+import axios from 'axios';
+import { ref } from 'vue';
 
+
+const orders = ref([])
+
+
+/**
+ * 返回所有要审核的订单
+ * 
+ * 请求参数：
+ * 无
+ * 
+ * 响应参数：
+ * orders:[{
+ *  order_id,
+ *  status,
+ *  total_price,
+ *  created_at,
+ *  order_details:[{
+ *      name,
+ *      price,
+ *      quantity
+ *  },...],
+ *  user_id,
+ *  address
+ * },...]
+ */
+const fetchOrder = async () => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log('所有待审核订单', response.data);
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
+
+/**
+ * 审核通过订单
+ * 
+ * 响应参数：
+ * order_id：Int
+ * 
+ * 返回参数：
+ * 是否修改成功
+ */
+const passOrder = async (index) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            order_id: orders.value[index].order_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log('通过订单', response.data);
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
+
+
+/**
+ * 审核拒绝订单
+ * 
+ * 响应参数：
+ * order_id：Int
+ * 
+ * 返回参数：
+ * 是否拒绝成功
+ */
+const rejectedOrder = async (index) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            order_id: orders.value[index].order_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log('通过订单', response.data);
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
 
 </script>
 
