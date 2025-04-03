@@ -31,17 +31,16 @@
   console.log('postDetails',history.state);
   
   /**
-   * 获取帖子详情数据
+   * 获取帖子详情
    * 
    * 请求参数：
-   * post_id:String,
-   * 
+   * post_id: String  // 帖子ID,从postList组件中获取
    * 响应参数：
-   * title:String,
-   * message:String,
-   * port_partition:String,
-   * created_at:String,
-   * updated_at:String
+   * title: String  // 帖子标题
+   * message: String  // 帖子内容
+   * post_partition: String  // 帖子分区
+   * created_at: String  // 帖子创建时间
+   * updated_at: String  // 帖子更新时间
    */
   const fetchPostsDetails = async () => {
   try {
@@ -79,11 +78,15 @@
   let createdAt = ref();  
   let updatedAt = ref();
   
-// 要实现数据库的帖子点赞数加1，更新点赞数，需要后端接口支持。
-// 请求参数：
-// post_id: String  // 帖子ID,从postList组件中获取
-// 响应参数：
-// likes: Number  // 点赞数量
+/**
+ * 点赞要实现数据库的帖子点赞数加1，更新点赞数，需要后端接口支持。
+ * 
+ * 请求参数：
+ * post_id: String  // 帖子ID,从postList组件中获取
+ * 响应参数：
+ * success: Boolean  // 是否点赞成功
+ * likes: Number  // 帖子点赞数
+ */ 
   const handlelikes = async() => {
     try {
       const url = ""

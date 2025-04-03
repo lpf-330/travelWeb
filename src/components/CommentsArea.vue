@@ -30,8 +30,8 @@
    * 获取评论列表
    * 
    * 请求参数：
-   * user_id:String,
-   * attraction_id:String,
+   * attraction_id: String
+   * 
    * 
    * 响应参数：
    * comments:[{
@@ -84,30 +84,38 @@
   let newComment = ref("");  
   
   /**  
-   * 编辑评论  
+   * 点赞评论  
    *   
    * 请求参数:  
-   * comment_id: String
+   * comment_id: String  
+   *   
+   * 响应参数:  
+   * likes: 点赞数+1  
    */  
-  let likeComment = async (id) => {  
+   const likeComment = async (id) => {  
     try {  
-      const url = "http://localhost:8081/attraction_comments/likes";  
-      const response = await Axios.post(url, {}, {  
-        headers: {  
-          'Content-Type': 'application/json',  
+        const url = "http://localhost:8081/comments/likes";  
+        const response = await axios.post(url, {  
+            comment_id: id  
+        }, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("点赞成功", response.data);  
+        const comment = comments.value.find(c => c.id === id);  
+        if (comment) {  
+            comment.likes += 1;  
         }  
-      });  
-      console.log("点赞成功");  
-      const comment = comments.value.find(c => c.id === id);  
-      if (comment) {  
-        comment.likes += 1;  
-      }  
+
+        // 显示成功提示  
+        ElMessage.success("点赞成功！");  
     } catch (error) {  
-      console.error("点赞失败:", error);  
-      alert("点赞失败，请稍后再试。");  
+        console.error("点赞失败:", error);  
+        alert("点赞失败，请稍后再试。");  
     }  
-  };  
-  
+};  
   //likeComment();
   
   /**  
@@ -179,13 +187,15 @@
    *   
    * 请求参数:  
    * content: String  
-   *   
+   * 
    * 响应参数:  
-   * id: 新评论的ID  
-   * username: 评论作者的用户名  
-   * avatar: 评论作者的头像  
-   * likes: 评论的点赞数  
-   * contect: 评论的内容  
+   * id: String  (新评论的id)  
+   * username: String  (当前用户的用户名)  
+   * avatar: String  (当前用户的头像)  
+   * content: String  (新评论的内容)  
+   * likes: 0  (新评论的点赞数)  
+   * isOwner: true  (当前用户是否是评论的作者)  
+   * 
    */  
    let submitComment = async () => {  
     try {  

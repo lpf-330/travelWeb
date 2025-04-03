@@ -3,52 +3,21 @@
         <h1>名人列表</h1>
         <div class="scrollbarBox" id="scenery-list">
             <el-scrollbar>
-                <div class="scenery-item">
+                <div class="scenery-item" v-for="(famousPeople, index) in famousPeopleList" :key="person_id">
                     <div class="image-placeholder">
-                        <span class="number-label">1</span>
+                        <span class="number-label">{{index+1}}</span>
                     </div>
                     <div class="scenery-description">
-                        <h2>名人 1</h2>
-                        <p>这是第一个名人的描述，介绍该名人。</p>
-                        <p></p>
+                        <h2>{{famousPeople.name}}</h2>
+                        <p>{{famousPeople.message}}</p>
                     </div>
                     <div class="button-group">
-                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
-                        <button class="delete-button">删除</button>
+                        <button class="modify-button" @click="centerDialogVisible = true;handleModifyFamousPeople(famousPeople.person_id)">修改</button>
+                        <button class="delete-button" @click="deleteFamousPeople(famousPeople.person_id)">删除</button>
                     </div>
                 </div>
-
-                <div class="scenery-item">
-                    <div class="image-placeholder">
-                        <span class="number-label">2</span>
-                    </div>
-                    <div class="scenery-description">
-                        <h2>名人 2</h2>
-                        <p>这是第二个名人的描述，介绍名人。</p>
-                    </div>
-                    <div class="button-group">
-                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
-                        <button class="delete-button">删除</button>
-                    </div>
-                </div>
-
-                <div class="scenery-item">
-                    <div class="image-placeholder">
-                        <span class="number-label">3</span>
-                    </div>
-                    <div class="scenery-description">
-                        <h2>名人 3</h2>
-                        <p>第三个名人的介绍。</p>
-                    </div>
-                    <div class="button-group">
-                        <button class="modify-button" @click="centerDialogVisible = true">修改</button>
-                        <button class="delete-button">删除</button>
-                    </div>
-                </div>
-
-                <button class="addButton" @click="centerDialogVisible = true">增加</button>
+                <button class="addButton" @click="centerDialogVisible = true;handleAddFamousPeople">增加</button>
             </el-scrollbar>
-
         </div>
     </div>
 
@@ -65,11 +34,11 @@
                     <el-upload ref="uploadRef" class="upload"
                         action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :auto-upload="false">
                         <template #trigger>
-                            <el-button type="primary">select file</el-button>
+                            <el-button type="primary">选择文件</el-button>
                         </template>
 
                         <el-button class="ml-3" type="success" @click="submitUpload">
-                            upload to server
+                            上传图片
                         </el-button>
 
                     </el-upload>
@@ -111,10 +80,162 @@ const submitUpload = () => {
 const form = ref({
     name: '',
     description: '',
+    image: ''
 })
 const centerDialogVisible = ref(false)
 
+const famousPeopleList = ref([])  
 
+/**
+ *获取名人列表
+ *
+ * 请求参数：无
+ * 响应参数：
+ * famousPeopleList:[{
+ * person_id: number,
+ * name: string,
+ * message: string,
+ * image: string
+ * },...]
+ *  
+ */
+const fetchFamousPeople = async () => {  
+    try {  
+        const url = "http://localhost:8081/api/famousPeople/getFamousPeople"  
+        const response = await axios.post(url, {}, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("响应名人列表", response.data);  
+        famousPeopleList.value = response.data.map(item => ({  
+            person_id: item.person_id,  
+            name: item.name,  
+            message: item.message,  
+            image: item.image  
+        }));  
+    } catch (error) {  
+        console.error("获取名人列表失败", error);  
+        alert("获取名人列表失败，请稍后再试。");  
+    }  
+}  
+//fetchFamousPeople();
+
+/**
+ * 添加名人信息
+ * 请求参数：
+ * name: string,
+ * message: string,
+ * image: string
+ * 响应参数：
+ * person_id: number
+ * 
+ */
+const handleAddFamousPeople = async () => {  
+    try {  
+        const url = "http://localhost:8081/api/famousPeople/addFamousPeople"  
+
+        const formData = {  
+            name: form.value.name,  
+            message: form.value.description,  
+            image: form.value.image  
+        };  
+
+        const response = await axios.post(url, formData, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("添加成功", response.data);  
+        // 刷新名人列表  
+        await fetchFamousPeople();  
+        centerDialogVisible.value = false;  
+
+        // 显示成功提示  
+        ElMessage.success("名人添加成功！");  
+    } catch (error) {  
+        console.error("添加失败", error);  
+        alert("添加失败，请稍后再试。");  
+    }  
+}  
+
+
+/**
+ * 修改名人信息
+ *
+ * 请求参数：
+ * id: number,
+ * name: string,
+ * message: string,
+ * image: string
+ * 响应参数：
+ * 无
+ */
+const handleModifyFamousPeople = async (id) => {  
+    try {  
+        const url = "http://localhost:8081/api/famousPeople/modifyFamousPeople"  
+
+        const formData = {  
+            id: id,  
+            name: form.value.name,  
+            message: form.value.description,  
+            image: form.value.image  
+        };  
+
+        const response = await axios.post(url, formData, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("修改成功", response.data);  
+        // 刷新名人列表  
+        await fetchFamousPeople();  
+        centerDialogVisible.value = false;  
+
+        // 显示成功提示  
+        ElMessage.success("名人信息修改成功！");  
+    } catch (error) {  
+        console.error("修改失败", error);  
+        alert("修改失败，请稍后再试。");  
+    }  
+}  
+
+/**
+ * 删除名人信息
+ *
+ * 请求参数：
+ * person_id: number
+ * 响应参数：
+ * 无
+ */
+const deleteFamousPeople = async (id) => {  
+    try {  
+        // 添加确认提示  
+        if (!confirm('确认删除该名人吗？')) {  
+            return;  
+        }  
+
+        const url = "http://localhost:8081/api/famousPeople/deleteFamousPeople"  
+        const response = await axios.post(url, { id }, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("删除成功", response.data);  
+        // 刷新名人列表  
+        await fetchFamousPeople();  
+
+        // 显示成功提示  
+        ElMessage.success("名人删除成功！");  
+    } catch (error) {  
+        console.error("删除失败", error);  
+        alert("删除失败，请稍后再试。");  
+    }  
+}  
 </script>
 
 

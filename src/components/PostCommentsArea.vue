@@ -30,8 +30,7 @@ let comments = ref([]);
  * 获取评论列表
  * 
  * 请求参数：
- * user_id:String,
- * post_id:String,
+ *  post_id: String
  * 
  * 响应参数：
  * comments:[{
@@ -87,25 +86,34 @@ let newComment = ref("");
  * 点赞评论  
  *   
  * 请求参数:  
- * commentId: String
+ * post_comment_id: String  
+ *   
+ * 响应参数:  
+ * likes: 点赞数+1  
  */  
-let likeComment = async (id) => {  
-  try {  
-    const url = "http://localhost:8081/comments/likes";  
-    const response = await Axios.post(url, {}, {  
-      headers: {  
-        'Content-Type': 'application/json',  
-      }  
-    });  
-    console.log("点赞成功");  
-    const comment = comments.value.find(c => c.id === id);  
-    if (comment) {  
-      comment.likes += 1;  
+ const likeComment = async (id) => {  
+    try {  
+        const url = "http://localhost:8081/comments/likes";  
+        const response = await axios.post(url, {  
+            post_comment_id: id  
+        }, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("点赞成功", response.data);  
+        const comment = comments.value.find(c => c.id === id);  
+        if (comment) {  
+            comment.likes += 1;  
+        }  
+
+        // 显示成功提示  
+        ElMessage.success("点赞成功！");  
+    } catch (error) {  
+        console.error("点赞失败:", error);  
+        alert("点赞失败，请稍后再试。");  
     }  
-  } catch (error) {  
-    console.error("点赞失败:", error);  
-    alert("点赞失败，请稍后再试。");  
-  }  
 };  
 
 //likeComment();
@@ -118,31 +126,31 @@ let likeComment = async (id) => {
  * content: String  
  *   
  * 响应参数:  
- * 无需返回具体数据，评论内容在前端直接更新  
+ * 无需返回具体数据，评论内容将更新为最新内容  
  */  
+ const editComment = async (commentId) => {  
+    try {  
+        const comment = comments.value.find(c => c.id === commentId);  
+        if (!comment) {  
+            console.error("评论未找到");  
+            return;  
+        }  
 
-let editComment = async (commentId) => {  
-  try {  
-    const comment = comments.value.find(c => c.id === commentId);  
-    if (!comment) {  
-      console.error("评论未找到");  
-      return;  
+        const url = `http://localhost:8081/comments/${commentId}`;  
+        const response = await axios.post(url, {  
+            content: comment.text  
+        }, {  
+            headers: {  
+                'Content-Type': 'application/json',  
+            }  
+        });  
+
+        console.log("编辑成功", response.data);  
+        ElMessage.success("编辑成功！");  
+    } catch (error) {  
+        console.error("编辑失败:", error);  
+        alert("编辑失败，请稍后再试。");  
     }  
-
-    const url = `http://localhost:8081/comments/${commentId}`;  
-    const response = await Axios.post(url, {  
-      content: comment.text  
-    }, {  
-      headers: {  
-        'Content-Type': 'application/json',  
-      }  
-    });  
-
-    console.log("编辑成功");  
-  } catch (error) {  
-    console.error("编辑失败:", error);  
-    alert("编辑失败，请稍后再试。");  
-  }  
 };  
 
 //eidtComment();
@@ -154,7 +162,7 @@ let editComment = async (commentId) => {
  * post_comment_id: String  
  *   
  * 响应参数:  
- * 无需返回具体数据，评论将从评论列表中移除  
+ * 无需返回具体数据，评论将被删除  
  */  
  let deleteComment = async (commentId) => {  
   try {  
@@ -175,17 +183,18 @@ let editComment = async (commentId) => {
 //deleteComment();
 
 /**  
- * 提交新评论  
+ * 提交评论  
  *   
  * 请求参数:  
  * content: String  
  *   
  * 响应参数:  
- * id: 新评论的ID  
- * username: 评论作者的用户名  
- * avatar: 评论作者的头像  
- * likes: 评论的点赞数  
- * contect: 评论的内容  
+ * id: String  (评论id)  
+ * username: String  (用户名)  
+ * content: String  (评论内容)  
+ * likes: 0  (点赞数)  
+ * avatar: String  (用户头像)  
+ * isOwner: true  (是否是当前用户发表的评论)  
  */  
  let submitComment = async () => {  
   try {  
@@ -203,7 +212,7 @@ let editComment = async (commentId) => {
       }  
     });  
 
-    console.log("提交成功");  
+    console.log("提交成功", response.data);  
     comments.value.push({  
       id: response.data.id,  
       username: currentUser.username,  

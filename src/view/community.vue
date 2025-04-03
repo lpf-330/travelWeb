@@ -88,25 +88,22 @@ let editPost = ref({
 /**
  * 创建新帖子
  * 
- * 请求方法：POST
- * 请求路径：/post/createPost
- * 
- * 请求体参数：
+ * 请求参数：
  * {
- *   title: String,     // 帖子标题（必需）
- *   message: String,   // 帖子内容（必需）
- *   user_id: Number    // 用户ID（必需）
+ *   title: String,    // 标题（必需）
+ *   message: String   // 内容（必需）
  * }
  * 
  * 响应参数：
  * {
- *   post_id: Number,     // 新创建的帖子ID
- *   title: String,       // 帖子标题
- *   message: String,     // 帖子内容
+ *   post_id: Number,     // 帖子ID
+ *   title: String,       // 标题
+ *   message: String,     // 内容
  *   user_id: Number,     // 作者ID
  *   created_at: String,  // 创建时间（ISO格式）
  *   updated_at: String   // 更新时间（ISO格式）
  * }
+ * 
  */
 const submitPost = async () => {
   if (!newPost.value.title || !newPost.value.content) {
@@ -151,24 +148,21 @@ let openEditModal = (post) => {
 /**
  * 更新帖子
  * 
- * 请求方法：PUT
- * 请求路径：/post/updatePost/{postId}
- * 
- * 路径参数：
- * postId: Number  // 要更新的帖子ID
- * 
- * 请求体参数：
+ * 请求参数：
  * {
- *   title: String,    // 新标题（必需）
- *   message: String   // 新内容（必需）
+ *   post_id: Number,  // 要更新的帖子ID
+ *   title: String,    // 标题（必需）
+ *   message: String   // 内容（必需）
  * }
  * 
  * 响应参数：
  * {
  *   post_id: Number,     // 帖子ID
- *   title: String,       // 更新后的标题
- *   message: String,     // 更新后的内容
- *   updated_at: String   // 新的更新时间（ISO格式）
+ *   title: String,       // 标题
+ *   message: String,     // 内容
+ *   user_id: Number,     // 作者ID
+ *   created_at: String,  // 创建时间（ISO格式）
+ *   updated_at: String   // 更新时间（ISO格式）
  * }
  */
 const updatePost = async () => {
@@ -197,12 +191,15 @@ const updatePost = async () => {
 /**
  * 删除帖子
  * 
- * 请求方法：DELETE
- * 请求路径：/post/deletePost/{postId}
- * 
- * 路径参数：
- * postId: Number  // 要删除的帖子ID
- * 
+ * 请求参数：
+ * {
+ *   post_id: Number  // 要删除的帖子ID
+ * }
+ *  
+ * 响应参数：
+ * {
+ *   message: String  // 删除成功提示信息
+ * }
  *
  */
 const deletePost = async (postId) => {
