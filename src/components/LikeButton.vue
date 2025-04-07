@@ -5,7 +5,11 @@
 </template>
 
 <script setup>
+function incrementLikes() {
+  this.likes++;
+}
 
+incrementLikes();
 </script>
 
 <style scoped>

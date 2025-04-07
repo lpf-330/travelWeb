@@ -218,20 +218,22 @@ const fetchFamousPeople = async () => {
  * transportation: 交通方式
  * famousPeople: 相关名人ID列表
  * 
+ * 
  * 响应参数：
  * scenery{
  *  attraction_id: 景点ID
  *  name: 景点名称
  *  description: 景点介绍
  *  image: 景点图像
+ *  sceneryList{
+ *      location: 景点地址
+ *      opening_hours: 开放时间
+ *      transportation: 交通方式
+ *      person_id: 名人ID
+ *      name: 名人名称
+ *  }
  * }
- * sceneryList{
- *  location: 景点地址
- *  opening_hours: 开放时间
- *  transportation: 交通方式
- *  person_id: 名人ID
- *  name: 名人名称
- * }
+
  */
 const handleAddScenery = async() => {
     try {  
@@ -280,13 +282,13 @@ const handleAddScenery = async() => {
  *  name: 景点名称
  *  description: 景点介绍
  *  image: 景点图像
- * }
- * sceneryList{
- *  location: 景点地址
- *  opening_hours: 开放时间
- *  transportation: 交通方式
- *  person_id: 名人ID
- *  name: 名人名称
+ *  sceneryList{
+ *      location: 景点地址
+ *      opening_hours: 开放时间
+ *      transportation: 交通方式
+ *      person_id: 名人ID
+ *      name: 名人名称
+ *  }
  * }
  * 
  */

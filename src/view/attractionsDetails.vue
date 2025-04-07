@@ -45,7 +45,7 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-console.log(JSON.parse(history.state.data))
+console.log("景点ID获取成功",history.state.id)
 
 // 测试数据
 // let attraction = ref({
@@ -104,7 +104,7 @@ const fetchAttractionDetail = async () => {
   try {  
     const url = "http://localhost:8081/Attractions/fetchAttractionDetail"
     const response = await axios.post(url, {
-      attractionId:route.params.id
+      attraction_id:history.state.id
     },
       {
         headers: {
@@ -139,7 +139,6 @@ const fetchAttractionDetail = async () => {
 };  
 
 fetchAttractionDetail();
-console.log(route.params.id)
 
 
 
@@ -156,7 +155,7 @@ const handleLikes = async () => {
   try {  
     const url = ""
     const response = await axios.post(url, {
-      attractionId:route.params.id
+      attraction_id:history.state.id
     },
       {
         headers: {

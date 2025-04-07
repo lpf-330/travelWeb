@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="sidebar">
-      <div class="sideBox" @click="selectLocation(locations[key])" v-for="(value, key) in locations">{{ value.name }}
+      <div class="sideBox" @click="selectLocation(locations[key],key)" v-for="(value, key) in locations">{{ value.name }}
       </div>
     </div>
     <div class="content">
@@ -14,6 +14,9 @@
 import { ref } from 'vue';
 import ShowList from '../components/ShowList.vue'; // 导入 ShowList 组件  
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const showType = "attractionsDetails"
 
@@ -79,11 +82,9 @@ fetchAttractions();
 let selectedLocation = ref(null);
 let showLists = ref([]);
 
-let selectLocation = (location) => {
+let selectLocation = (location,key) => {
   selectedLocation.value = location;
   showLists.value = location ? location.attractions : [];
-  const attractionId = location.attractions[0].id;  
-  router.push({ name: 'attractionDetail', params: { id: attractionId } });//还没作测试
 };  
 </script>
 

@@ -16,17 +16,12 @@ let props = defineProps({
 
 
 
-let goToDetail = (ShowList) => {
-  // // 这里可以添加跳转到详情页面的逻辑  
-  // console.log('跳转到详情页面，ID：', id);
-  
-  let data=JSON.stringify({id:ShowList.id}) 
-
-  router.push({
-    path:"/index/" + props.showType,
-    state:{data}
-  })
-};
+const goToDetail = (id) => {  
+  router.push({  
+    name: 'attractionsDetails',  
+    state: { id: id }  
+  });  
+};  
 
 
 
@@ -35,7 +30,7 @@ let goToDetail = (ShowList) => {
 
 <template>
   <div class="ShowLists">
-    <div class="ShowList" v-for="(ShowList, index) in showLists" :key="index" @click="goToDetail(ShowList)">
+    <div class="ShowList" v-for="(ShowList, index) in showLists" :key="index" @click="goToDetail(ShowList.id)">
       <!--假设 ID 为 index，也可以根据需要更改-->
       <div class="ShowList-content">
         <img :src="ShowList.pic" class="ShowList-pic" />
