@@ -69,6 +69,7 @@
 import { onMounted } from 'vue';
 import { ref } from 'vue'
 import type { UploadInstance } from 'element-plus'
+import axios from 'axios'
 
 const uploadRef = ref<UploadInstance>()
 
@@ -166,7 +167,7 @@ const handleAddFamousPeople = async () => {
  * 修改名人信息
  *
  * 请求参数：
- * id: number,
+ * person_id: number,
  * name: string,
  * message: string,
  * image: string

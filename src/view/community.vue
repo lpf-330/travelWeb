@@ -92,6 +92,7 @@ let editPost = ref({
  * {
  *   title: String,    // 标题（必需）
  *   message: String   // 内容（必需）
+ *   user_id: Number,     // 作者ID
  * }
  * 
  * 响应参数：
@@ -99,9 +100,7 @@ let editPost = ref({
  *   post_id: Number,     // 帖子ID
  *   title: String,       // 标题
  *   message: String,     // 内容
- *   user_id: Number,     // 作者ID
- *   created_at: String,  // 创建时间（ISO格式）
- *   updated_at: String   // 更新时间（ISO格式）
+
  * }
  * 
  */
@@ -156,14 +155,7 @@ let openEditModal = (post) => {
  * }
  * 
  * 响应参数：
- * {
- *   post_id: Number,     // 帖子ID
- *   title: String,       // 标题
- *   message: String,     // 内容
- *   user_id: Number,     // 作者ID
- *   created_at: String,  // 创建时间（ISO格式）
- *   updated_at: String   // 更新时间（ISO格式）
- * }
+ * 是否更新成功，无响应参数
  */
 const updatePost = async () => {
   try {

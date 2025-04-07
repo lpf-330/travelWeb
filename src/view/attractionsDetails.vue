@@ -102,7 +102,7 @@ const attraction = ref({});
    */  
 const fetchAttractionDetail = async () => {  
   try {  
-    const url = ""
+    const url = "http://localhost:8081/Attractions/fetchAttractionDetail"
     const response = await axios.post(url, {
       attractionId:route.params.id
     },
@@ -137,9 +137,11 @@ const fetchAttractionDetail = async () => {
     console.error("获取数据失败:", error);  
   }  
 };  
-// console.log(route.params.id)
 
-//fetchAttractionDetail();
+fetchAttractionDetail();
+console.log(route.params.id)
+
+
 
 const toFamousPeople = () => {
   router.push("/index/famousPeople")

@@ -40,16 +40,16 @@ const locations = ref([]);
    */
 const fetchAttractions = async () => {  
   try {  
-    const response = await axios.post("http://localhost:8081/getAttractions");  
+    const response = await axios.post("http://localhost:8081/Attractions/fetchAttractions");  
     if (response.data) {  
       locations.value = response.data.map(item => ({  
         name: item.location,  
-        attractions: [{  
-          id: item.attraction_id,  
-          name: item.name,  
-          message: item.description,  
-          pic: item.image  
-        }]  
+        attractions: item.attractions.map(attraction => ({  
+        id: attraction.attraction_id,  
+        name: attraction.name,  
+        message: attraction.description,  
+        pic: attraction.image  
+      }))  
       }));  
     }  
     console.log("获取数据成功:", response.data);  
@@ -58,9 +58,9 @@ const fetchAttractions = async () => {
   }  
 };  
 
-//fetchAttractions();   
+fetchAttractions();   
 
-// // 用来做测试的假数据
+// 用来做测试的假数据
 // let locations=[
 //   {
 //     name: "北京",
@@ -94,11 +94,13 @@ let selectLocation = (location) => {
 }
 
 .sidebar {
+  border-radius: 0.8rem;
+  margin-left: 1rem;
   width: 250px;
   background-color: #f0f0f0;
   padding: 20px;
   border-right: 1px solid #ddd;
-  height: 88%;
+  height: 92%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -117,6 +119,8 @@ let selectLocation = (location) => {
 
 .sideBox:hover {
   background-color: #c4c4c4;
+  border-radius: 0.4rem;
+  transition: all 0.5s ease-in-out;
 }
 
 .sidebar h2 {

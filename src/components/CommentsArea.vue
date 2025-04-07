@@ -8,7 +8,6 @@
           <p>{{ comment.text }}</p>  
           <button @click="likeComment(comment.id)">点赞 ({{ comment.likes }})</button>  
           <template v-if="comment.isOwner">  
-            <button @click="editComment(comment.id)">编辑</button>  
             <button @click="deleteComment(comment.id)">删除</button>  
           </template>  
         </div>  
@@ -41,8 +40,7 @@
    *    likes,
    *    avatar,
    * },...],
-   * userComments:[]  (用户在这个景点评论区里发表的所有评论的id)
-   * 
+   * userComments:[]  (用户在这个帖子评论区里发表的所有评论的id)
    */
   const fetchComments = async () => {  
     try{
@@ -118,42 +116,6 @@
 };  
   //likeComment();
   
-  /**  
-   * 编辑评论  
-   *   
-   * 请求参数:  
-   * comment_id: String  
-   * content: String  
-   *   
-   * 响应参数:  
-   * 无需返回具体数据，评论内容在前端直接更新  
-   */  
-  
-  let editComment = async (commentId) => {  
-    try {  
-      const comment = comments.value.find(c => c.id === commentId);  
-      if (!comment) {  
-        console.error("评论未找到");  
-        return;  
-      }  
-  
-      const url = `http://localhost:8081/attraction_comments/${commentId}`;  
-      const response = await Axios.put(url, {  
-        content: comment.text  
-      }, {  
-        headers: {  
-          'Content-Type': 'application/json',  
-        }  
-      });  
-  
-      console.log("编辑成功");  
-    } catch (error) {  
-      console.error("编辑失败:", error);  
-      alert("编辑失败，请稍后再试。");  
-    }  
-  };  
-  
-  //eidtComment();
   
   /**  
    * 删除评论  
