@@ -45,19 +45,19 @@ const goToDetail = (id) => {
 
 <style scoped>
 .ShowLists {
-  max-width: 95%;
+  width: 100rem;
   margin: auto;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 2rem;
   /* 每个景点间的间距 */
 }
 
 .ShowList {
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 16px;
+  padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   cursor: pointer;
@@ -83,9 +83,9 @@ const goToDetail = (id) => {
 }
 
 .ShowList-pic {
-  width: 250px;
+  width: 12rem;
   /* 设置图片宽度 */
-  height: 156px;
+  height: 10rem;
   /* 设置高度 */
   border-radius: 8px;
   margin-right: 5%;

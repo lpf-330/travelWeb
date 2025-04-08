@@ -97,11 +97,11 @@ let selectLocation = (location) => {
 .sidebar {
   border-radius: 0.8rem;
   margin-left: 1rem;
-  width: 250px;
+  width: 15rem;
   background-color: #f0f0f0;
   padding: 20px;
   border-right: 1px solid #ddd;
-  height: 92%;
+  height: auto;
   display: flex;
   justify-content: flex-start;
   align-items: center;

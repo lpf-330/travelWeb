@@ -16,7 +16,9 @@
       </div>  
   
       <div class="likes">  
-        <LikeButton @click="handlelikes"></LikeButton>  
+        <LikeButton 
+    :likes="likes" 
+    @like="handlelikes"/> 
       </div>
         <PostCommentsArea></PostCommentsArea>  
     </div>  
@@ -41,11 +43,12 @@
    * post_partition: String  // 帖子分区
    * created_at: String  // 帖子创建时间
    * updated_at: String  // 帖子更新时间
+   * likes: Number  // 帖子点赞数
    */
   const fetchPostsDetails = async () => {
   try {
-    const url = "http://localhost:8081/post/post_id"
-    const response = await axios.post(url, {post_id: history.state.post_id
+    const url = "http://localhost:8081/post/fetchPostsDetails"
+    const response = await axios.post(url, {post_id: history.state.id
     },
       {
         headers: {
@@ -64,6 +67,8 @@
 
     createdAt.value = response.data.created_at;
     updatedAt.value = response.data.updated_at;
+    console.log("点赞数", response.data.likes);
+    likes.value = response.data.likes;
 
   } catch (error) {
     console.error("出错", error);
@@ -72,11 +77,12 @@
   }
 }
 
-  // fetchPostsDetails();
+  fetchPostsDetails();
   
   let post = ref({});  
   let createdAt = ref();  
   let updatedAt = ref();
+  let likes = ref();
   
 /**
  * 点赞要实现数据库的帖子点赞数加1，更新点赞数，需要后端接口支持。
@@ -89,8 +95,8 @@
  */ 
   const handlelikes = async() => {
     try {
-      const url = ""
-      const response = await axios.post(url, {post_id: history.state.post_id
+      const url = "http://localhost:8081/post/handleLikes1"
+      const response = await axios.post(url, {post_id: history.state.id
       },
         {
           headers: {

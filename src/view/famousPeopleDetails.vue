@@ -25,25 +25,15 @@
 
   const route = useRoute(); 
 
-  const person = ref({});  
 
-  onMounted(() => {  
-    // 从 route.state 中获取 person 对象  
-    console.log("快出来",history.state);  
-    if (history.state && history.state.person) {
-      person.value = history.state.person;   
-    } else {  
-      console.warn("没有在 route.state 中找到名人数据");  
-    }  
-  });  
-  // // 假设我们有一个名人数据对象  
-  // let person = ref({  
-  //   name: "李白",  
-  //   picture: "https://via.placeholder.com/750",  
-  //   biography: "李白是唐代著名的诗人，被称为‘诗仙’。他以豪放飘逸的诗风著称，作品广泛流传。",  
-  // });  
-  
-  // 创建时间和更新时间  
+  const person = ref({
+  name: '',
+  image: '',
+  biography: ''
+  })
+
+  person.value = history.state.personData
+
   let createdAt = ref("2024-01-01");  
   let updatedAt = ref("2024-12-01");  
 

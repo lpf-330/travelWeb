@@ -30,7 +30,9 @@
       </div>
     </div>
     <div class="likes-line">
-      <LikeButton @click="handleLikes"></LikeButton>
+      <LikeButton 
+    :likes="attraction.likes" 
+    @like="handleLikes"/>
     </div>
     <CommentsArea></CommentsArea>
   </div>
@@ -142,13 +144,18 @@ fetchAttractionDetail();
 
 
 
-const toFamousPeople = (figure) => {  
-  console.log("跳转到名人详情页", figure);
-  router.push({  
-    name: 'famousPeople',  
-    state: { person: figure },
-  });  
-};  
+const toFamousPeople = (figure) => {
+  router.push({
+    name: 'famousPeople',
+    state: { 
+      personData: {
+        name: figure.name,
+        image: figure.image,
+        biography: figure.biography,
+      }
+    }
+  });
+}
 
 // 要实现数据库的景点点赞数加1，更新点赞数，需要后端接口支持。
 // 请求参数：
@@ -170,6 +177,7 @@ const handleLikes = async () => {
     if (response.data.success) {  
       attraction.value.likes = response.data.data.likes;  
     }  
+    console.log('更新点赞数成功:', response.data);  
   } catch (error) {  
     console.error('更新点赞数失败:', error);  
   }  

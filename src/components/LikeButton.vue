@@ -1,11 +1,28 @@
 <template>
-<div class="like-button" @click="incrementLikes"> 
+<div class="like-button" @click="handleClick"> 
     <span>&#x1F44D; 点赞 {{ likes }}</span>  
 </div>
 </template>
 
 <script setup>
+import { defineProps, defineEmits } from 'vue';
 
+// 接收父组件传递的点赞数
+const props = defineProps({
+  likes: {
+    type: Number,
+    required: true,
+    default: 0
+  }
+});
+
+// 定义事件发射器
+const emit = defineEmits(['like']);
+
+// 点击时触发父组件事件
+const handleClick = () => {
+  emit('like');
+};
 </script>
 
 <style scoped>
