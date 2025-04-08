@@ -27,7 +27,7 @@
     </div>
 
     <div class="tail">
-      <div class="buy">添加到购物车</div>
+      <div class="buy" @click="product.value.available === true">添加到购物车</div>
       <!--设置事件跳转CheckoutModal.vue-->
     </div>
   </div>
@@ -76,25 +76,30 @@ if (data.value.stock <= 0) {
  */
 let postAddShopCart = async () => {
 
-  try {
+  if (product.value.available === true) {
+    try {
 
-    const url = "http://localhost:8081/"
-    const response = await axios.post(url, {
-      user_id: userInfoStore.user_id.value,
-      product_id: data.value.product_id
-    },
-      {
-        headers: {
-          'Content-Type': 'application/json',
+      const url = "http://localhost:8081/"
+      const response = await axios.post(url, {
+        user_id: userInfoStore.user_id.value,
+        product_id: data.value.product_id
+      },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }
-      }
-    );
+      );
 
 
-  } catch (error) {
-    console.error("出错", error);
-    alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    } catch (error) {
+      console.error("出错", error);
+      alert("加载失败，请稍后再试。"); // 友好的错误提示  
 
+    }
+  }
+  else {
+    alert('该商品已停售')
   }
 
 }

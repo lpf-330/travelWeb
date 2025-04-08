@@ -29,6 +29,9 @@ const userInfoStore = storeToRefs(useUserInfoStore())
  *      address:String
  *  }
  * },...]
+ * 
+ * [1,2,3,4]
+ * []
  */
 const fetchPreOrder = async () => {
 

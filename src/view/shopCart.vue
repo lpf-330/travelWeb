@@ -222,33 +222,40 @@ const deleteProduction = async ({ product_id }) => {
  * 是否提交结算成功
  */
 const postCheckOut = async () => {
-    const order_details = []
-    for (let i = 0; i < selected.value.length; i++) {
-        order_details.push({
-            product_id: shopCart.value[selected.value[i]].product_id,
-            quantity: shopCart.value[selected.value[i]].quantity,
-            price: shopCart.value[selected.value[i]].price
-        })
-    }
+    if (selected.value.length > 0) {
+        const order_details = []
+        for (let i = 0; i < selected.value.length; i++) {
+            order_details.push({
+                product_id: shopCart.value[selected.value[i]].product_id,
+                quantity: shopCart.value[selected.value[i]].quantity,
+                price: shopCart.value[selected.value[i]].price
+            })
+        }
 
-    try {
-        const url = "http://localhost:8081/"    //后端还没写
-        const response = await axios.post(url, {
-            user_id: userInfoStore.user_id.value,
-            total_price: sumPrice.value,
-            address: userInfoStore.nowAddr.value,
-            order_details: order_details
-        },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
+        try {
+            const url = "http://localhost:8081/product/postCheckOut"    //后端还没写
+            const response = await axios.post(url, {
+                user_id: userInfoStore.user_id.value,
+                total_price: sumPrice.value,
+                address: userInfoStore.nowAddr.value,
+                order_details: order_details
+            },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 }
-            }
-        );
+            )
 
-    } catch (error) {
-        console.error("出错", error);
-        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+            console.log('结算返回', response.data);
+
+
+        } catch (error) {
+            console.error("出错", error);
+            alert("加载失败，请稍后再试。"); // 友好的错误提示  
+        }
+    } else {
+        alert('未选择商品')
     }
 }
 
@@ -340,7 +347,7 @@ const countSumPrice = () => {
                                 <div class="sumPrice">总价：{{ sumPrice }} 元</div>
                             </div>
                             <div class="checkBox">
-                                <button class="checkButton">结算</button>
+                                <button class="checkButton" @click="postCheckOut">结算</button>
                             </div>
                         </div>
                     </div>
