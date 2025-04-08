@@ -192,7 +192,7 @@
       const url = "http://localhost:8081/handleModifyProduction";  
   
       const formData = {  
-        product_id: form.value.id,  
+        production_id: form.value.id,  
         name: form.value.name,  
         message: form.value.description,  
         price: form.value.price,  
