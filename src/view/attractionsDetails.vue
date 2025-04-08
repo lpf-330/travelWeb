@@ -17,10 +17,10 @@
         <p><strong>景点描述:</strong> {{ attraction.description }}</p>
       </div>
     </div>
-    <div class="related-figures">
+    <div class="related-figures" @click="">
       <h2>相关名人</h2>
       <div class="figures-list">
-        <div v-for="figure in attraction.relatedFigures" :key="figure.id" class="figure" @click="toFamousPeople">
+        <div v-for="figure in attraction.relatedFigures" :key="figure.id" class="figure" @click="toFamousPeople(figure)">
           <img :src="figure.image" alt="名人图片" />
           <div class="figure-info">
             <h3>{{ figure.name }}</h3>
@@ -142,9 +142,13 @@ fetchAttractionDetail();
 
 
 
-const toFamousPeople = () => {
-  router.push("/index/famousPeople")
-}
+const toFamousPeople = (figure) => {  
+  console.log("跳转到名人详情页", figure);
+  router.push({  
+    name: 'famousPeople',  
+    state: { person: figure },
+  });  
+};  
 
 // 要实现数据库的景点点赞数加1，更新点赞数，需要后端接口支持。
 // 请求参数：
@@ -153,7 +157,7 @@ const toFamousPeople = () => {
 // likes: Number  // 点赞数量
 const handleLikes = async () => {  
   try {  
-    const url = ""
+    const url = "http://localhost:8081/Attractions/handleLikes"
     const response = await axios.post(url, {
       attraction_id:history.state.id
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="sidebar">
-      <div class="sideBox" @click="selectLocation(locations[key],key)" v-for="(value, key) in locations">{{ value.name }}
+      <div class="sideBox" @click="selectLocation(locations[key])" v-for="(value, key) in locations">{{ value.name }}
       </div>
     </div>
     <div class="content">
@@ -82,7 +82,7 @@ fetchAttractions();
 let selectedLocation = ref(null);
 let showLists = ref([]);
 
-let selectLocation = (location,key) => {
+let selectLocation = (location) => {
   selectedLocation.value = location;
   showLists.value = location ? location.attractions : [];
 };  
