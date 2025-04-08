@@ -60,7 +60,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 
-const orders = ref([])
+const orders = ref([1, 2, 3, 4, 5])
 
 
 /**
@@ -75,11 +75,6 @@ const orders = ref([])
  *  status,
  *  total_price,
  *  created_at,
- *  order_details:[{
- *      name,
- *      price,
- *      quantity
- *  },...],
  *  user_id,
  *  address
  * },...]
@@ -111,6 +106,45 @@ const fetchOrder = async () => {
     }
 
 }
+
+
+/**
+ * 请求参数：
+ * order_id:Int
+ * 
+ * 响应参数：
+ * order_details:[{
+ *  name,
+ *  price,
+ *  quantity
+ * },...],
+ */
+const fetchOrderDetails = async (order_id) => {
+
+    try {
+        const url = "http://localhost:8081/"    //后端还没写
+        const response = await axios.post(url, {
+            order_id: order_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log('订单详情', response.data);
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+
+}
+
+
 
 /**
  * 审核通过订单

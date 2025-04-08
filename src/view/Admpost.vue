@@ -3,45 +3,21 @@
         <h1>帖子列表</h1>
         <div class="scrollbarBox" id="scenery-list">
             <el-scrollbar>
-                <div class="scenery-item" @click="centerDialogVisible = true">
+                <div class="scenery-item" v-for="(value, index) in posts" v-bind:key="value.post_id"
+                    @click="centerDialogVisible = true; fatchPostDetails(value.post_id)">
                     <div class="image-placeholder">
-                        <span class="number-label">1</span>
+                        <span class="number-label">{{ index }}</span>
                     </div>
                     <div class="scenery-description">
-                        <h2>帖子 1</h2>
-                        <p>这是第一个帖子的描述，介绍该帖子的特点和历史。</p>
-                        <p></p>
+                        <h2>{{ value.title }}</h2>
+                        <p>{{ value.message }}</p>
                     </div>
                     <div class="button-group">
-                        <button class="delete-button" @click.stop>删除</button>
+                        <button class="delete-button" @click.stop @click="deletePost(value.post_id)">删除</button>
                     </div>
                 </div>
 
-                <div class="scenery-item">
-                    <div class="image-placeholder">
-                        <span class="number-label">2</span>
-                    </div>
-                    <div class="scenery-description">
-                        <h2>帖子 2</h2>
-                        <p>这是第二个帖子的描述，介绍它的魅力和吸引点。</p>
-                    </div>
-                    <div class="button-group">
-                        <button class="delete-button">删除</button>
-                    </div>
-                </div>
 
-                <div class="scenery-item">
-                    <div class="image-placeholder">
-                        <span class="number-label">3</span>
-                    </div>
-                    <div class="scenery-description">
-                        <h2>帖子 3</h2>
-                        <p>第三个帖子的介绍，包括它的特色之处和游玩的建议。</p>
-                    </div>
-                    <div class="button-group">
-                        <button class="delete-button">删除</button>
-                    </div>
-                </div>
 
             </el-scrollbar>
 
@@ -52,20 +28,14 @@
         <el-form label-position="left" v-model="form" class="fromBox">
             <div class="nameBox formItem">
                 <el-form-item label="帖子标题" class="formItemBox head">
-                    <span>q3w324</span>
-                </el-form-item>
-            </div>
-
-            <div class="posterBox formItem">
-                <el-form-item label="发布人" class="formItemBox head">
-                    <span>23443</span>
+                    <span>{{ postDetails.title }}</span>
                 </el-form-item>
             </div>
 
             <div class="descriptionBox formItem">
                 <el-form-item label="帖子内容" class="formItemBox">
                     <el-scrollbar height="95%">
-                        <span>123111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111231111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+                        <span>{{ postDetails.message }}
                         </span>
                     </el-scrollbar>
                 </el-form-item>
@@ -113,32 +83,23 @@
 
 <script setup>
 import { ref } from 'vue'
+import axios from 'axios'
 
 const posts = ref([])
+const postDetails = ref({
+    post_id: '',
+    title: '',
+    message: '',
+    img: '',
+    comments: []
+})
 
 
-/**
- * 获取所有帖子
- * 
- * 请求参数：
- * 无
- * 
- * 响应参数：
- * posts:[{
- *  post_id,
- *  title,
- *  message,
- *  username,
- *  comments:[{
- *      username,
- *      content
- *  },...]
- * },...]
- */
 const fatchPosts = async () => {
+    posts.value = []
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/post/getPosts"    //后端还没写
         const response = await axios.post(url, {
 
         },
@@ -149,8 +110,43 @@ const fatchPosts = async () => {
             }
         );
 
-        for (let item in response.data) {
-            posts.value.push(item)
+        for (let i = 0; i < response.data.length; i++) {
+            posts.value.push(response.data[i])
+        }
+
+        console.log('posts', posts.value);
+
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+fatchPosts()
+
+
+const fatchPostDetails = async (post_id) => {
+
+    try {
+        const url = "http://localhost:8081/post/fetchPostsDetails"    //后端还没写
+        const response = await axios.post(url, {
+            post_id: post_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        postDetails.value = {
+            post_id: response.data.post_id,
+            title: response.data.title,
+            message: response.data.message,
+            img: '',
+            comments: []
         }
 
     } catch (error) {
@@ -158,6 +154,7 @@ const fatchPosts = async () => {
         alert("加载失败，请稍后再试。"); // 友好的错误提示  
     }
 }
+
 
 /**
  * 删除帖子
@@ -168,12 +165,12 @@ const fatchPosts = async () => {
  * 响应参数：
  * 是否删除成功
  */
-const deletePosts = async () => {
+const deletePost = async (post_id) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/post/deletePost"    //后端还没写
         const response = await axios.post(url, {
-            // post_id:
+            post_id: post_id
         },
             {
                 headers: {
@@ -182,7 +179,10 @@ const deletePosts = async () => {
             }
         );
 
-
+        alert(response.data)
+        if (response.data === "删除成功") {
+            fatchPosts()
+        }
 
     } catch (error) {
         console.error("出错", error);
@@ -201,12 +201,12 @@ const deletePosts = async () => {
  * 是否删除成功
  * 
  */
-const deleteComment = async () => {
+const deleteComment = async (post_id) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/post/deleteComment"    //后端还没写
         const response = await axios.post(url, {
-            // post_id:
+            post_id: post_id
         },
             {
                 headers: {
@@ -224,6 +224,8 @@ const deleteComment = async () => {
 
 
 const centerDialogVisible = ref(false)
+
+
 
 
 </script>
@@ -477,11 +479,6 @@ a {
     height: 10%;
 }
 
-.posterBox {
-    width: 100%;
-    height: 10%;
-}
-
 .descriptionBox {
     width: 100%;
     height: 30%;
@@ -493,7 +490,7 @@ a {
 }
 
 .commentBox {
-    min-height: 30%;
+    min-height: 40%;
     width: 100%;
 }
 
