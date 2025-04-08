@@ -21,7 +21,7 @@ let fetchProductsList = async () => {
 
   try {
 
-    const url = "http://localhost:8081/product/getProducts"
+    const url = "http://localhost:8081/getProducts"
     const response = await axios.post(url, {
     },
       {

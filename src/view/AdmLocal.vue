@@ -115,9 +115,9 @@
   
       console.log("响应土特产列表", response.data);  
       productionList.value = response.data.map(item => ({  
-        id: item.production_id,  
+        id: item.product_id,  
         name: item.name,  
-        message: item.description,  
+        message: item.message,  
         price: item.price,  
         stock: item.stock  
       }));  
@@ -198,6 +198,7 @@
         price: form.value.price,  
         stock: form.value.stock  
       };  
+      console.log("修改表单数据", formData);  
   
       const response = await axios.post(url, formData, {  
         headers: {  
