@@ -102,7 +102,7 @@ const famousPeopleList = ref([])
  */
 const fetchFamousPeople = async () => {  
     try {  
-        const url = "http://localhost:8081/api/famousPeople/getFamousPeople"  
+        const url = "http://localhost:8081/FamousPeople/fetchFamousPeople"  
         const response = await axios.post(url, {}, {  
             headers: {  
                 'Content-Type': 'application/json',  
@@ -121,7 +121,7 @@ const fetchFamousPeople = async () => {
         alert("获取名人列表失败，请稍后再试。");  
     }  
 }  
-//fetchFamousPeople();
+fetchFamousPeople();
 
 /**
  * 添加名人信息
@@ -261,13 +261,14 @@ h1 {
     display: flex;
     margin-bottom: 1.5rem;
     border: 0.1rem solid #ddd;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     padding-left: 3rem;
     padding-right: 3rem;
     border-radius: 1rem;
     background-color: #fafafa;
     position: relative;
+    
     /* 让子元素相对于此盒子定位 */
 }
 
@@ -311,6 +312,12 @@ h1 {
 
 .scenery-description {
     flex: 1;
+    width: 10rem;
+    height: 8.5rem;
+    overflow: hidden;
+    padding-right: 2rem;
+
+    box-sizing: border-box;
 }
 
 .button-group {

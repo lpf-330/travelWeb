@@ -99,9 +99,9 @@ let selectLocation = (location) => {
   margin-left: 1rem;
   width: 15rem;
   background-color: #f0f0f0;
-  padding: 20px;
+  padding: 1rem;
   border-right: 1px solid #ddd;
-  height: auto;
+  height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;

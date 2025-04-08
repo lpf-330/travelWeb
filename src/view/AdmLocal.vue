@@ -1,291 +1,247 @@
 <template>
     <div class="container">
-        <h1>土特产列表</h1>
-        <div class="scrollbarBox" id="scenery-list">
-            <el-scrollbar>
-                <div class="scenery-item" v-for="(production, index) in productionList" :key="production.id">
-                    <div class="image-placeholder">
-                        <span class="number-label">{{ index + 1 }}</span>
-                    </div>
-                    <div class="scenery-description">
-                        <div class="descriptionBox">
-                            <h2>{{ production.name }}</h2>
-                            <p>{{ production.message }}</p>
-                            <p></p>
-                        </div>
-                        <div class="saleBox">
-                            <p>价格：{{ production.price }}</p>
-                            <p>库存：{{ production.stock }}</p>
-                        </div>
-
-                    </div>
-                    <div class="button-group">
-                        <button class="modify-button" @click="centerDialogVisible = true;handleModifyProduction(production.id)">修改</button>
-                        <button class="delete-button" @click="deleteProduction(production.id)">删除</button>
-                    </div>
-                </div>
-                <button class="addButton" @click="centerDialogVisible = true;handleAddProduction">增加</button>
-            </el-scrollbar>
-
-        </div>
-    </div>
-
-    <el-dialog v-model="centerDialogVisible" title="特产修改" width="50rem" align-center>
-        <el-form label-position="left" v-model="form" class="fromBox">
-            <div class="nameBox formItem">
-                <el-form-item label="特产名称" class="formItemBox">
-                    <el-input v-model="form.name" style="height: 60%;width: 100%;" />
-                </el-form-item>
+      <h1>土特产列表</h1>
+      <div class="scrollbarBox" id="scenery-list">
+        <el-scrollbar>
+          <div class="scenery-item" v-for="(production, index) in productionList" :key="production.id">
+            <div class="image-placeholder">
+              <span class="number-label">{{ index + 1 }}</span>
             </div>
-
-            <div class="descriptionBox formItem">
-                <el-form-item label="特产介绍" class="formItemBox">
-                    <el-input type="textarea" :rows="10" v-model="form.description" style="height: 85%;width: 100%;" />
-                </el-form-item>
+            <div class="scenery-description">
+              <div class="descriptionBox">
+                <h2>{{ production.name }}</h2>
+                <p>{{ production.message }}</p>
+              </div>
+              <div class="saleBox">
+                <p>价格：{{ production.price }}</p>
+                <p>库存：{{ production.stock }}</p>
+              </div>
             </div>
-
-            <div class="imgBox formItem">
-                <el-form-item label="特产图像" class="formItemBox">
-                    <el-upload ref="uploadRef" class="upload"
-                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :auto-upload="false">
-                        <template #trigger>
-                            <el-button type="primary">选择文件</el-button>
-                        </template>
-
-                        <el-button class="ml-3" type="success" @click="submitUpload">
-                            上传到服务器
-                        </el-button>
-
-                    </el-upload>
-                </el-form-item>
+            <div class="button-group">
+              <button class="modify-button" @click="openEditDialog(production)">修改</button>
+              <button class="delete-button" @click="deleteProduction(production.id)">删除</button>
             </div>
-
-            <div class="priceBox formItem">
-                <el-form-item label="特产价格" class="formItemBox">
-                    <el-input v-model.number="form.price" />
-                </el-form-item>
-            </div>
-
-            <div class="stockBox formItem">
-                <el-form-item label="特产库存" class="formItemBox">
-                    <el-input v-model.number="form.stock" />
-                </el-form-item>
-            </div>
-
-
-        </el-form>
-
-        <template #footer>
-            <div class="dialog-footer footer">
-                <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false">
-                    确定
+          </div>
+          <button class="addButton" @click="openAddDialog">增加</button>
+        </el-scrollbar>
+      </div>
+  
+      <el-dialog v-model="centerDialogVisible" :title="dialogTitle" width="50rem" align-center>
+        <el-form label-position="left" :model="form" class="fromBox">
+          <div class="nameBox formItem">
+            <el-form-item label="特产名称" class="formItemBox">
+              <el-input v-model="form.name" style="height: 60%;width: 100%;" />
+            </el-form-item>
+          </div>
+  
+          <div class="descriptionBox formItem">
+            <el-form-item label="特产介绍" class="formItemBox">
+              <el-input type="textarea" :rows="10" v-model="form.description" style="height: 85%;width: 100%;" />
+            </el-form-item>
+          </div>
+  
+          <div class="imgBox formItem">
+            <el-form-item label="特产图像" class="formItemBox">
+              <el-upload ref="uploadRef" class="upload"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :auto-upload="false">
+                <template #trigger>
+                  <el-button type="primary">选择文件</el-button>
+                </template>
+                <el-button class="ml-3" type="success" @click="submitUpload">
+                  上传到服务器
                 </el-button>
-            </div>
+              </el-upload>
+            </el-form-item>
+          </div>
+  
+          <div class="priceBox formItem">
+            <el-form-item label="特产价格" class="formItemBox">
+              <el-input v-model.number="form.price" />
+            </el-form-item>
+          </div>
+  
+          <div class="stockBox formItem">
+            <el-form-item label="特产库存" class="formItemBox">
+              <el-input v-model.number="form.stock" />
+            </el-form-item>
+          </div>
+        </el-form>
+  
+        <template #footer>
+          <div class="dialog-footer footer">
+            <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitForm">
+              确定
+            </el-button>
+          </div>
         </template>
-    </el-dialog>
-</template>
-
-
-<script setup lang="ts">
-import { onMounted } from 'vue';
-import { ref } from 'vue'
-import type { UploadInstance } from 'element-plus'
-
-const uploadRef = ref<UploadInstance>()
-
-const submitUpload = () => {
+      </el-dialog>
+    </div>
+  </template>
+  
+  <script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  import type { UploadInstance } from 'element-plus'
+  import axios from 'axios'
+  
+  const uploadRef = ref<UploadInstance>()
+  
+  const submitUpload = () => {
     uploadRef.value!.submit()
-}
-
-const form = ref({
+  }
+  
+  const form = ref({
+    id: 0,
     name: '',
     description: '',
     price: 0,
     stock: 0,
-})
-const centerDialogVisible = ref(false)
-
-const productionList = ref([]);  
-
-/**
- * 获取土特产列表
- * 
- * 请求参数：
- * 无
- * 
- * 响应参数：
- * productionList[{
- *   product_id: number,
- *   name: string,
- *   description: string,
- *   price: number,
- *   stock: number
- * },...]
- */
-const fetchProductions = async () => {  
+  })
+  
+  const centerDialogVisible = ref(false)
+  const dialogTitle = ref('')
+  const currentMode = ref('add') // 'add' 或 'edit'
+  
+  const productionList = ref([]);  
+  
+  const fetchProductions = async () => {  
     try {  
-        const url = "http://localhost:8081/api/productions/getProductions";  
-        const response = await axios.post(url, {}, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
-
-        console.log("响应土特产列表", response.data);  
-        productionList.value = response.data.map(item => ({  
-            id: item.production_id,  
-            name: item.name,  
-            message: item.description,  
-            price: item.price,  
-            stock: item.stock  
-        }));  
-    } catch (error) {  
-        console.error("获取土特产列表失败", error);  
-        alert("获取土特产列表失败，请稍后再试。");  
-    }  
-};  
-//fetchProductions();
-
-/**
- * 添加土特产
- * 
- * 请求参数：
- * {
- *   name: string,
- *   message: string,
- *   price: number,
- *   stock: number
- * }
- * 
- * 响应参数：
- * {
- *   success: boolean,
- *   message: string
- * }
- */
-const handleAddProduction = async () => {  
-    try {  
-        const url = "http://localhost:8081/api/productions/addProduction";  
-
-        const formData = {  
-            name: form.value.name,  
-            message: form.value.description,  
-            price: form.value.price,  
-            stock: form.value.stock  
-        };  
-
-        const response = await axios.post(url, formData, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
-
-        console.log("添加成功", response.data);  
-        // 刷新土特产列表  
-        await fetchProductions();  
-        centerDialogVisible.value = false;  
-
-        // 显示成功提示  
-        ElMessage.success("土特产添加成功！");  
-    } catch (error) {  
-        console.error("添加失败", error);  
-        alert("添加失败，请稍后再试。");  
-    }  
-};  
-
-/**
- * 修改土特产
- * 
- * 请求参数：
- * {
- *   product_id: number,
- *   name: string,
- *   message: string,
- *   price: number,
- *   stock: number
- * }
- * 
- * 响应参数：
- * {
- *   success: boolean,
- *   message: string
- * }
- */
-const handleModifyProduction = async (id) => {  
-    try {  
-        const url = "http://localhost:8081/api/productions/modifyProduction";  
-
-        const formData = {  
-            id: product_id,  
-            name: form.value.name,  
-            message: form.value.description,  
-            price: form.value.price,  
-            stock: form.value.stock  
-        };  
-
-        const response = await axios.post(url, formData, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
-
-        console.log("修改成功", response.data);  
-        // 刷新土特产列表  
-        await fetchProductions();  
-        centerDialogVisible.value = false;  
-
-        // 显示成功提示  
-        ElMessage.success("土特产信息修改成功！");  
-    } catch (error) {  
-        console.error("修改失败", error);  
-        alert("修改失败，请稍后再试。");  
-    }  
-};  
-
-/**
- * 删除土特产(只是更新库存数量，将库存数量置为0)
- * 
- * 请求参数：
- * {
- *   product_id: number,
- *   stock: number
- * }
- * 
- * 响应参数：
- * {
- *   success: boolean,
- *   message: string
- * }
- */
-const deleteProduction = async (id) => {  
-    try {  
-        if (!confirm('确认删除该土特产吗？')) {  
-            return;  
+      const url = "http://localhost:8081/fetchProductions";  
+      const response = await axios.post(url, {}, {  
+        headers: {  
+          'Content-Type': 'application/json',  
         }  
-
-        const url = "http://localhost:8081/api/productions/updateStock";  
-        const response = await axios.post(url, {  
-            id: id,  
-            stock: 0  
-        }, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
-
-        console.log("删除成功", response.data);  
-        // 刷新土特产列表以反映更新  
-        await fetchProductions();  
-
-        // 显示成功提示  
-        ElMessage.success("土特产删除成功！");  
+      });  
+  
+      console.log("响应土特产列表", response.data);  
+      productionList.value = response.data.map(item => ({  
+        id: item.production_id,  
+        name: item.name,  
+        message: item.description,  
+        price: item.price,  
+        stock: item.stock  
+      }));  
     } catch (error) {  
-        console.error("删除失败", error);  
-        alert("删除失败，请稍后再试。");  
+      console.error("获取土特产列表失败", error);  
+      alert("获取土特产列表失败，请稍后再试。");  
     }  
-};  
-</script>
+  };
+  
+  const openAddDialog = () => {
+    currentMode.value = 'add'
+    dialogTitle.value = '新增特产'
+    form.value = {
+      id: 0,
+      name: '',
+      description: '',
+      price: 0,
+      stock: 0
+    }
+    centerDialogVisible.value = true
+  }
+  
+  const openEditDialog = (production) => {
+    currentMode.value = 'edit'
+    dialogTitle.value = '修改特产'
+    form.value = {
+      id: production.id,
+      name: production.name,
+      description: production.message,
+      price: production.price,
+      stock: production.stock
+    }
+    centerDialogVisible.value = true
+  }
+  
+  const submitForm = async () => {
+    if (currentMode.value === 'add') {
+      await handleAddProduction()
+    } else {
+      await handleModifyProduction()
+    }
+  }
+  
+  const handleAddProduction = async () => {  
+    try {  
+      const url = "http://localhost:8081/handleAddProduction";  
+  
+      const formData = {  
+        name: form.value.name,  
+        message: form.value.description,  
+        price: form.value.price,  
+        stock: form.value.stock  
+      };  
+  
+      const response = await axios.post(url, formData, {  
+        headers: {  
+          'Content-Type': 'application/json',  
+        }  
+      });  
+  
+      console.log("添加成功", response.data);  
+      await fetchProductions();  
+      centerDialogVisible.value = false;  
+    } catch (error) {  
+      console.error("添加失败", error);  
+      alert("添加失败，请稍后再试。");  
+    }  
+  };  
+  
+  const handleModifyProduction = async () => {  
+    try {  
+      const url = "http://localhost:8081/handleModifyProduction";  
+  
+      const formData = {  
+        product_id: form.value.id,  
+        name: form.value.name,  
+        message: form.value.description,  
+        price: form.value.price,  
+        stock: form.value.stock  
+      };  
+  
+      const response = await axios.post(url, formData, {  
+        headers: {  
+          'Content-Type': 'application/json',  
+        }  
+      });  
+  
+      console.log("修改成功", response.data);  
+      await fetchProductions();  
+      centerDialogVisible.value = false;  
+    } catch (error) {  
+      console.error("修改失败", error);  
+      alert("修改失败，请稍后再试。");  
+    }  
+  };  
+  
+  const deleteProduction = async (id) => {  
+    try {  
+      if (!confirm('确认删除该土特产吗？')) {  
+        return;  
+      }  
+  
+      const url = "http://localhost:8081/deleteProduction2";  
+      const response = await axios.post(url, {  
+        product_id: id,  
+        stock: 0  
+      }, {  
+        headers: {  
+          'Content-Type': 'application/json',  
+        }  
+      });  
+  
+      console.log("删除成功", response.data);  
+      await fetchProductions();  
+    } catch (error) {  
+      console.error("删除失败", error);  
+      alert("删除失败，请稍后再试。");  
+    }  
+  };  
+  
+  onMounted(() => {
+    fetchProductions();
+  });
+  </script>
 
 
 <style scoped>
@@ -309,8 +265,8 @@ h1 {
     display: flex;
     margin-bottom: 1.5rem;
     border: 0.1rem solid #ddd;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     padding-left: 3rem;
     padding-right: 3rem;
     border-radius: 1rem;
