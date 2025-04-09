@@ -65,7 +65,7 @@
     width: 100%;  
     border: 1px solid #ccc;  
     border-radius: 8px;  
-    padding: 16px;  
+    padding: 1.5rem;  
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  
     transition: transform 0.4s;
     cursor: pointer;  
@@ -86,13 +86,18 @@
     color: #333; /* 帖子标题颜色 */  
   }  
   
-  .ShowList-message {  
-    display: flex; /* 使用 flexbox 排列内容 */  
-    justify-content: space-between; /* 内容两端对齐 */  
-    align-items: center; /* 垂直居中对齐 */  
-    font-size: 1em; /* 帖子内容字体大小 */  
-    color: #666; /* 帖子内容颜色 */  
-  }  
+  .ShowList-message {
+  font-size: 1em;
+  color: #555;
+  /*次要文字颜色 */
+  overflow: hidden;
+  /* 隐藏超出内容 */
+  text-overflow: ellipsis;
+  /* 超出部分用省略号表示 */
+  display: block;
+  /* 使文本块行为正常 */
+  white-space: nowrap;
+}
   
   .ShowList-actions button {  
     margin-left: 10px; /* 按钮间距 */  
