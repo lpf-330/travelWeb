@@ -234,11 +234,18 @@ const postCheckOut = async () => {
 
         try {
             const url = "http://localhost:8081/product/postCheckOut"    //后端还没写
+            const address=''
+            for(let i=0;i<userInfoStore.address.length;i++){
+                if(userInfoStore.nowAddr===userInfoStore.address[i].id){
+                    address=userInfoStore.address[i].address
+                    break
+                }
+            }
             const response = await axios.post(url, {
                 user_id: userInfoStore.user_id.value,
                 total_price: sumPrice.value,
                 address: userInfoStore.nowAddr.value,
-                order_details: order_details
+                order_details: address
             },
                 {
                     headers: {
