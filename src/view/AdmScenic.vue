@@ -5,7 +5,7 @@
             <el-scrollbar>
                 <div class="scenery-item" v-for="(scenery, index) in sceneryList" :key="scenery.id">
                     <div class="image-placeholder">
-                        <span class="number-label">{{ index + 1 }}</span>
+                        <img :src="'src/assets/picture/picture_package/attraction/' +scenery.attraction_id+'.jpg'">
                     </div>
                     <div class="scenery-description">
                         <h2>{{ scenery.name }}</h2>
@@ -465,9 +465,8 @@ h1 {
 }
 
 .image-placeholder {
-    width: 10rem;
-    height: 10rem;
-    background-color: #ccc;
+    width: 12rem;
+    height: 12rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -496,6 +495,12 @@ h1 {
 .scenery-item:hover .number-label {
     transform: scale(1.2);
     /* 悬浮时放大效果 */
+}
+
+.image-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 .scenery-description {

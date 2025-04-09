@@ -5,7 +5,7 @@
             <el-scrollbar>
                 <div class="scenery-item" v-for="(famousPeople, index) in famousPeopleList" :key="person_id">
                     <div class="image-placeholder">
-                        <span class="number-label">{{index+1}}</span>
+                        <img :src="'src/assets/picture/picture_package/famouspeople/'+ famousPeople.person_id +'.jpg'"></img>
                     </div>
                     <div class="scenery-description">
                         <h2>{{famousPeople.name}}</h2>
@@ -65,17 +65,11 @@
 </template>
 
 
-<script setup lang="ts">
+<script setup>
 import { onMounted } from 'vue';
 import { ref } from 'vue'
-import type { UploadInstance } from 'element-plus'
 import axios from 'axios'
 
-const uploadRef = ref<UploadInstance>()
-
-const submitUpload = () => {
-    uploadRef.value!.submit()
-}
 
 
 const form = ref({
@@ -268,10 +262,15 @@ h1 {
     height: 90%;
 }
 
+.image-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
 .image-placeholder {
-    width: 10rem;
+    width: 15rem;
     height: 10rem;
-    background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;

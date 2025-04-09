@@ -47,6 +47,7 @@ const toProductDetails = () => {
 
 .box:hover {
     border: 2px orange solid;
+    transition: all 0.4s ease-in-out;
 }
 
 .img {

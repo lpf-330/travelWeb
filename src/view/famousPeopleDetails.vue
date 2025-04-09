@@ -45,7 +45,7 @@ let updatedAt = ref("2024-12-01");
 
 <style scoped>
 .famous-person-detail {
-  max-width: 95%;
+  max-width: 90%;
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -74,10 +74,8 @@ let updatedAt = ref("2024-12-01");
   justify-content: space-around;
 }
 
-.image-container {
-  text-align: center;
-  height: 400px;
-  width: 400px;
+img{
+    object-fit: contain;
 }
 
 .person-image {
@@ -87,12 +85,17 @@ let updatedAt = ref("2024-12-01");
 }
 
 .biography {
-  margin-bottom: 20px;
   text-align: center;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding: 1rem;
   box-shadow: 0px 0.5vh 1vh 0 #acacac;
   border-radius: 10px;
+  width: 50%;
+  text-align: justify;
+  hyphens: auto;
+  margin-top: 1.5rem ;
+  margin-bottom: 4rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 h2 {

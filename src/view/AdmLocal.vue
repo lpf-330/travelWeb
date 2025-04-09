@@ -5,7 +5,7 @@
         <el-scrollbar>
           <div class="scenery-item" v-for="(production, index) in productionList" :key="production.id">
             <div class="image-placeholder">
-              <span class="number-label">{{ index + 1 }}</span>
+                <img :src="'src/assets/picture/picture_package/productions/'+ production.id +'.jpg'">
             </div>
             <div class="scenery-description">
               <div class="descriptionBox">
@@ -281,9 +281,8 @@ h1 {
 }
 
 .image-placeholder {
-    width: 10rem;
-    height: 10rem;
-    background-color: #ccc;
+    width: 12rem;
+    height: 12rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -492,6 +491,12 @@ a {
 .descriptionBox {
     height: 40%;
     width: 100%;
+}
+
+.image-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 .saleBox {

@@ -146,6 +146,8 @@
     text-align: center;  
     padding-left: 50px;  
     padding-right: 50px;  
+    text-align: justify;
+    hyphens: auto;
   }  
   
   h2 {  
