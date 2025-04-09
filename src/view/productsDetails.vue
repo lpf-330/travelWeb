@@ -143,9 +143,8 @@ let updatedAt = ref("2024-12-01");
 
 
 
-.image-container {
-  margin-bottom: 20px;
-  width: 600px
+img{
+  object-fit: contain;
 }
 
 .product-image {
