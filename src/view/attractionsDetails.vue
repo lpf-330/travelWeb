@@ -32,7 +32,7 @@
     <div class="likes-line">
       <LikeButton 
     :likes="attraction.likes" 
-    @like="handleLikes"/>
+    @like="handleLikes();addlikes()"/>
     </div>
     <CommentsArea></CommentsArea>
   </div>
@@ -174,14 +174,34 @@ const handleLikes = async () => {
         }
       }
     );
-    if (response.data.success) {  
-      attraction.value.likes = response.data.data.likes;  
-    }  
-    console.log('更新点赞数成功:', response.data);  
+
+    await fetchAttractionDetail();
+    console.log('收集点赞数成功:', response.data);  
   } catch (error) {  
-    console.error('更新点赞数失败:', error);  
+    console.error('收集点赞数失败:', error);  
   }  
 };  
+
+const addlikes = async() => {
+  try
+  {
+    const url = "http://localhost:8081/Attractions/likeComment1"
+    const response = axios.post(url, {
+      attraction_id:history.state.id
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    
+    console.log('点赞成功:');
+  }
+  catch (error) {
+    console.error('点赞失败:', error);  
+  }
+}
 </script>
 
 <style scoped>

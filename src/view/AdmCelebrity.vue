@@ -154,8 +154,6 @@ const handleAddFamousPeople = async () => {
         await fetchFamousPeople();  
         centerDialogVisible.value = false;  
 
-        // 显示成功提示  
-        ElMessage.success("名人添加成功！");  
     } catch (error) {  
         console.error("添加失败", error);  
         alert("添加失败，请稍后再试。");  
@@ -195,9 +193,6 @@ const handleModifyFamousPeople = async (id) => {
         // 刷新名人列表  
         await fetchFamousPeople();  
         centerDialogVisible.value = false;  
-
-        // 显示成功提示  
-        ElMessage.success("名人信息修改成功！");  
     } catch (error) {  
         console.error("修改失败", error);  
         alert("修改失败，请稍后再试。");  
@@ -219,7 +214,7 @@ const deleteFamousPeople = async (id) => {
             return;  
         }  
 
-        const url = "http://localhost:8081/api/famousPeople/deleteFamousPeople"  
+        const url = "http://localhost:8081//FamousPeople/deleteFamousPeople"  
         const response = await axios.post(url, { id }, {  
             headers: {  
                 'Content-Type': 'application/json',  
@@ -229,9 +224,6 @@ const deleteFamousPeople = async (id) => {
         console.log("删除成功", response.data);  
         // 刷新名人列表  
         await fetchFamousPeople();  
-
-        // 显示成功提示  
-        ElMessage.success("名人删除成功！");  
     } catch (error) {  
         console.error("删除失败", error);  
         alert("删除失败，请稍后再试。");  

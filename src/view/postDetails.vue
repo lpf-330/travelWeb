@@ -104,12 +104,11 @@
           }
         }
       );
-      if(response.data.success){
-        console.log("点赞成功", response.data.likes);
-      }
+        await fetchPostsDetails();
+        console.log("收集点赞数成功", response.data);
     } catch (error) {
       console.error("出错", error);
-      alert("点赞失败，请稍后再试。");
+      alert("收集点赞数失败，请稍后再试。");
     }
   }
   </script>  
