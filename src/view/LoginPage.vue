@@ -73,9 +73,11 @@ let getAddress = async () => {
       }
     );
 
-    console.log('响应地址', response.data);
+    
 
     userInfoStore.address.value = response.data
+
+    console.log('响应地址', userInfoStore.address.value);
 
   } catch (error) {
     console.error("出错", error);

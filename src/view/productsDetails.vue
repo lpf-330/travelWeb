@@ -27,7 +27,7 @@
     </div>
 
     <div class="tail">
-      <div class="buy" @click="product.value.available === true">添加到购物车</div>
+      <div class="buy" @click="postAddShopCart">添加到购物车</div>
       <!--设置事件跳转CheckoutModal.vue-->
     </div>
   </div>
@@ -37,6 +37,7 @@
 import { onMounted, ref } from 'vue';
 import useUserInfoStore from '../stores/user';
 import { storeToRefs } from 'pinia';
+import axios from 'axios';
 
 const userInfoStore = storeToRefs(useUserInfoStore())
 
@@ -79,10 +80,10 @@ let postAddShopCart = async () => {
   if (product.value.available === true) {
     try {
 
-      const url = "http://localhost:8081/"
+      const url = "http://localhost:8081/postAddShopCart"
       const response = await axios.post(url, {
         user_id: userInfoStore.user_id.value,
-        product_id: data.value.product_id
+        product_id: data.value.id
       },
         {
           headers: {
@@ -91,6 +92,8 @@ let postAddShopCart = async () => {
         }
       );
 
+      console.log('postAddShopCart',response.data);
+      
 
     } catch (error) {
       console.error("出错", error);

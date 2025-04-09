@@ -233,19 +233,24 @@ const postCheckOut = async () => {
         }
 
         try {
-            const url = "http://localhost:8081/product/postCheckOut"    //后端还没写
-            const address=''
-            for(let i=0;i<userInfoStore.address.length;i++){
-                if(userInfoStore.nowAddr===userInfoStore.address[i].id){
-                    address=userInfoStore.address[i].address
+            const url = "http://localhost:8081/postCheckOut"    //后端还没写
+            let address=''
+            // console.log('响应地址', userInfoStore.address.value);
+            console.log('userInfoStore.address',userInfoStore.address.value);
+            
+            for(let i=0;i<userInfoStore.address.value.length;i++){
+                if(userInfoStore.nowAddr.value===userInfoStore.address.value[i].addr_id){
+                    address=userInfoStore.address.value[i].address
                     break
                 }
             }
+            console.log('address',address);
+            
             const response = await axios.post(url, {
                 user_id: userInfoStore.user_id.value,
                 total_price: sumPrice.value,
-                address: userInfoStore.nowAddr.value,
-                order_details: address
+                address: address,
+                order_details: order_details
             },
                 {
                     headers: {
