@@ -3,21 +3,22 @@
         <h1>景点列表</h1>
         <div class="scrollbarBox" id="scenery-list">
             <el-scrollbar>
-                <div class="scenery-item" v-for="(scenery, index) in scenery" :key="scenery.id">
+                <div class="scenery-item" v-for="(scenery, index) in sceneryList" :key="scenery.id">
                     <div class="image-placeholder">
-                        <span class="number-label">{{ index+1 }}</span>
+                        <span class="number-label">{{ index + 1 }}</span>
                     </div>
                     <div class="scenery-description">
                         <h2>{{ scenery.name }}</h2>
                         <p>{{ scenery.description }}</p>
                     </div>
                     <div class="button-group">
-                        <button class="modify-button" @click="centerDialogVisible = true;handleModifyScenery(scenery.id)">修改</button>
-                        <button class="delete-button" @click="deleteScenery(scenery.id)">删除</button>
+                        <button class="modify-button"
+                            @click="centerDialogVisible = true; updataScenery(scenery)">修改</button>
+                        <button class="delete-button" @click="">删除</button>
                     </div>
                 </div>
 
-                <button class="addButton" @click="centerDialogVisible = true;handleAddScenery">增加</button>
+                <button class="addButton" @click="centerDialogVisible = true; addScenery()">增加</button>
             </el-scrollbar>
 
         </div>
@@ -75,7 +76,7 @@
         <template #footer>
             <div class="dialog-footer footer">
                 <el-button class="cancelbutton" type="primary" @click="centerDialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false">
+                <el-button type="primary" @click="centerDialogVisible = false; addOrUpdata()">
                     确定
                 </el-button>
             </div>
@@ -97,7 +98,7 @@ import axios from 'axios';
 // }))
 
 const selectedFamousPeople = ref([])
-const famousPeople = ref([{ value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }, { value: '4', label: '4' }])
+const famousPeople = ref([])
 
 const form = ref({
     name: '',
@@ -105,15 +106,48 @@ const form = ref({
     famousPeople: [],
     opening: '',
     transportation: '',
-    location: ''
+    location: '',
+    attraction_id: -1,   //-1则为新增
 })
 const centerDialogVisible = ref(false)
 
 const scenery = ref([])
 const sceneryList = ref([])
 
+
+const addScenery = () => {
+    form.value.attraction_id = -1
+    form.value.description = ''
+    form.value.famousPeople = []
+    form.value.opening = ''
+    form.value.transportation = ''
+    form.value.name = ''
+    form.value.location = ''
+}
+
+const updataScenery = (scenery) => {
+    form.value.attraction_id = scenery.attraction_id
+    fetchAttractionDetail(form.value.attraction_id)
+    // form.value.description = scenery.description
+    // form.value.famousPeople = scenery.scenery
+    // form.value.opening = scenery.opening
+    // form.value.transportation = scenery.transportation
+    // form.value.name = scenery.name
+    // form.value.location = scenery.location
+
+}
+
+const addOrUpdata = () => {
+    if (form.value.attraction_id === -1) {
+        handleAddScenery()
+    } else {
+        handleModifyScenery(form.value.attraction_id)
+    }
+}
+
+
 /**
- * 获取景点列表&名人信息
+ * 获取景点列表
  * 
  * 请求参数：
  * 无
@@ -124,54 +158,97 @@ const sceneryList = ref([])
  *  name: 景点名称
  *  description: 景点介绍
  *  image: 景点图像
- *  sceneryList[{
- *      location: 景点地址
- *      opening_hours: 开放时间
- *      transportation: 交通方式
- *      person_id: 名人ID
- *      name: 名人名称
- *  },...]
  * },...]
-
  * 
  */
-const fetchSceneries = async () => {  
-    try {  
-        scenery.value = [];  
-        sceneryList.value = [];  
-        const url = "http://localhost:8081/api/sceneries/getSceneries"  
-        const response = await axios.post(url, {}, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
+const fetchSceneries = async () => {
+    try {
+        scenery.value = [];
+        sceneryList.value = [];
+        const url = "http://localhost:8081/Attractions/fetchAttractions"
+        const response = await axios.post(url, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-        console.log("响应景点", response.data);  
+        console.log("响应景点", response.data);
 
+        for (let i = 0; i < response.data.length; i++) {
+            for (let j = 0; j < response.data[i].attractions.length; j++) {
+                sceneryList.value.push(response.data[i].attractions[j])
+            }
+        }
+        console.log('sceneryList', sceneryList);
 
-        for (let i = 0; i < response.data.length; i++) {  
-            
-            scenery.value.push({  
-                id: response.data[i].attraction_id,  
-                name: response.data[i].name,  
-                description: response.data[i].description,  
-                image: response.data[i].image
-            })  
-            sceneryList.value.push({
-                location: response.data[i].location,  
-                opening: response.data[i].opening_hours,  
-                transportation: response.data[i].transportation, 
-                famousPeopleID: response.data[i].person_id,
-                famousPeoplename: response.data[i].name
-            })  
-        }  
-
-    } catch (error) {  
-        console.error("出错", error);  
-        alert("加载失败，请稍后再试。");  
-    }  
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。");
+    }
 }
-//fetchSceneries();
+fetchSceneries();
+
+
+const fetchAttractionDetail = async (attraction_id) => {
+    try {
+        const url = "http://localhost:8081/Attractions/fetchAttractionDetail"
+        const response = await axios.post(url, {
+            attraction_id: attraction_id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+
+
+        form.value.description = response.data.description
+        form.value.famousPeople = response.data.scenery
+        form.value.opening = response.data.opening
+        form.value.transportation = response.data.transportation
+        form.value.name = response.data.name
+        form.value.location = response.data.location
+        console.log("响应form.value", form.value);
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。");
+    }
+}
+
+
+/**
+ * 获取某个景点对应的名人关系
+ * 
+ * 请求参数：
+ * attraction_id:Int
+ * 
+ * 响应参数：
+ * selectedFamousPeople:[{
+ *  person_id,
+ *  name
+ * },...]
+ */
+const fetchRelation = async (attraction_id) => {
+    try {
+        const url = "http://localhost:8081/"
+        const response = await axios.post(url, {
+            attraction_id: attraction_id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        console.log("响应景点对应的名人关系", response.data);
+
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。");
+    }
+}
+
 
 /**
  * 获取名人列表
@@ -185,27 +262,24 @@ const fetchSceneries = async () => {
  * },...]
  * 
  */
-const fetchFamousPeople = async () => {  
-    try {  
-        const url = "http://localhost:8081/api/famousPeople/getFamousPeople"  
-        const response = await axios.post(url, {}, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
+const fetchFamousPeople = async () => {
+    try {
+        const url = "http://localhost:8081/FamousPeople/fetchFamousPeople"
+        const response = await axios.post(url, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-        console.log("响应名人列表", response.data);  
-        famousPeople.value = response.data.map(item => ({  
-            value: item.id,  
-            label: item.name  
-        }));  
+        console.log("响应名人列表", response.data);
+        famousPeople.value = response.data
 
-    } catch (error) {  
-        console.error("获取名人列表失败", error);  
-        alert("获取名人列表失败，请稍后再试。");  
-    }  
-}  
-//fetchFamousPeople();
+    } catch (error) {
+        console.error("获取名人列表失败", error);
+        alert("获取名人列表失败，请稍后再试。");
+    }
+}
+fetchFamousPeople();
 
 /**
  * 添加景点
@@ -235,33 +309,33 @@ const fetchFamousPeople = async () => {
  * }
 
  */
-const handleAddScenery = async() => {
-    try {  
+const handleAddScenery = async () => {
+    try {
         const url = "http://localhost:8081/api/sceneries/addScenery"
         // 准备提交的数据  
-        const formData = {  
-            name: form.value.name,  
-            description: form.value.description,  
-            location: form.value.location,  
-            opening: form.value.opening,  
-            transportation: form.value.transportation,  
-            famousPeople: selectedFamousPeople.value  
-        };    
-        const response = await axios.post(url,formData, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
+        const formData = {
+            name: form.value.name,
+            description: form.value.description,
+            location: form.value.location,
+            opening: form.value.opening,
+            transportation: form.value.transportation,
+            famousPeople: selectedFamousPeople.value
+        };
+        const response = await axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-        console.log("添加成功", response.data);  
+        console.log("添加成功", response.data);
         // 刷新景点列表  
-        await fetchSceneries();  
-        centerDialogVisible.value = false;  
+        await fetchSceneries();
+        centerDialogVisible.value = false;
 
-    } catch (error) {  
-        console.error("添加失败", error);  
-        alert("添加失败，请稍后再试。");  
-    }  
+    } catch (error) {
+        console.error("添加失败", error);
+        alert("添加失败，请稍后再试。");
+    }
 }
 
 /**
@@ -293,33 +367,33 @@ const handleAddScenery = async() => {
  * 
  */
 const handleModifyScenery = async (id) => {
-    try{
-        const url = "http://localhost:8081/api/sceneries/modifyScenery"  
-            // 准备提交的数据  
-            const formData = {  
-            id: id,  
-            name: form.value.name,  
-            description: form.value.description,  
-            location: form.value.location,  
-            opening: form.value.opening,  
-            transportation: form.value.transportation,  
-            famousPeople: selectedFamousPeople.value  
-        };  
-        const response = await axios.post(url,formData,{  
-            id:id
-            }, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-                }
-            });
-            console.log("修改成功", response.data);  
-            // 刷新景点列表  
-            await fetchSceneries();  
-            centerDialogVisible.value = false;  
-    } catch (error) {  
-        console.error("修改失败", error);  
-        alert("修改失败，请稍后再试。");  
-    }  
+    try {
+        const url = "http://localhost:8081/api/sceneries/modifyScenery"
+        // 准备提交的数据  
+        const formData = {
+            attraction_id: id,
+            name: form.value.name,
+            description: form.value.description,
+            location: form.value.location,
+            opening_hours: form.value.opening,
+            transportation: form.value.transportation,
+            famousPeople: form.value.famousPeople
+        };
+        const response = await axios.post(url, formData, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log("修改成功", response.data);
+        // 刷新景点列表  
+        await fetchSceneries();
+        centerDialogVisible.value = false;
+    } catch (error) {
+        console.error("修改失败", error);
+        alert("修改失败，请稍后再试。");
+    }
 }
 
 /**
@@ -332,24 +406,24 @@ const handleModifyScenery = async (id) => {
  * 无
  * 
  */
-const deleteScenery = async (id) => {  
-    try {  
-        const url = "http://localhost:8081/api/sceneries/deleteScenery"  
-        const response = await axios.post(url, { id }, {  
-            headers: {  
-                'Content-Type': 'application/json',  
-            }  
-        });  
+const deleteScenery = async (id) => {
+    try {
+        const url = "http://localhost:8081/api/sceneries/deleteScenery"
+        const response = await axios.post(url, { id }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-        console.log("删除成功", response.data);  
+        console.log("删除成功", response.data);
         // 刷新景点列表  
-        await fetchSceneries();  
+        await fetchSceneries();
 
-    } catch (error) {  
-        console.error("删除失败", error);  
-        alert("删除失败，请稍后再试。");  
-    }  
-}  
+    } catch (error) {
+        console.error("删除失败", error);
+        alert("删除失败，请稍后再试。");
+    }
+}
 
 
 </script>

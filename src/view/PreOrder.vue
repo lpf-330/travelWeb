@@ -8,38 +8,31 @@ const userInfoStore = storeToRefs(useUserInfoStore())
 
 
 
+const orders = ref([])
+const order_details = ref([])
+
 /**
- * 获取历史订单
+ * 返回所有用户的历史订单
  * 
  * 请求参数：
- * user_id:String
+ * user_id:Int
  * 
  * 响应参数：
- * pre_orders:[{
- *  order_id:String,
- *  status:String,
- *  total_price:String,
- *  created_at:String,
- *  order_details:{
- *      productions:[{
- *          name:String,
- *          price:Number,
- *          quantity:Number
- *      },...],
- *      address:String
- *  }
+ * orders:[{
+ *  order_id,
+ *  status,
+ *  total_price,
+ *  created_at,
+ *  user_id,
+ *  address
  * },...]
- * 
- * [1,2,3,4]
- * []
  */
-const fetchPreOrder = async () => {
+const fetchUserOrder = async () => {
 
     try {
-
-        const url = "http://localhost:8081/"
+        const url = "http://localhost:8081/"    //后端还没写
         const response = await axios.post(url, {
-            user_id: userInfoStore.user_id.value,
+            user_id: userInfoStore.user_id.value
         },
             {
                 headers: {
@@ -48,7 +41,44 @@ const fetchPreOrder = async () => {
             }
         );
 
-        console.log("响应获取历史订单", response.data);
+        console.log('所有用户的历史订单', response.data);
+        orders.value = response.data
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+
+    }
+}
+
+
+/**
+ * 请求参数：
+ * order_id:Int
+ * 
+ * 响应参数：
+ * order_details:[{
+ *  name,
+ *  price,
+ *  quantity
+ * },...],
+ */
+const fetchOrderDetails = async (order_id) => {
+    console.log('fetchOrderDetails');
+
+    try {
+        const url = "http://localhost:8081/fetchOrderDetails"    //后端还没写
+        const response = await axios.post(url, {
+            order_id: order_id
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        order_details.value = response.data
 
 
     } catch (error) {
@@ -64,38 +94,39 @@ const fetchPreOrder = async () => {
 <template>
     <div class="containerBox">
         <el-scrollbar height="100%">
-            <el-collapse>
-                <el-collapse-item name="1">
+            <el-collapse accordion>
+                <el-collapse-item name="1" v-for="item in orders" v-bind:key="item.order_id"
+                    @click="fetchOrderDetails(item.order_id)">
                     <template #title>
                         <div class="titleBox">
                             <div class="titleBlock">
-                                <span class="title">订单号：</span>
+                                <span class="title">订单号：{{ item.order_id }}</span>
                             </div>
                             <div class="titleBlock">
-                                <span class="title">订单状态：</span>
+                                <span class="title">订单状态：{{ item.status }}</span>
                             </div>
                             <div class="titleBlock">
-                                <span class="title">金额：</span>
+                                <span class="title">金额：{{ item.total_price }}</span>
                             </div>
                             <div class="titleBlock">
-                                <span class="title">创建时间</span>
+                                <span class="title">创建时间{{ ' ' + item.create_at }}</span>
                             </div>
                         </div>
                     </template>
                     <div>
-                        <div class="prodection">
+                        <div class="prodection" v-for="value in order_details">
                             <div class="productionBlock">
-                                <span>商品名称：</span>
+                                <span>商品名称：{{ value.name }}</span>
                             </div>
                             <div class="productionBlock">
-                                <span>单价：</span>
+                                <span>单价：{{ value.price }}</span>
                             </div>
                             <div class="productionBlock">
-                                <span>数量：</span>
+                                <span>数量：{{ value.quantity }}</span>
                             </div>
                         </div>
                         <div class="addBox">
-                            <span>地址：</span>
+                            <span>地址：{{ item.address }}</span>
                         </div>
                     </div>
                 </el-collapse-item>

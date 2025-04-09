@@ -3,39 +3,40 @@
         <h1>订单列表</h1>
         <div class="scrollbarBox" id="scenery-list">
             <el-scrollbar>
-                <el-collapse>
-                    <el-collapse-item name="1" v-for="item in orders">
+                <el-collapse accordion>
+                    <el-collapse-item :name="item.order_id" v-for="item in orders" v-bind:key="item.order_id"
+                        @click="fetchOrderDetails(item.order_id)">
                         <template #title>
                             <div class="titleBox">
                                 <div class="titleBlock">
-                                    <span class="title">订单号：</span>
+                                    <span class="title">订单号：{{ item.order_id }}</span>
                                 </div>
                                 <div class="titleBlock">
-                                    <span class="title">订单状态：</span>
+                                    <span class="title">订单状态：{{ item.status }}</span>
                                 </div>
                                 <div class="titleBlock">
-                                    <span class="title">金额：</span>
+                                    <span class="title">金额：{{ item.total_price }}</span>
                                 </div>
                                 <div class="titleBlock">
-                                    <span class="title">创建时间</span>
+                                    <span class="title">创建时间{{ ' ' + item.create_at }}</span>
                                 </div>
                             </div>
                         </template>
                         <div>
-                            <div class="prodection">
+                            <div class="prodection" v-for="value in order_details">
                                 <div class="productionBlock">
-                                    <span>商品名称：</span>
+                                    <span>商品名称：{{ value.name }}</span>
                                 </div>
                                 <div class="productionBlock">
-                                    <span>单价：</span>
+                                    <span>单价：{{ value.price }}</span>
                                 </div>
                                 <div class="productionBlock">
-                                    <span class="prodectionNum">数量：</span>
+                                    <span class="prodectionNum">数量：{{ value.quantity }}</span>
                                 </div>
                             </div>
                             <div class="addBox">
-                                <span>用户id：</span>
-                                <span>地址：</span>
+                                <span>用户id：{{ item.user_id }}</span>
+                                <span>地址：{{ item.address }}</span>
                                 <div class="handle">
                                     <el-button type="danger">撤回</el-button>
                                     <el-button type="success">通过</el-button>
@@ -60,8 +61,8 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 
-const orders = ref([1, 2, 3, 4, 5])
-
+const orders = ref([])
+const order_details = ref([])
 
 /**
  * 返回所有要审核的订单
@@ -82,7 +83,7 @@ const orders = ref([1, 2, 3, 4, 5])
 const fetchOrder = async () => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/fetchOrder"    //后端还没写
         const response = await axios.post(url, {
 
         },
@@ -94,18 +95,16 @@ const fetchOrder = async () => {
         );
 
         console.log('所有待审核订单', response.data);
-
-        for (let item in response.data) {
-            orders.value.push(item)
-        }
+        orders.value = response.data
 
     } catch (error) {
         console.error("出错", error);
         alert("加载失败，请稍后再试。"); // 友好的错误提示  
 
     }
-
 }
+
+fetchOrder()
 
 
 /**
@@ -120,9 +119,10 @@ const fetchOrder = async () => {
  * },...],
  */
 const fetchOrderDetails = async (order_id) => {
+    console.log('fetchOrderDetails');
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/fetchOrderDetails"    //后端还没写
         const response = await axios.post(url, {
             order_id: order_id
         },
@@ -133,7 +133,7 @@ const fetchOrderDetails = async (order_id) => {
             }
         );
 
-        console.log('订单详情', response.data);
+        order_details.value = response.data
 
 
     } catch (error) {

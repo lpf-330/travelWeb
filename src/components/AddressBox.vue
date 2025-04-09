@@ -11,15 +11,10 @@ console.log('userInfoStore', userInfoStore.address.value);
 
 
 const radio = ref(userInfoStore.nowAddr.value)
-const address = ref([
-    { addr_id: 1, address: '1234567' },
-    { addr_id: 2, address: '1234567' },
-    { addr_id: 3, address: '1234567' },
-    { addr_id: 4, address: '1234567' },
-    { addr_id: 5, address: '1234567' },
-    { addr_id: 6, address: '1234567' },
-    { addr_id: 7, address: '1234567' },
-])
+const address = ref(userInfoStore.address.value)
+
+console.log('radio', radio.value);
+console.log('userInfoStore', userInfoStore);
 
 
 /**
@@ -178,7 +173,7 @@ const addAddress = async (value) => {
     <div class="box">
         <el-scrollbar class="scrollbar" height="100%">
             <el-radio-group style="width: 100%;height: 100%;" v-model="radio">
-                <div class="contain" v-for="(value, index) in address">
+                <div class="contain" v-for="(value, index) in address" v-bind:key="value.addr_id">
                     <div class="selectBox">
                         <div class="selectButton">
                             <el-radio size="large" :value="value.addr_id"></el-radio>
@@ -188,7 +183,7 @@ const addAddress = async (value) => {
                         </div>
                     </div>
                     <div class="addressBox">
-                        <input class="address" type="text" name="" id="">
+                        <input class="address" type="text" name="" id="" v-model="value.address">
                     </div>
                     <div class="updataBox">
                         <el-button type="success">修改</el-button>

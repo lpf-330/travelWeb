@@ -13,8 +13,6 @@ const passwardTest = /^[a-zA-Z0-_]{2,11}$/
 const userInfoStore = storeToRefs(useUserInfoStore())
 
 let fetchUser = async () => {
-
-
   try {
 
 
@@ -30,8 +28,6 @@ let fetchUser = async () => {
       }
     );
 
-
-
     if (response.data.code === 1) {
 
 
@@ -41,7 +37,11 @@ let fetchUser = async () => {
       userInfoStore.phone.value = response.data.data.phone
       userInfoStore.user_id.value = response.data.data.user_id
       userInfoStore.username.value = response.data.data.username
+      userInfoStore.nowAddr.value = response.data.data.now_address_id
       console.log("响应登录", response.data);
+
+
+      getAddress()
 
 
     } else {
@@ -55,9 +55,37 @@ let fetchUser = async () => {
 
   }
 
+}
 
+
+let getAddress = async () => {
+  try {
+
+
+    const url = "http://localhost:8081/user_id"
+    const response = await axios.post(url, {
+      user_id: userInfoStore.user_id.value
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('响应地址', response.data);
+
+    userInfoStore.address.value = response.data
+
+  } catch (error) {
+    console.error("出错", error);
+    alert("加载失败，请稍后再试。");
+
+  }
 
 }
+
+
 
 const LoginTest = () => {
   if (account.value) {
