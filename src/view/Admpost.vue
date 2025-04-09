@@ -5,9 +5,6 @@
             <el-scrollbar>
                 <div class="scenery-item" v-for="(value, index) in posts" v-bind:key="value.post_id"
                     @click="centerDialogVisible = true; fatchPostDetails(value.post_id)">
-                    <div class="image-placeholder">
-                        <span class="number-label">{{ index }}</span>
-                    </div>
                     <div class="scenery-description">
                         <h2>{{ value.title }}</h2>
                         <p>{{ value.message }}</p>

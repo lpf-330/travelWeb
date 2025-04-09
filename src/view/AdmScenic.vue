@@ -505,6 +505,11 @@ h1 {
 
 .scenery-description {
     flex: 1;
+    text-align: justify;
+    hyphens: auto;
+    padding-right: 1.5rem;
+    overflow: hidden;
+    height: 8.5rem;
 }
 
 .button-group {

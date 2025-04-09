@@ -44,7 +44,7 @@
    */
   const fetchComments = async () => {  
     try{
-      const url = 'http://localhost:8081/attraction_comments';
+      const url = 'http://localhost:8081/fetchComments';
       const response = await Axios.get(url,{},
       {
         headers:{

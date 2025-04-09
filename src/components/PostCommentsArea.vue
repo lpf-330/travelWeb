@@ -44,7 +44,7 @@ let comments = ref([]);
  */
 const fetchComments = async () => {  
   try{
-    const url = 'http://localhost:8081/comments';
+    const url = 'http://localhost:8081/post/fetchComments';
     const response = await Axios.post(url,{},
     {
       headers:{
