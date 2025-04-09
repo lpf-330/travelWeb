@@ -202,7 +202,9 @@ const updataAvatar = async () => {
             </div>
         </div>
         <div class="harfBox">
-            <div class="box img"></div>
+            <div class="box img">
+                上传图片
+            </div>
             <div class="box name">
                 <input type="text" class="update" v-model="username">
                 <button class="updateButton" @click="updataUserName">修改</button>

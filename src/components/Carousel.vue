@@ -45,8 +45,8 @@ onMounted(() => {
 
 <style scoped>
 .box {
-  width: 70%;
-  height: 85%;
+  width: 65%;
+  height: 80%;
   margin-left: 15%;
   background-color: aqua;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.37);

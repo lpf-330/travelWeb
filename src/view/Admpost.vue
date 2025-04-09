@@ -149,6 +149,8 @@ const fatchPostDetails = async (post_id) => {
             comments: []
         }
 
+        fetchComments(post_id)
+
     } catch (error) {
         console.error("出错", error);
         alert("加载失败，请稍后再试。"); // 友好的错误提示  
@@ -183,6 +185,30 @@ const deletePost = async (post_id) => {
         if (response.data === "删除成功") {
             fatchPosts()
         }
+
+    } catch (error) {
+        console.error("出错", error);
+        alert("加载失败，请稍后再试。"); // 友好的错误提示  
+    }
+}
+
+const fetchComments = async (post_id) => {
+    try {
+        const url = "http://localhost:8081/post/fetchComments"    //后端还没写
+        const response = await axios.post(url, {
+            post_id: post_id,
+            user_id: 1
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        console.log('fetchComments', response.data);
+
+
 
     } catch (error) {
         console.error("出错", error);
