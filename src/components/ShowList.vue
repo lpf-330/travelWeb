@@ -16,12 +16,12 @@ let props = defineProps({
 
 
 
-const goToDetail = (id) => {  
-  router.push({  
-    name: 'attractionsDetails',  
-    state: { id: id }  
-  });  
-};  
+const goToDetail = (id) => {
+  router.push({
+    name: 'attractionsDetails',
+    state: { id: id }
+  });
+};
 
 
 
@@ -33,7 +33,7 @@ const goToDetail = (id) => {
     <div class="ShowList" v-for="(ShowList, index) in showLists" :key="index" @click="goToDetail(ShowList.id)">
       <!--假设 ID 为 index，也可以根据需要更改-->
       <div class="ShowList-content">
-        <img :src="ShowList.pic" class="ShowList-pic" />
+        <img :src="'src/assets/picture/picture_package/attraction/' + ShowList.id + '.jpg'" class="ShowList-pic" />
         <div class="ShowList-details">
           <h2 class="ShowList-name">{{ ShowList.name }}</h2>
           <p class="ShowList-message">{{ ShowList.message }}</p>

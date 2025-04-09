@@ -185,8 +185,9 @@ const updataAvatar = async () => {
 <template>
     <div class="spaceBox">
         <div class="harfBox">
-            <div class="box img">
-            </div>
+            <img class="box img"
+                :src="'src/assets/picture/picture_package/user_avater/' + userInfoStore.user_id.value + '.jpg'">
+            </img>
             <div class="box name">
                 <span>昵称</span>
                 <input type="text" class="read" readonly v-model="userInfoStore.username.value">
@@ -256,6 +257,10 @@ const updataAvatar = async () => {
     height: 150px;
     width: 150px;
     background-color: silver;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 0;
 }
 
 .box input {

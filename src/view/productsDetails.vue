@@ -50,7 +50,7 @@ data.value = history.state
 // 假设我们有一个土特产数据对象  
 const product = ref({
   name: data.value.name,
-  picture: "https://via.placeholder.com/750",
+  picture: "src/assets/picture/picture_package/productions/" + data.value.id + '.jpg',
   description: data.value.message,
   price: data.value.price, // 产品价格  
   stock: data.value.stock, // 库存数量  

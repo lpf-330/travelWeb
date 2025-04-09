@@ -34,10 +34,6 @@ const deleteProduction = () => {
 }
 
 const select = () => {
-    // console.log('index', props.index);
-
-    console.log('emit', typeof (emit));
-
     emit('select', { index: props.index })
 }
 
@@ -150,7 +146,7 @@ input[type="checkbox"]:checked {
 .num {
     height: 30%;
     width: 60%;
-    background-color: cadetblue;
+    background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: row;
 }

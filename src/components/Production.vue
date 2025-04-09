@@ -28,7 +28,7 @@ const toProductDetails = () => {
 
 <template>
     <div class="box" @click="toProductDetails">
-        <div class="img"></div>
+        <img class="img" :src="'src/assets/picture/picture_package/productions/' + props.data.id + '.jpg'"></img>
         <div class="name">{{ props.data.name }}</div>
         <div class="price">{{ props.data.price }}</div>
     </div>

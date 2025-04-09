@@ -8,7 +8,7 @@
     </div>
     <div class="attraction-content">
       <div class="attraction-image">
-        <img :src="attraction.image" alt="景点图片" />
+        <img :src="'src/assets/picture/picture_package/attraction/' + attraction.id + '.jpg'" alt="景点图片" />
       </div>
       <div class="attraction-info">
         <h2>相关信息</h2>
@@ -20,8 +20,9 @@
     <div class="related-figures" @click="">
       <h2>相关名人</h2>
       <div class="figures-list">
-        <div v-for="figure in attraction.relatedFigures" :key="figure.id" class="figure" @click="toFamousPeople(figure)">
-          <img :src="figure.image" alt="名人图片" />
+        <div v-for="figure in attraction.relatedFigures" :key="figure.id" class="figure"
+          @click="toFamousPeople(figure)">
+          <img :src="'src/assets/picture/picture_package/famouspeople/' + figure.id + '.jpg'" alt="名人图片" />
           <div class="figure-info">
             <h3>{{ figure.name }}</h3>
             <p>{{ figure.biography }}</p>
@@ -30,9 +31,7 @@
       </div>
     </div>
     <div class="likes-line">
-      <LikeButton 
-    :likes="attraction.likes" 
-    @like="handleLikes();addlikes()"/>
+      <LikeButton :likes="attraction.likes" @like="handleLikes(); addlikes()" />
     </div>
     <CommentsArea></CommentsArea>
   </div>
@@ -47,7 +46,7 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-console.log("景点ID获取成功",history.state.id)
+console.log("景点ID获取成功", history.state.id)
 
 // 测试数据
 // let attraction = ref({
@@ -77,36 +76,36 @@ console.log("景点ID获取成功",history.state.id)
 // });
 const attraction = ref({});
 
- /**   
-   * 获取单个景点的详细信息   
-   *   
-   * 请求参数：   
-   * attraction_id: String  // 景点ID,从attractionsLists组件中获取   
-   *   
-   * 响应参数：   
-   * {   
-   *   name: String,            // 景点名称   
-   *   created_at: String,     // 创建时间   
-   *   updated_at: String,      // 更新时间   
-   *   location: String,        // 所在地区   
-   *   image: String,            // 景点图片地址   
-   *   opening_hours: String,   // 开放时间   
-   *   transportation: String,  // 交通信息   
-   *   description: String,     // 景点描述   
-   *   relatedFigures: [{     // 相关名人信息数组   
-   *   person_id: String,     // 名人ID   
-   *   name: String,         // 名人姓名   
-   *   image: String,        // 名人图片地址   
-   *   message: String       // 名人介绍   
-   *   }],   
-   *   likes: Number           // 点赞数量   
-   * }   
-   */  
-const fetchAttractionDetail = async () => {  
-  try {  
+/**   
+  * 获取单个景点的详细信息   
+  *   
+  * 请求参数：   
+  * attraction_id: String  // 景点ID,从attractionsLists组件中获取   
+  *   
+  * 响应参数：   
+  * {   
+  *   name: String,            // 景点名称   
+  *   created_at: String,     // 创建时间   
+  *   updated_at: String,      // 更新时间   
+  *   location: String,        // 所在地区   
+  *   image: String,            // 景点图片地址   
+  *   opening_hours: String,   // 开放时间   
+  *   transportation: String,  // 交通信息   
+  *   description: String,     // 景点描述   
+  *   relatedFigures: [{     // 相关名人信息数组   
+  *   person_id: String,     // 名人ID   
+  *   name: String,         // 名人姓名   
+  *   image: String,        // 名人图片地址   
+  *   message: String       // 名人介绍   
+  *   }],   
+  *   likes: Number           // 点赞数量   
+  * }   
+  */
+const fetchAttractionDetail = async () => {
+  try {
     const url = "http://localhost:8081/Attractions/fetchAttractionDetail"
     const response = await axios.post(url, {
-      attraction_id:history.state.id
+      attraction_id: history.state.id
     },
       {
         headers: {
@@ -114,31 +113,32 @@ const fetchAttractionDetail = async () => {
         }
       }
     );
-    if (response.data) {  
-      attraction.value = {  
-        name: response.data.name,  
-        createdAt: response.data.created_at,  
-        updatedAt: response.data.updated_at,  
-        region: response.data.location,  
-        image: response.data.image,  
-        openingHours: response.data.opening_hours,  
-        transportation: response.data.transportation,  
-        description: response.data.description,  
+    if (response.data) {
+      attraction.value = {
+        id: history.state.id,
+        name: response.data.name,
+        createdAt: response.data.created_at,
+        updatedAt: response.data.updated_at,
+        region: response.data.location,
+        image: response.data.image,
+        openingHours: response.data.opening_hours,
+        transportation: response.data.transportation,
+        description: response.data.description,
         // 下面的relatedFigures是获取名人表的信息
-        relatedFigures: response.data.relatedFigures.map(figure => ({  
-          id: figure.person_id,  
-          name: figure.name,  
-          image: figure.image,  
-          biography: figure.message  
+        relatedFigures: response.data.relatedFigures.map(figure => ({
+          id: figure.person_id,
+          name: figure.name,
+          image: figure.image,
+          biography: figure.message
         })),
         likes: response.data.likes
       };
-    }  
-    console.log("获取数据成功:", response.data);  
-  } catch (error) {  
-    console.error("获取数据失败:", error);  
-  }  
-};  
+    }
+    console.log("获取数据成功:", response.data);
+  } catch (error) {
+    console.error("获取数据失败:", error);
+  }
+};
 
 fetchAttractionDetail();
 
@@ -147,8 +147,9 @@ fetchAttractionDetail();
 const toFamousPeople = (figure) => {
   router.push({
     name: 'famousPeople',
-    state: { 
+    state: {
       personData: {
+        id: figure.id,
         name: figure.name,
         image: figure.image,
         biography: figure.biography,
@@ -162,11 +163,11 @@ const toFamousPeople = (figure) => {
 // attraction_id: String  // 景点ID,从attractionsLists组件中获取
 // 响应参数：
 // likes: Number  // 点赞数量
-const handleLikes = async () => {  
-  try {  
+const handleLikes = async () => {
+  try {
     const url = "http://localhost:8081/Attractions/handleLikes"
     const response = await axios.post(url, {
-      attraction_id:history.state.id
+      attraction_id: history.state.id
     },
       {
         headers: {
@@ -176,18 +177,17 @@ const handleLikes = async () => {
     );
 
     await fetchAttractionDetail();
-    console.log('收集点赞数成功:', response.data);  
-  } catch (error) {  
-    console.error('收集点赞数失败:', error);  
-  }  
-};  
+    console.log('收集点赞数成功:', response.data);
+  } catch (error) {
+    console.error('收集点赞数失败:', error);
+  }
+};
 
-const addlikes = async() => {
-  try
-  {
+const addlikes = async () => {
+  try {
     const url = "http://localhost:8081/Attractions/likeComment1"
     const response = axios.post(url, {
-      attraction_id:history.state.id
+      attraction_id: history.state.id
     },
       {
         headers: {
@@ -195,11 +195,11 @@ const addlikes = async() => {
         }
       }
     );
-    
+
     console.log('点赞成功:');
   }
   catch (error) {
-    console.error('点赞失败:', error);  
+    console.error('点赞失败:', error);
   }
 }
 </script>

@@ -29,7 +29,7 @@ const sumPrice = ref(0)
 const fetchShopCart = async () => {
 
     try {
-        const url = "http://localhost:8081/product/fetchShopCart"    //后端还没写
+        const url = "http://localhost:8081/fetchShopCart"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value
         },

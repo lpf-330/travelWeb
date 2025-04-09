@@ -31,7 +31,8 @@ const userInfoPage = () => {
             <span><router-link to="/index/shopCart" class="a6">购物车</router-link></span>
         </div>
         <div class="user" @click="userInfoPage()">
-            <div class="userImg"></div>
+            <img class="userImg"
+                :src="'src/assets/picture/picture_package/user_avater/' + userInfoStore.user_id.value + '.jpg'"></img>
             <span>{{ username }}</span>
         </div>
 
