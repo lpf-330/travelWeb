@@ -38,8 +38,8 @@
                                 <span>用户id：{{ item.user_id }}</span>
                                 <span>地址：{{ item.address }}</span>
                                 <div class="handle">
-                                    <el-button type="danger">撤回</el-button>
-                                    <el-button type="success">通过</el-button>
+                                    <el-button type="danger" @click="passOrder(item.order_id,0)">撤回</el-button>
+                                    <el-button type="success" @click="passOrder(item.order_id,1)">通过</el-button>
                                 </div>
                             </div>
 
@@ -155,12 +155,13 @@ const fetchOrderDetails = async (order_id) => {
  * 返回参数：
  * 是否修改成功
  */
-const passOrder = async (index) => {
+const passOrder = async (order_id,isPass) => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/passOrder"    //后端还没写
         const response = await axios.post(url, {
-            order_id: orders.value[index].order_id
+            order_id: order_id,
+            isPass: isPass
         },
             {
                 headers: {
@@ -171,7 +172,7 @@ const passOrder = async (index) => {
 
         console.log('通过订单', response.data);
 
-
+        fetchOrder()
 
     } catch (error) {
         console.error("出错", error);
