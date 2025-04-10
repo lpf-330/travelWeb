@@ -17,6 +17,9 @@ let props = defineProps({
 
 const data = ref(props.data)
 
+console.log('data',data.value);
+
+
 const emit = defineEmits(['addQuantity', 'reduceQuantity', 'deleteProduction', 'select'])
 
 const addQuantity = () => {
@@ -45,7 +48,9 @@ const select = () => {
             <div class="selectBox">
                 <input type="checkbox" name="" id="" @click="select">
             </div>
-            <div class="imgBox"></div>
+            <div class="imgBox">
+                <img :src="'src/assets/picture/picture_package/productions/'+data.product_id+'.jpg'" alt="">
+            </div>
             <div class="nameBox">
                 <div class="name">
                     <span>{{ data.name }}</span>
@@ -105,6 +110,11 @@ const select = () => {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+}
+
+.imgBox img{
+    width: 100%;
+    height: 100%;
 }
 
 .nameBox {

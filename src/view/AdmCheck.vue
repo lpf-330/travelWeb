@@ -18,7 +18,7 @@
                                     <span class="title">金额：{{ item.total_price }}</span>
                                 </div>
                                 <div class="titleBlock">
-                                    <span class="title">创建时间{{ ' ' + item.create_at }}</span>
+                                    <span class="title">创建时间{{ ' ' + item.created_at }}</span>
                                 </div>
                             </div>
                         </template>

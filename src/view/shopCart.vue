@@ -222,7 +222,8 @@ const deleteProduction = async ({ product_id }) => {
  * 是否提交结算成功
  */
 const postCheckOut = async () => {
-    if (selected.value.length > 0) {
+    if(userInfoStore.address.value.length>0){
+        if (selected.value.length > 0) {
         const order_details = []
         for (let i = 0; i < selected.value.length; i++) {
             order_details.push({
@@ -269,10 +270,12 @@ const postCheckOut = async () => {
     } else {
         alert('未选择商品')
     }
+    }else{
+        alert('请添加地址')
+    }
 }
 
 const select = ({ index }) => {
-    console.log('选择前', selected.value);
 
     try {
         let isExist = false
