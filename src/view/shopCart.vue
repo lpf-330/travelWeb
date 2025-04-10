@@ -234,18 +234,18 @@ const postCheckOut = async () => {
 
         try {
             const url = "http://localhost:8081/postCheckOut"    //后端还没写
-            let address=''
+            let address = ''
             // console.log('响应地址', userInfoStore.address.value);
-            console.log('userInfoStore.address',userInfoStore.address.value);
-            
-            for(let i=0;i<userInfoStore.address.value.length;i++){
-                if(userInfoStore.nowAddr.value===userInfoStore.address.value[i].addr_id){
-                    address=userInfoStore.address.value[i].address
+            console.log('userInfoStore.address', userInfoStore.address.value);
+
+            for (let i = 0; i < userInfoStore.address.value.length; i++) {
+                if (userInfoStore.nowAddr.value === userInfoStore.address.value[i].addr_id) {
+                    address = userInfoStore.address.value[i].address
                     break
                 }
             }
-            console.log('address',address);
-            
+            console.log('address', address);
+
             const response = await axios.post(url, {
                 user_id: userInfoStore.user_id.value,
                 total_price: sumPrice.value,
@@ -343,7 +343,10 @@ const countSumPrice = () => {
                         <div class="scrollbarBox">
                             <el-scrollbar max-height="100%" style="width: 100%;">
                                 <div class="selectItem" v-for="i in selected" :key="shopCart[i].product_id">
-                                    <div class="selectImg"></div>
+                                    <div class="selectImg">
+                                        <img :src="'src/assets/picture/picture_package/productions/' + shopCart[i].product_id + '.jpg'"
+                                            alt="">
+                                    </div>
                                     <div class="selectNum">
                                         <span>{{ shopCart[i].quantity }}</span>
                                     </div>
@@ -508,6 +511,11 @@ const countSumPrice = () => {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.selectImg img {
+    height: 100%;
+    width: 100%;
 }
 
 .selectHeadImg {

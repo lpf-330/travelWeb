@@ -30,7 +30,7 @@ const order_details = ref([])
 const fetchUserOrder = async () => {
 
     try {
-        const url = "http://localhost:8081/"    //后端还没写
+        const url = "http://localhost:8081/fetchUserOrder"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value
         },
@@ -50,6 +50,8 @@ const fetchUserOrder = async () => {
 
     }
 }
+
+fetchUserOrder()
 
 
 /**
@@ -95,7 +97,7 @@ const fetchOrderDetails = async (order_id) => {
     <div class="containerBox">
         <el-scrollbar height="100%">
             <el-collapse accordion>
-                <el-collapse-item name="1" v-for="item in orders" v-bind:key="item.order_id"
+                <el-collapse-item :name="item.order_id" v-for="item in orders" v-bind:key="item.order_id"
                     @click="fetchOrderDetails(item.order_id)">
                     <template #title>
                         <div class="titleBox">
