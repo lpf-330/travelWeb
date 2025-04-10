@@ -82,7 +82,7 @@ fetchShopCart()
 const addQuantity = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/product/addQuantity"    //后端还没写
+        const url = "http://localhost:8081/addQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -125,7 +125,7 @@ const addQuantity = async ({ product_id }) => {
 const reduceQuantity = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/product/reduceQuantity"    //后端还没写
+        const url = "http://localhost:8081/reduceQuantity"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
@@ -167,7 +167,7 @@ const reduceQuantity = async ({ product_id }) => {
 const deleteProduction = async ({ product_id }) => {
 
     try {
-        const url = "http://localhost:8081/product/deleteProduction"    //后端还没写
+        const url = "http://localhost:8081/deleteProduction"    //后端还没写
         const response = await axios.post(url, {
             user_id: userInfoStore.user_id.value,
             product_id: product_id
