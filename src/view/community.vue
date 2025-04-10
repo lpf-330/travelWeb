@@ -159,7 +159,7 @@ let openEditModal = (post) => {
  */
 const updatePost = async () => {
   try {
-    await axios.put(`${API_BASE}/updatePost/${editPost.value.id}`, {
+    await axios.post(`${API_BASE}/updatePost/${editPost.value.id}`, {
       title: editPost.value.title,
       message: editPost.value.content
     });

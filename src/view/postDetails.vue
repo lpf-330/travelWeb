@@ -18,7 +18,7 @@
       <div class="likes">  
         <LikeButton 
     :likes="likes" 
-    @like="handlelikes"/> 
+    @like="handlelikes();addlikes()"/> 
       </div>
         <PostCommentsArea></PostCommentsArea>  
     </div>  
@@ -111,6 +111,26 @@
       alert("收集点赞数失败，请稍后再试。");
     }
   }
+
+  const addlikes = async () => {
+  try {
+    const url = "http://localhost:8081/post/likeComment4"
+    const response = axios.post(url, {
+      post_id: history.state.id
+    },
+    
+     {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    console.log('点赞成功');
+  }
+  catch (error) {
+    console.error('点赞失败:', error);
+  }
+}
   </script>  
   
   <style scoped>  

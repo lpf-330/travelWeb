@@ -22,6 +22,8 @@
 <script setup>
 import { ref } from 'vue';
 import { Axios } from 'axios'; 
+import useUserInfoStore from '../stores/user';
+const userInfoStore = storeToRefs(useUserInfoStore())
 
 let comments = ref([]);
 
@@ -42,28 +44,32 @@ let comments = ref([]);
  * userComments:[]  (用户在这个帖子评论区里发表的所有评论的id)
  * 
  */
+console.log("id获取",history.state.id);
 const fetchComments = async () => {  
   try{
     const url = 'http://localhost:8081/post/fetchComments';
-    const response = await Axios.post(url,{},
+    const response = await Axios.post(url,{
+      post_id: history.state.id,
+      user_id: userInfoStore.user_id.value
+    },
     {
       headers:{
         'Content-Type': 'application/json',
       }
     }
   );
-
-  console.log("响应评论",response.data);
-  let userComments = response.data.userComments;
-  let comments = response.data.comments;
-  for(let i=0;i<response.data.length;i++){
-    const item={
-      id: response.data[i].post_comment_id,
-      username: response.data[i].username,
-      text: response.data[i].content,
-      likes: response.data[i].likes,
-      isOwner: false, 
-    }
+    console.log("id获取",post_id);
+    console.log("响应评论",response.data);
+    let userComments = response.data.userComments;
+    let comments = response.data.comments;
+    for(let i=0;i<response.data.length;i++){
+      const item={
+        id: response.data[i].post_comment_id,
+        username: response.data[i].username,
+        text: response.data[i].content,
+        likes: response.data[i].likes,
+        isOwner: false, 
+      }
 
     if(userComments.includes(item.id)){
       item.isOwner = true;
@@ -77,7 +83,7 @@ const fetchComments = async () => {
   }
 }
 
-//fetchComments();
+fetchComments();
 
 let newComment = ref("");  
 
