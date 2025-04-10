@@ -2,7 +2,7 @@
 <div class="comments-section">  
     <h2>评论区</h2>  
     <div v-for="comment in comments" :key="comment.id" class="comment">  
-      <img :src="comment.avatar" alt="用户头像" class="avatar" />  
+      <img :src="'src/assets/picture/picture_package/user_avater/'+ comment.id +'.jpg'">
       <div class="comment-info">  
         <strong>{{ comment.username }}</strong>  
         <p>{{ comment.text }}</p>  
@@ -21,8 +21,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Axios } from 'axios'; 
+// import { Axios } from 'axios'; 
+import axios from 'axios';
 import useUserInfoStore from '../stores/user';
+import { storeToRefs } from 'pinia';
 const userInfoStore = storeToRefs(useUserInfoStore())
 
 let comments = ref([]);
@@ -44,11 +46,10 @@ let comments = ref([]);
  * userComments:[]  (用户在这个帖子评论区里发表的所有评论的id)
  * 
  */
-console.log("id获取",history.state.id);
 const fetchComments = async () => {  
   try{
     const url = 'http://localhost:8081/post/fetchComments';
-    const response = await Axios.post(url,{
+    const response = await axios.post(url,{
       post_id: history.state.id,
       user_id: userInfoStore.user_id.value
     },
@@ -58,25 +59,20 @@ const fetchComments = async () => {
       }
     }
   );
-    console.log("id获取",post_id);
+
     console.log("响应评论",response.data);
-    let userComments = response.data.userComments;
-    let comments = response.data.comments;
-    for(let i=0;i<response.data.length;i++){
-      const item={
-        id: response.data[i].post_comment_id,
-        username: response.data[i].username,
-        text: response.data[i].content,
-        likes: response.data[i].likes,
-        isOwner: false, 
-      }
-
-    if(userComments.includes(item.id)){
-      item.isOwner = true;
-    }
-
-    comments.value.push(item);
+    for(let i=0;i<response.data.comments_username.length;i++){     
+    comments.value.push({
+      id: response.data.comments_username[i].post_comment_id,
+        username: response.data.comments_username[i].username,
+        text: response.data.comments_username[i].content,
+        likes: response.data.comments_username[i].likes,
+    });
   }
+
+  console.log("comments",comments);
+  
+
   } catch (error) {
     console.log("出错",error);
     alert("加载失败，请稍后再试。");
@@ -98,7 +94,7 @@ let newComment = ref("");
  */  
  const likeComment = async (id) => {  
     try {  
-        const url = "http://localhost:8081/comments/likes";  
+        const url = "http://localhost:8081/post/likeComment";  
         const response = await axios.post(url, {  
             post_comment_id: id  
         }, {  
@@ -113,8 +109,6 @@ let newComment = ref("");
             comment.likes += 1;  
         }  
 
-        // 显示成功提示  
-        ElMessage.success("点赞成功！");  
     } catch (error) {  
         console.error("点赞失败:", error);  
         alert("点赞失败，请稍后再试。");  
@@ -211,6 +205,16 @@ let newComment = ref("");
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */  
 }  
 
+
+
+img{
+  width: 50px; /* 头像宽度 */  
+    height: 50px; /* 头像高度 */  
+    border-radius: 50%; /* 圆形头像 */  
+    margin-right: 10px; /* 头像和评论内容之间的间距 */  
+  object-fit: contain;
+}
+
 .comments-section h2 {  
     text-align: center; /* 标题居中 */  
     color: #333; /* 标题颜色 */  
@@ -220,7 +224,7 @@ let newComment = ref("");
 .comment {  
     display: flex; /* 灵活布局 */  
     align-items: flex-start; /* 垂直对齐 */  
-    padding: 10px; /* 内边距 */  
+    padding: 24px; /* 内边距 */  
     border-bottom: 1px solid #e0e0e0; /* 下边框 */  
 }  
 
